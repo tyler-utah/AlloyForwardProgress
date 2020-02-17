@@ -68,6 +68,7 @@
    <relation name="$next_in_thd"> <type name="A"/> <type name="A"/> </relation>
    <relation name="$to"> <type name="S"/> <type name="S"/> </relation>
    <relation name="$to_run_a"> <type name="Thread"/> <type name="A"/> </relation>
+   <relation name="t_order"> <type name="Thread"/> <type name="Thread"/> </relation>
 </edge>
 
 <edge visible="no" attribute="yes">

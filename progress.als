@@ -15,21 +15,23 @@ fact {
   V = ZERO + ONE
 }
 
-// Threads
-sig Thread {} 
-
-// A local state maps the next instruction of a thread
-// Previously used to hold registers
-sig L_state {
-  next_ins : lone Instruction
-}
-
 // Global locations
 sig X {}
 
 // Global memory maps global locations to values
 sig G_memory {
    mem : X -> one V
+}
+
+// Threads
+sig Thread {
+   t_order : lone Thread
+} 
+
+// A local state maps the next instruction of a thread
+// Previously used to hold registers
+sig L_state {
+  next_ins : lone Instruction
 }
 
 // The state of the whole system comprises a global memory and one local state per thread
@@ -126,6 +128,16 @@ fact po_facts {
   no (iden & ^po)
 }
 
+fact t_order_facts {
+  // instructions are in the same thread iff they are po-related
+  all t1,t2 : Thread | t1 in t2.*t_order or t2 in t1.*t_order
+
+  // po is acyclic
+  no (iden & ^t_order)
+}
+
+
+
 // Helper function: reverse of pre
 fun pre_rev : S -> A {
   ~pre
@@ -181,7 +193,7 @@ fact state_change_of_atomic_exch_branch {
   {
      // Location x gets new value in global state
     some v implies (a.post.G_state.mem[x] = v)
-    no v implies  (a.post.G_state.mem[x] =a.pre.G_state.mem[x] )
+    no v implies  (a.post.G_state.mem[x] = a.pre.G_state.mem[x] )
 
     // Other locations in global memory keep their old values
     all x' : dom[a.post.G_state.mem] | 
@@ -358,4 +370,5 @@ pred to_run {
 }
 
 // This is pretty small but it will show a producer/consumer example
-run to_run for 2 V,  exactly 3 Thread,  7 S,  8 A, 5 L_state, 4 G_memory, 2 X,  exactly 3 Instruction
+run to_run for 2 V,  exactly 2 Thread,  7 S,  4 A, 5 L_state, 4 G_memory, 2 X,  exactly 2 Instruction
+//run to_run for 2 V,   3 Thread,  7 S,  8 A, 5 L_state, 4 G_memory, 2 X,  4 Instruction
