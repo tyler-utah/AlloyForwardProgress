@@ -1,0 +1,22 @@
+-- This is an SVL script, see http://cadp.inria.fr/man/svl-lang.html
+
+-- Look for loops of thread execution steps.
+property FreeFromDeadlockLasso (model)
+    "There are no deadlock lassos in ${model}"
+is
+    "${model}_deadlock.bcg" = "${model}.bcg" |= with evaluator4
+        < true* > < 'EX .*' > @;
+    expected FALSE;
+end property
+
+"prod_cons_obe.bcg" = generation of "prod_cons_obe.lnt";
+check FreeFromDeadlockLasso(prod_cons_obe);
+
+"prod_cons_hsa.bcg" = generation of "prod_cons_hsa.lnt";
+check FreeFromDeadlockLasso(prod_cons_hsa);
+
+"prod_cons_hsa_obe.bcg" = generation of "prod_cons_hsa_obe.lnt";
+check FreeFromDeadlockLasso(prod_cons_hsa_obe);
+
+"prod_cons_lobe.bcg" = generation of "prod_cons_lobe.lnt";
+check FreeFromDeadlockLasso(prod_cons_lobe);
