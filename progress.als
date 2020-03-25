@@ -335,10 +335,12 @@ pred constrain_comparisons {
 // touched by at least one load from another thread
 pred constrain_stores {
  all i : ATOMIC_EXCH_BRANCH | some i.exch_val implies 
-                                             (some i' : ATOMIC_EXCH_BRANCH | 
+                                             ((some i' : ATOMIC_EXCH_BRANCH | 
                                                        i'.thd != i.thd and 
                                                        i'.po != i'.branch_target and // i' is not a store
-                                                       i.check_loc = i'.check_loc)
+                                                       i.check_loc = i'.check_loc) 
+                                                       and
+                                               (some a: A | a.ins = i and a.pre.G_state.mem[i.check_loc] != i.exch_val))
 
  // Also branches need to have some action from another thread 
  // touch the memory location
@@ -355,6 +357,10 @@ pred constrain_branches {
             (some a:A | a.ins = i and a.pre.G_state.mem[i.check_loc] = i.check_val ) and (some a:A | a.ins = i and a.pre.G_state.mem[i.check_loc] != i.check_val))
 }
 
+
+
+
+
 pred minimal_programs {
    constrain_comparisons and constrain_branches and constrain_stores
 }
@@ -370,5 +376,5 @@ pred to_run {
 }
 
 // This is pretty small but it will show a producer/consumer example
-run to_run for 2 V,  exactly 2 Thread,  7 S,  4 A, 5 L_state, 4 G_memory, 2 X,  exactly 2 Instruction
+run to_run for 2 V,  exactly 2 Thread,  7 S,  8 A, 5 L_state, 7 G_memory, 1 X,  exactly 3 Instruction
 //run to_run for 2 V,   3 Thread,  7 S,  8 A, 5 L_state, 4 G_memory, 2 X,  4 Instruction
