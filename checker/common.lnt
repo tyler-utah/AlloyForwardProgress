@@ -118,8 +118,8 @@ process SHARED_MEMORY [EX: ExChan, TERMINATE: NatChan] (numThread: nat) is
 end process
 
 
--- This process specifies the fair scheduler, which always allows any process to execute
-process SCHEDULER_FAIR [EX: ExChan, TERMINATE: NatChan] (numThread: nat) is
+-- This process specifies a "no scheduler", which always allows any process to execute
+process SCHEDULER_NONE [EX: ExChan, TERMINATE: NatChan] (numThread: nat) is
    var
       doneThread: nat
    in
