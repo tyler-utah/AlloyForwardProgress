@@ -1,0 +1,48 @@
+-- This is an SVL script, see http://cadp.inria.fr/man/svl-lang.html
+
+-- Sanity check: an interesting test, under no scheduler ("none"),
+-- should have at least one cycle of EX-ecution steps property
+-- NOTE: this is only expected on "<test>_none.lnt" which use SCHEDULER_NONE
+property AtLeastOneLassoUnderNoScheduler (model)
+is
+  "${model}_one_lasso.bcg" = "${model}.bcg" |= with evaluator4
+    < true* > < 'EX .*' > @;
+  expected TRUE;
+end property
+
+-- Sanity check: from any state, there is always a way to reach
+-- termination. Again, this should be tested only for "<test>_none.lnt"
+-- see first example of: http://cadp.inria.fr/man/mcl4.html#sect16
+property CanAlwaysReachTermination (model)
+is
+  "${model}_no_termination.bcg" = "${model}.bcg" |= with evaluator4
+    [ true* . (not "exit") ] < (not "exit")* . "exit" > true;
+  expected TRUE;
+end property
+
+-- With SCHEDULER_NONE, any test should verify the two sanity check properties
+"prod_cons_none.bcg" = generation of "prod_cons_none.lnt";
+check AtLeastOneLassoUnderNoScheduler(prod_cons_none);
+check CanAlwaysReachTermination(prod_cons_none);
+
+------------------------------------------------------------------------
+-- Look for loops of thread execution steps.
+property FreeFromDeadlockLasso (model)
+    "There are no deadlock lassos in ${model}"
+is
+    "${model}_deadlock.bcg" = "${model}.bcg" |= with evaluator4
+        < true* > < 'EX .*' > @;
+    expected FALSE;
+end property
+
+"prod_cons_obe.bcg" = generation of "prod_cons_obe.lnt";
+check FreeFromDeadlockLasso(prod_cons_obe);
+
+"prod_cons_hsa.bcg" = generation of "prod_cons_hsa.lnt";
+check FreeFromDeadlockLasso(prod_cons_hsa);
+
+"prod_cons_hsa_obe.bcg" = generation of "prod_cons_hsa_obe.lnt";
+check FreeFromDeadlockLasso(prod_cons_hsa_obe);
+
+"prod_cons_lobe.bcg" = generation of "prod_cons_lobe.lnt";
+check FreeFromDeadlockLasso(prod_cons_lobe);
