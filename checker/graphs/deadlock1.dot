@@ -1,0 +1,5 @@
+digraph G {
+        1 -> 2 [ color=blue ]
+        2 -> 1 [ color=blue ]
+        2 -> 3
+}
