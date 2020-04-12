@@ -159,3 +159,150 @@ If we restrict to only the fairly scheduled threads, we would not consider such
 cycles. But if there are enough execution tokens to execute threads that are not
 strictly guaranteed execution, the non-fairly scheduled threads may perturbate
 the fairly scheduled ones such that such loops are an issue?
+
+## A token-based execution model
+
+The first draft of Schedulers are defined with respect to a certain number of
+Compute Units. We can reach something more flexible with a token-based execution
+model, where threads can execute only if they have a (virtual) token from the
+scheduler. The total number of tokens is picked up randomly between 1 and the
+total number of threads. The threads that are fairly scheduled are guaranteed to
+have a token.
+
+In practice, we consider the following sets of threads:
+
+- `A` is the set of **active** threads, i.e. threads that have not terminated
+  yet and which may be scheduled.
+  
+- `E` is the set of **enabled** threads, i.e. treads to which the scheduler have
+  given a token.
+
+- `F` is the set of **fairly scheduled** threads, i.e. threads that are
+  guaranteed to be given a token.
+
+We have the following invariants:
+
+- F is a subset of E, which is a subset of A
+
+- card(E) is lower or equal to the number of tokens
+
+A scheduler definition looks like:
+
+```
+process SCHEDULER_X [EX: ExChan, TERMINATE: NatChan, NUM_TOKEN: NatChan] (numThread: nat) is
+  var
+    A, E, F: NatSet,
+    numTokens: nat,
+    tid: nat,
+    ...
+  in
+
+    -- At the beginning, all threads are active
+    for tid := 0  while tid < numThreads by tid := tid + 1 loop
+      A := insert(A, tid)
+    end loop;
+
+    -- randomly pick a number of token within a relevant bound
+    NUM_TOKEN(?numTokens) where (0 < numTokens) and (numTokens <= numThreads);
+
+    -- main loop
+    loop sched_loop in
+
+      -- Scheduler-specific logic to set F and E
+      F := ...
+      E := ...
+      assert F isSubsetOf E;
+
+      select
+
+        EX(?tid, ...) where tid isElementOf E;
+        -- Maybe some scheduler-specific logic
+        E := ...
+        F := ...
+
+      []
+
+        TERMINATE(?tid);
+        A := remove(tid, A);
+
+        if isEmpty(A) then
+          -- all threads are terminated, let's terminate the scheduler
+          break sched_loop
+        end if;
+
+        -- Maybe some scheduler-specific logic
+        E := ...
+        F := ...
+
+      end select
+    end loop
+  end var
+end process
+```
+
+Note that A, E and F may be modified at each iteration of the loop.
+
+Let's write HSA with this style:
+
+```
+-- NOTE: THIS WON'T COMPILE AS-IS, NEED TO FIX SOME SET-RELATED PRIMITIVES
+
+-- This pragma speeds up all generation of sets of naturals,
+-- by bounding the naturals to include in the enumerations.
+!nat_sup <number of threads>
+
+process SCHEDULER_HSA_TOKEN [EX: ExChan, TERMINATE: NatChan, NUM_TOKEN: NatChan] (numThread: nat) is
+  var
+    A, E, F: NatSet,
+    numTokens: nat,
+    tid: nat
+  in
+
+    -- At the beginning, all threads are active
+    for tid := 0  while tid < numThreads by tid := tid + 1 loop
+      A := insert(A, tid)
+    end loop;
+
+    -- Randomly pick a number of token within a relevant bound
+    NUM_TOKEN(?numTokens) where (0 < numTokens) and (numTokens <= numThreads);
+
+    -- main loop
+    loop sched_loop in
+
+      -- Only the active thread with the lowest ID is guaranteed fairly scheduling
+      for tid := 0 while tid < numThreads by tid := tid + 1 loop
+        if tid isElementOf A then
+          F := NatSet(tid);
+          break
+        end if
+      end loop;
+
+      -- Threads other than the one in F may be enabled if there are some tokens for them
+      -- This will randomly pick new threads not in F at every iteration of the main loop
+      E := any NatSet where (F isSubsetOf E) and (E isSubsetOf A) and (card(E) <= numTokens);
+
+      assert F isSubsetOf E;
+      assert E isSubsetOf A;
+
+      select
+
+        EX(?tid, ...) where tid isElementOf E;
+        -- Nothing special to do for HSA
+
+      []
+
+        TERMINATE(?tid);
+        A := remove(tid, A);
+
+        if isEmpty(A) then
+          -- all threads are terminated, let's terminate the scheduler
+          break sched_loop
+        end if;
+
+        -- Nothing special to do for HSA
+
+      end select
+    end loop
+  end var
+end process
+```
