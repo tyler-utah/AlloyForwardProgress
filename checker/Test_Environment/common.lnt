@@ -7,21 +7,21 @@ module common is
 -- Types, Channels
 
 type NatSet is
-  set of nat
+  sorted set of nat
   with "length", "remove", "member"
 end type
 
 -- Shared memory
 function NumMemLoc() : nat is
-  return 1
+  return 2
 end function
 
 type MemArray is
-  array [1..1] of int
+  array [1..2] of int
 end type
 
 type MemLoc is
-  range 1..1 of nat
+  range 1..2 of nat
 end type
 
 type Instruction is
@@ -41,7 +41,7 @@ channel NatChan is
 end channel
 
 channel ExChan is
-  -- tid, instruction, do_branch
+  -- tid, instruction, fair_threads
   (nat, Instruction, NatSet)
 end channel
 
@@ -147,6 +147,43 @@ process SCHEDULER_NONE [EX: ExChan, TERMINATE: NatChan] (numThread: nat) is
    end var
 end process
 
+process SCHEDULER_WEAK_FAIR [EX: ExChan, TERMINATE: NatChan] (numThread: nat) is
+   var
+      doneThread: nat,
+      ts: NatSet,
+      tid:nat,
+      i:nat
+   in
+      doneThread := 0;
+      ts := {};
+      i := 0;
+
+      while i < numThread loop
+	      ts := insert(i, ts);
+         i := i + 1
+	   end loop;
+
+      loop sched_loop in
+         select
+
+            -- Execution step of a thread
+            EX(?any nat, ?any Instruction, ts)
+
+         []
+
+            -- a Thread may stop at any time
+            TERMINATE(?tid);
+            ts := remove(tid, ts);
+
+            doneThread := doneThread + 1;
+            if doneThread == numThread then
+               break sched_loop
+            end if
+
+         end select
+      end loop
+   end var
+end process
 
 -- This process specifies the scheduler for Occupancy Bound Execution model,
 -- where a thread is fairly scheduled if it has performed at least one operation
@@ -158,14 +195,14 @@ process SCHEDULER_OBE [EX: ExChan, TERMINATE: NatChan] (numThread: nat) is
       numCU: nat
    in
       doneThread := 0;
-      numCU := any nat where numCU <= numThread;
+      numCU := numThread;
       activeThreads := {};
 
     loop sched_loop in
       select
 
         -- First execution step of a thread
-	EX(?tid, ?any Instruction, activeThreads) where length(activeThreads) < numCU and not(member(tid, activeThreads));
+	     EX(?tid, ?any Instruction, activeThreads) where length(activeThreads) < numCU and not(member(tid, activeThreads));
         activeThreads := insert(tid, activeThreads)
 
       []
@@ -177,7 +214,7 @@ process SCHEDULER_OBE [EX: ExChan, TERMINATE: NatChan] (numThread: nat) is
 
         -- a Thread may stop at any time, it is then remove from the list of active threads
         TERMINATE(?tid);
-	activeThreads := remove(tid, activeThreads);
+	     activeThreads := remove(tid, activeThreads);
         doneThread := doneThread + 1;
         if doneThread == numThread then
            break sched_loop
@@ -188,12 +225,43 @@ process SCHEDULER_OBE [EX: ExChan, TERMINATE: NatChan] (numThread: nat) is
   end var
 end process
 
-
 -- This process specifies the scheduler for the Heterogeneous System
 -- Architecture model, where threads are fairly scheduled based on
 -- their id, in a round-robin fashion starting a index 0 and
 -- increasing by 1 every time the active thread terminates.
 process SCHEDULER_HSA [EX: ExChan, TERMINATE: NatChan] (numThread: nat) is
+   var
+      doneThread: nat,
+      fairSched: NatSet
+   in
+      doneThread := 0;
+      fairSched := {doneThread};
+
+      loop sched_loop in
+         select
+
+            -- Execution step of a thread
+            EX(?any nat, ?any Instruction, fairSched)
+
+         []
+
+            -- a Thread may stop at any time
+            TERMINATE(?any nat);
+            doneThread := doneThread + 1;
+            fairSched := {doneThread};
+            if doneThread == numThread then
+               break sched_loop
+            end if
+
+         end select
+      end loop
+   end var
+end process
+
+-- This process specifies a scheduler similar to HSA, but where threads not guaranteed
+-- to execute fairly (while not guaranteed to continue) are next to resume when a CU becomes
+-- available.
+process SCHEDULER_HSA_PRIORITY [EX: ExChan, TERMINATE: NatChan] (numThread: nat) is
    var
       activeThread: nat,
       tid: nat,
@@ -202,7 +270,7 @@ process SCHEDULER_HSA [EX: ExChan, TERMINATE: NatChan] (numThread: nat) is
       numCU: nat
    in
       activeThread := 0;
-      numCU := any nat where numCU <= numThread;
+      numCU := numThread;
       schedSet := {activeThread};
       tokenSet := {activeThread};
     loop sched_loop in
@@ -242,15 +310,17 @@ end process
 
 -- This process specifies the scheduler for the HSA+OBE model, which
 -- combines HSA and OBE behaviours.
-process SCHEDULER_HSA_OBE [EX: ExChan, TERMINATE: NatChan] (numThread: nat, numCU: nat) is
+process SCHEDULER_HSA_OBE [EX: ExChan, TERMINATE: NatChan] (numThread: nat) is
    var
       doneThreads: NatSet,
       tid: nat,
       hsaThread: nat,
-      activeThreads: NatSet
+      activeThreads: NatSet,
+      numCU: nat
    in
       doneThreads := {};
       hsaThread := 0;
+      numCU := numThread;
       activeThreads := {hsaThread};
 
       -- This is OBE behaviour, with the thread corresponding to HSA index being always present in activeThreads
@@ -270,10 +340,12 @@ process SCHEDULER_HSA_OBE [EX: ExChan, TERMINATE: NatChan] (numThread: nat, numC
       []
 
         -- Termination of a thread
-        TERMINATE(?tid);
-	activeThreads := remove(tid, activeThreads);
+        TERMINATE(?tid); 
+	     activeThreads := remove(tid, activeThreads);
+
         doneThreads := insert(tid, doneThreads);
-	if length(doneThreads) == numThread then
+
+        if length(doneThreads) == numThread then
            break sched_loop
         end if;
 
@@ -283,7 +355,10 @@ process SCHEDULER_HSA_OBE [EX: ExChan, TERMINATE: NatChan] (numThread: nat, numC
         -- we hit this thread index.
         if tid == hsaThread then
            while member(hsaThread, doneThreads) loop
-	      hsaThread := hsaThread + 1
+	      hsaThread := hsaThread + 1;
+	      if not(member(hsaThread, activeThreads)) then
+	      	 activeThreads := insert(hsaThread, activeThreads)
+	      end if
 	   end loop
 	end if
 
@@ -299,6 +374,7 @@ end process
 process SCHEDULER_LOBE [EX: ExChan, TERMINATE: NatChan] (numThread: nat) is
    var
       doneThreads: nat,
+      doneSet: NatSet,
       tid: nat,
       highestID: nat,
       threadSet: NatSet,
@@ -306,36 +382,50 @@ process SCHEDULER_LOBE [EX: ExChan, TERMINATE: NatChan] (numThread: nat) is
       i: nat
    in
       doneThreads := 0;
-      numCU := any nat where numCU <= numThread;
+      numCU := numThread;
       highestID := numCU;
 
-      i := 0;
       threadSet := {};
-      while i < highestID loop
-	      threadSet := insert(i, threadSet);
-         i := i + 1
-	   end loop;
+      doneSet := {};
 
     loop sched_loop in
       select
 
+      -- First execution step of a thread
+	      EX(?tid, ?any Instruction, threadSet) where tid < highestID and not(member(tid, threadSet));
+         
+         -- We guarantee all smaller id threads
+         i := 0;
+         while i < tid loop
+            if not(member(i, threadSet)) and not(member(i, doneSet)) then
+	            threadSet := insert(i, threadSet)
+            end if;
+            i := i + 1
+	      end loop;
+         threadSet := insert(tid, threadSet)
+
+      []
+
         -- any Thread up to highestID is guaranteed fairly scheduling
-        EX(?tid, ?any Instruction, threadSet) where tid < highestID
+        EX(?tid, ?any Instruction, threadSet) where member(tid, threadSet)
 
       []
 
         -- Termination of a thread
         TERMINATE(?tid);
-	doneThreads := doneThreads + 1;
-	if doneThreads == numThread then
+	     doneThreads := doneThreads + 1;
+        doneSet := insert(tid, doneSet);
+	     if doneThreads == numThread then
            break sched_loop
         end if;
 
         -- a Thread just terminated, we bump highestID to allow a new thread to be scheduled.
-   threadSet := insert(highestID, threadSet);
-   threadSet := remove(tid, threadSet);
+        if highestID < numThread then
+           threadSet := insert(highestID, threadSet)
+        end if;
+        threadSet := remove(tid, threadSet);
 
-   highestID := highestID + 1
+        highestID := highestID + 1
 
       end select
     end loop
