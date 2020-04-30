@@ -31,7 +31,7 @@ property FreeFromDeadlockLasso (model)
     "There are no deadlock lassos in ${model}"
 is
     "${model}_deadlock.bcg" = "${model}.bcg" |= with evaluator4
-        < true* > < 'EX .*' > @;
+        <true*> (( <  'EX !1 .* !{1}' . true* > @ ) or ( <  'EX !0 .* !{0}' . true* > @ ) or ( <  'EX !0 .* !{0, 1}' . true* . 'EX !1 .* !{0, 1}' . true* > @ ));
     expected FALSE;
 end property
 
