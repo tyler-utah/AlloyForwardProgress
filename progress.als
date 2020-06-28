@@ -30,6 +30,9 @@ sig Thread {
 
 // A local state maps the next instruction of a thread
 // Previously used to hold registers
+// JW: Maybe rename this to "current instruction"? I found "next instruction"
+//      a bit misleading because it made me think of "the next instruction after
+//       the current one" which is (I think) not what you mean.
 sig L_state {
   next_ins : lone Instruction
 }
@@ -38,29 +41,22 @@ sig L_state {
 sig S {
    G_state: one G_memory,
    T_state: Thread -> one L_state
+}{
+  // each thread contains only instructions that actually belong to it
+  all t : Thread | T_state[t].next_ins.thd in t
 }
 
 // Instructions
 sig Instruction {
    po : lone Instruction, // immediate successor in program order
    thd : one Thread // each instruction belongs to one thread
-}
-
-// Need to define that the first instruction in every thread the first one in po
-pred first_instruction_check[t:Thread, i:Instruction] {
-  i.thd = t
-  i not in ran[po]
-}
-
-fun first_instruction[t:Thread]: lone Instruction {
-  {i : Instruction | first_instruction_check[t,i]}
-}
+} 
 
 // Initial state
 one sig START extends S {
 }{
   G_state.mem[X] = ZERO // all memory locations are zero
-  all t : Thread | T_state[t].next_ins = first_instruction[t]  // Every thread starts at its first instruction
+  all t : Thread | T_state[t].next_ins not in ran[po] // each thread begins at a po-minimal instruction  
 }
 
 // Final state(s)
@@ -83,6 +79,7 @@ sig ATOMIC_EXCH_BRANCH extends Instruction {
    check_val : one V,
    branch_target: lone Instruction
 } {
+  // if the branch_target is set, then the target instruction must be within the same thread
   some branch_target implies (branch_target.@thd = thd)
 }
 
@@ -120,23 +117,25 @@ fact {
   Instruction in ATOMIC_EXCH_BRANCH 
 }
 
-fact po_facts {
-  // instructions are in the same thread iff they are po-related
+pred is_acyclic[r:univ->univ] {
+  no (iden & ^r)
+}
+
+fact po_facts { // po is a strict total order on instructions per thread
+  // the reflexive transitive closure of po relates pairs of instructions iff they are in the same thread
   all i1,i2 : Instruction | i1.thd = i2.thd iff i1 in i2.*po or i2 in i1.*po
 
   // po is acyclic
-  no (iden & ^po)
+  is_acyclic[po]
 }
 
-fact t_order_facts {
-  // instructions are in the same thread iff they are po-related
+fact t_order_facts { // t_order is a strict total order on threads
+  // the reflexive transitive closure of t_order relates every pair of threads one way or the other
   all t1,t2 : Thread | t1 in t2.*t_order or t2 in t1.*t_order
 
-  // po is acyclic
-  no (iden & ^t_order)
+  // t_order is acyclic
+  is_acyclic[t_order]
 }
-
-
 
 // Helper function: reverse of pre
 fun pre_rev : S -> A {
@@ -156,7 +155,7 @@ fun next_in_thd : A -> A {
   next & (ins.thd.~thd.~ins)
 }
 
-fun enabled_threads[s:S] : set Thread {
+fun enabled_threads[s : S] : set Thread {
   pre_rev[s].ins.thd
 }
 
