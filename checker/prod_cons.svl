@@ -16,7 +16,7 @@ end property
 property CanAlwaysReachTermination (model)
 is
   "${model}_no_termination.bcg" = "${model}.bcg" |= with evaluator4
-    [ true* . (not "exit") ] < (not "exit")* . "exit" > true;
+    [ true* . (not "ALL_DONE") ] < (not "ALL_DONE")* . "ALL_DONE" > true;
   expected TRUE;
 end property
 

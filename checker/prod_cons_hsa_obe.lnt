@@ -1,10 +1,10 @@
 module prod_cons_hsa_obe(common) is
 
-process MAIN [EX: ExChan, TERMINATE: NatChan] is
+process MAIN [EX: ExChan, TERMINATE: NatChan, ALL_DONE: none] is
   par EX, TERMINATE in
-    SHARED_MEMORY [EX, TERMINATE] (2)
+    SHARED_MEMORY [EX, TERMINATE, ALL_DONE] (2)
   ||
-    SCHEDULER_HSA_OBE [EX, TERMINATE] (2, 1)
+    SCHEDULER_HSA_OBE [EX, TERMINATE]
   ||
     par
 
