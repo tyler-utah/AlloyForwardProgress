@@ -25,7 +25,7 @@ type MemLoc is
 end type
 
 type Instruction is
-  ATOMIC_EXCH_BRANCH(check_loc: MemLoc, exch_val: int, do_exch: bool, check_val: int, branch_target: nat, do_branch: bool)
+  ATOMIC_EXCH_BRANCH(do_exch: bool, exch_val: int, check_loc: MemLoc, check_val: int, branch_target: nat, do_branch: bool)
    with "get"
 end type
 
@@ -56,22 +56,25 @@ end channel
 process Thread [EX: ExChan, TERMINATE: NatChan] (tid: nat, prog: Program) is
   var
     pc: nat, -- program counter
-    -- variables to match ATOMIC_EXCH_BRANCH_MEM arguments:
-    check_loc: MemLoc, exch_val: int, do_exch: bool, check_val: int, branch_target: nat
+    -- variables to match ATOMIC_EXCH_BRANCH arguments:
+    do_exch: bool, exch_val: int, check_loc: MemLoc, check_val: int, branch_target: nat
  in
     pc := 1; -- start at first instruction (list indexes start at 1)
 
     loop execute_loop in
 
       case access(prog, pc) of Instruction in
-         ATOMIC_EXCH_BRANCH(check_loc, exch_val, do_exch, check_val, branch_target, any bool) ->
-            select
-               EX(tid, ATOMIC_EXCH_BRANCH(check_loc, exch_val, do_exch, check_val, branch_target, true), ?any NatSet);
-               pc := branch_target
-            []
-               EX(tid, ATOMIC_EXCH_BRANCH(check_loc, exch_val, do_exch, check_val, branch_target, false), ?any NatSet);
-               pc := pc + 1
-            end select
+         ATOMIC_EXCH_BRANCH(do_exch, exch_val, check_loc, check_val, branch_target, any bool) ->
+           -- Note: we do need a 'select' with the two possible values of do_branch (true/false),
+           -- because a nested receive operation (e.g. EX(... ATOMIC_EXCH_BRANCH(..., ?do_branch)) )
+           -- is not allowed
+           select
+             EX(tid, ATOMIC_EXCH_BRANCH(do_exch, exch_val, check_loc, check_val, branch_target, true), ?any NatSet);
+             pc := branch_target
+           []
+             EX(tid, ATOMIC_EXCH_BRANCH(do_exch, exch_val, check_loc, check_val, branch_target, false), ?any NatSet);
+             pc := pc + 1
+           end select
       end case;
 
       -- Reach end of program?
@@ -87,12 +90,12 @@ end process
 
 -- This process specifies the behavior of the shared memory
 -- The gate "EX" (EXecute) is used to synchronize with other processes, which represent threads
-process SHARED_MEMORY [EX: ExChan, TERMINATE: NatChan, ALL_DONE: none] (numThread: nat) is
+process SHARED_MEMORY [EX: ExChan, TERMINATE: NatChan, ALL_DONE: none] (numThreads: nat) is
   var
     doneThread: nat,
     mem: MemArray,
-    -- variables to match ATOMIC_EXCH_BRANCH_MEM arguments:
-    check_loc: MemLoc, exch_val: int, do_exch: bool, check_val: int, do_branch: bool
+    -- variables to match ATOMIC_EXCH_BRANCH arguments:
+    do_exch: bool, exch_val: int, check_loc: MemLoc, check_val: int, do_branch: bool
   in
     doneThread := 0;
     mem := MemArray(0);
@@ -100,7 +103,7 @@ process SHARED_MEMORY [EX: ExChan, TERMINATE: NatChan, ALL_DONE: none] (numThrea
     -- main loop
     loop mem_loop in
       select
-        EX(?any nat, ?ATOMIC_EXCH_BRANCH(check_loc, exch_val, do_exch, check_val, any nat, do_branch), ?any NatSet) where do_branch == (check_val == mem[nat(check_loc)]);
+        EX(?any nat, ?ATOMIC_EXCH_BRANCH(do_exch, exch_val, check_loc, check_val, any nat, do_branch), ?any NatSet) where do_branch == (check_val == mem[nat(check_loc)]);
         if do_exch then
           mem[nat(check_loc)] := exch_val
         end if
@@ -109,7 +112,7 @@ process SHARED_MEMORY [EX: ExChan, TERMINATE: NatChan, ALL_DONE: none] (numThrea
 
         TERMINATE(?any nat);
         doneThread := doneThread + 1;
-        if doneThread == numThread then
+        if doneThread == numThreads then
           break mem_loop
         end if
       end select
