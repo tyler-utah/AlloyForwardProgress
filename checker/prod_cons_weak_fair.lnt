@@ -1,10 +1,10 @@
-module prod_cons_none(common) is
+module prod_cons_weak_fair(common) is
 
 process MAIN [EX: ExChan, TERMINATE: NatChan, ALL_DONE: none] is
   par EX, TERMINATE in
     SHARED_MEMORY [EX, TERMINATE, ALL_DONE] (2)
   ||
-    SCHEDULER_NONE [EX, TERMINATE]
+    SCHEDULER_WEAK_FAIR [EX, TERMINATE] ({0, 1})
   ||
     par
 

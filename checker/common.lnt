@@ -121,15 +121,37 @@ process SHARED_MEMORY [EX: ExChan, TERMINATE: NatChan, ALL_DONE: none] (numThrea
 end process
 
 -- This process specifies a "no scheduler", which always allows any process to execute
-process SCHEDULER_NONE [EX: ExChan, TERMINATE: NatChan] (allThreads: NatSet) is
+process SCHEDULER_NONE [EX: ExChan, TERMINATE: NatChan] is
   loop
     select
-      EX(?any nat, ?any Instruction, allThreads)
+      EX(?any nat, ?any Instruction, {} of NatSet)
     []
       TERMINATE(?any nat)
     end select
   end loop
 end process
+
+process SCHEDULER_WEAK_FAIR [EX: ExChan, TERMINATE: NatChan] (in var fair: NatSet) is
+  var
+    tid: nat
+  in
+    loop
+      select
+
+        -- Execution step of a thread
+        EX(?any nat, ?any Instruction, fair)
+
+      []
+
+        -- a Thread may stop at any time
+        TERMINATE(?tid);
+        fair := remove(tid, fair)
+
+      end select
+    end loop
+  end var
+end process
+
 
 -- This process specifies the scheduler for Occupancy Bound Execution model,
 -- where a thread is fairly scheduled if it has performed at least one operation
@@ -181,7 +203,6 @@ process SCHEDULER_HSA [EX: ExChan, TERMINATE: NatChan] is
     end loop
   end var
 end process
-
 
 -- This process specifies the scheduler for the HSA+OBE model, which
 -- combines HSA and OBE behaviours.

@@ -35,6 +35,9 @@ is
     expected FALSE;
 end property
 
+"prod_cons_weak_fair.bcg" = generation of "prod_cons_weak_fair.lnt";
+check FreeFromDeadlockLasso(prod_cons_weak_fair);
+
 "prod_cons_obe.bcg" = generation of "prod_cons_obe.lnt";
 check FreeFromDeadlockLasso(prod_cons_obe);
 
