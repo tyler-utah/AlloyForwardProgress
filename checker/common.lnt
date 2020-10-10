@@ -8,7 +8,7 @@ module common is
 
 type NatSet is
   set of nat
-  with "length", "remove", "member"
+  with "length", "remove", "member", "access"
 end type
 
 -- Shared memory
@@ -42,8 +42,22 @@ end channel
 
 channel ExChan is
   -- tid, instruction, do_branch
-  (nat, Instruction, NatSet)
+  (nat, Instruction, String)
 end channel
+
+function Str(nset: NatSet): String is
+  var i: nat, s: String in
+    if length(nset) == 0 then
+      return "::"
+    else
+      s := ":";
+      for i := 1 while i <= length(nset) by i := i + 1 loop
+        s := s + String(access(nset, i)) + ":"
+      end loop;
+      return s
+    end if
+  end var
+end function
 
 -------------------------------------------------------------------------------
 -- Processes
@@ -69,10 +83,10 @@ process Thread [EX: ExChan, TERMINATE: NatChan] (tid: nat, prog: Program) is
            -- because a nested receive operation (e.g. EX(... ATOMIC_EXCH_BRANCH(..., ?do_branch)) )
            -- is not allowed
            select
-             EX(tid, ATOMIC_EXCH_BRANCH(do_exch, exch_val, check_loc, check_val, branch_target, true), ?any NatSet);
+             EX(tid, ATOMIC_EXCH_BRANCH(do_exch, exch_val, check_loc, check_val, branch_target, true), ?any String);
              pc := branch_target
            []
-             EX(tid, ATOMIC_EXCH_BRANCH(do_exch, exch_val, check_loc, check_val, branch_target, false), ?any NatSet);
+             EX(tid, ATOMIC_EXCH_BRANCH(do_exch, exch_val, check_loc, check_val, branch_target, false), ?any String);
              pc := pc + 1
            end select
       end case;
@@ -103,7 +117,7 @@ process SHARED_MEMORY [EX: ExChan, TERMINATE: NatChan, ALL_DONE: none] (numThrea
     -- main loop
     loop mem_loop in
       select
-        EX(?any nat, ?ATOMIC_EXCH_BRANCH(do_exch, exch_val, check_loc, check_val, any nat, do_branch), ?any NatSet) where do_branch == (check_val == mem[nat(check_loc)]);
+        EX(?any nat, ?ATOMIC_EXCH_BRANCH(do_exch, exch_val, check_loc, check_val, any nat, do_branch), ?any String) where do_branch == (check_val == mem[nat(check_loc)]);
         if do_exch then
           mem[nat(check_loc)] := exch_val
         end if
@@ -127,7 +141,7 @@ end process
 process SCHEDULER_NONE [EX: ExChan, TERMINATE: NatChan] is
   loop
     select
-      EX(?any nat, ?any Instruction, {} of NatSet)
+      EX(?any nat, ?any Instruction, "::")
     []
       TERMINATE(?any nat)
     end select
@@ -142,7 +156,7 @@ process SCHEDULER_WEAK_FAIR [EX: ExChan, TERMINATE: NatChan] (in var fair: NatSe
       select
 
         -- Execution step of a thread
-        EX(?any nat, ?any Instruction, fair)
+        EX(?any nat, ?any Instruction, Str(fair))
 
       []
 
@@ -166,7 +180,7 @@ process SCHEDULER_OBE [EX: ExChan, TERMINATE: NatChan] is
     fair := {};
     loop
       select
-	EX(?tid, ?any Instruction, fair);
+	EX(?tid, ?any Instruction, Str(fair));
         fair := insert(tid, fair)
       []
         TERMINATE(?tid);
@@ -192,7 +206,7 @@ process SCHEDULER_HSA [EX: ExChan, TERMINATE: NatChan] is
     loop
       select
         -- Only the active thread is guaranteed fair scheduling
-	EX(?any nat, ?any Instruction, {fair})
+	EX(?any nat, ?any Instruction, Str({fair}))
       []
 
         -- When activeThread terminates, provide fair scheduling to the next thread id
@@ -226,7 +240,7 @@ process SCHEDULER_HSA_OBE [EX: ExChan, TERMINATE: NatChan] is
       select
 
         -- First execution step of a thread
-	EX(?tid, ?any Instruction, fair);
+	EX(?tid, ?any Instruction, Str(fair));
         fair := insert(tid, fair)
 
       []
@@ -261,7 +275,7 @@ process SCHEDULER_LOBE [EX: ExChan, TERMINATE: NatChan] is
       select
 
         -- any Thread up to highestID is guaranteed fairly scheduling
-        EX(?tid, ?any Instruction, fair);
+        EX(?tid, ?any Instruction, Str(fair));
         for i := 0 while i <= tid by i := i + 1 loop
           if not(member(i, done)) then
             fair := insert(i, fair)
