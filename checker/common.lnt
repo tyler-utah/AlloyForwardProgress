@@ -42,7 +42,7 @@ end channel
 
 channel ExChan is
   -- tid, instruction, do_branch
-  (nat, Instruction)
+  (nat, Instruction, NatSet)
 end channel
 
 -------------------------------------------------------------------------------
@@ -66,10 +66,10 @@ process Thread [EX: ExChan, TERMINATE: NatChan] (tid: nat, prog: Program) is
       case access(prog, pc) of Instruction in
          ATOMIC_EXCH_BRANCH(check_loc, exch_val, do_exch, check_val, branch_target, any bool) ->
             select
-               EX(tid, ATOMIC_EXCH_BRANCH(check_loc, exch_val, do_exch, check_val, branch_target, true));
+               EX(tid, ATOMIC_EXCH_BRANCH(check_loc, exch_val, do_exch, check_val, branch_target, true), ?any NatSet);
                pc := branch_target
             []
-               EX(tid, ATOMIC_EXCH_BRANCH(check_loc, exch_val, do_exch, check_val, branch_target, false));
+               EX(tid, ATOMIC_EXCH_BRANCH(check_loc, exch_val, do_exch, check_val, branch_target, false), ?any NatSet);
                pc := pc + 1
             end select
       end case;
@@ -100,7 +100,7 @@ process SHARED_MEMORY [EX: ExChan, TERMINATE: NatChan, ALL_DONE: none] (numThrea
     -- main loop
     loop mem_loop in
       select
-        EX(?any nat, ?ATOMIC_EXCH_BRANCH(check_loc, exch_val, do_exch, check_val, any nat, do_branch)) where do_branch == (check_val == mem[nat(check_loc)]);
+        EX(?any nat, ?ATOMIC_EXCH_BRANCH(check_loc, exch_val, do_exch, check_val, any nat, do_branch), ?any NatSet) where do_branch == (check_val == mem[nat(check_loc)]);
         if do_exch then
           mem[nat(check_loc)] := exch_val
         end if
@@ -121,10 +121,10 @@ process SHARED_MEMORY [EX: ExChan, TERMINATE: NatChan, ALL_DONE: none] (numThrea
 end process
 
 -- This process specifies a "no scheduler", which always allows any process to execute
-process SCHEDULER_NONE [EX: ExChan, TERMINATE: NatChan] is
+process SCHEDULER_NONE [EX: ExChan, TERMINATE: NatChan] (allThreads: NatSet) is
   loop
     select
-      EX(?any nat, ?any Instruction)
+      EX(?any nat, ?any Instruction, allThreads)
     []
       TERMINATE(?any nat)
     end select
@@ -135,25 +135,17 @@ end process
 -- where a thread is fairly scheduled if it has performed at least one operation
 process SCHEDULER_OBE [EX: ExChan, TERMINATE: NatChan] is
   var
-    doneThread: nat,
     tid: nat,
-    activeThreads: NatSet
+    fair: NatSet
   in
-    doneThread := 0;
-    activeThreads := {};
-    loop sched_loop in
+    fair := {};
+    loop
       select
-
-        -- First execution step of a thread
-	EX(?tid, ?any Instruction);
-        activeThreads := insert(tid, activeThreads)
-
+	EX(?tid, ?any Instruction, fair);
+        fair := insert(tid, fair)
       []
-
-        -- a Thread may stop at any time, it is then remove from the list of active threads
         TERMINATE(?tid);
-	activeThreads := remove(tid, activeThreads)
-
+	fair := remove(tid, fair)
       end select
     end loop
   end var
@@ -165,21 +157,25 @@ end process
 -- their id, in a round-robin fashion starting a index 0 and
 -- increasing by 1 every time the active thread terminates.
 process SCHEDULER_HSA [EX: ExChan, TERMINATE: NatChan] is
-   var
-      activeThread: nat
-   in
-      activeThread := 0;
-    loop sched_loop in
+  var
+    tid: nat,
+    fair: nat,
+    done: NatSet
+  in
+    fair := 0;
+    done := {};
+    loop
       select
-
         -- Only the active thread is guaranteed fair scheduling
-	EX(activeThread, ?any Instruction)
-
+	EX(?any nat, ?any Instruction, {fair})
       []
 
         -- When activeThread terminates, provide fair scheduling to the next thread id
-        TERMINATE(activeThread);
-	activeThread := activeThread + 1
+        TERMINATE(?tid);
+        done := insert(tid, done);
+        while member(fair, done) loop
+          fair := fair + 1
+        end loop
 
       end select
     end loop
@@ -191,68 +187,69 @@ end process
 -- combines HSA and OBE behaviours.
 process SCHEDULER_HSA_OBE [EX: ExChan, TERMINATE: NatChan] is
   var
-    doneThreads: NatSet,
     tid: nat,
-    hsaThread: nat,
-    activeThreads: NatSet
+    fair: NatSet,
+    done: NatSet,
+    hsaThread: nat
   in
-    doneThreads := {};
     hsaThread := 0;
-    activeThreads := {hsaThread};
+    fair := {hsaThread};
+    done := {};
 
     -- This is OBE behaviour, with the thread corresponding to HSA index being always present in activeThreads
 
-    loop sched_loop in
+    loop
       select
 
         -- First execution step of a thread
-	EX(?tid, ?any Instruction);
-        activeThreads := insert(tid, activeThreads)
+	EX(?tid, ?any Instruction, fair);
+        fair := insert(tid, fair)
 
       []
 
         -- Termination of a thread
         TERMINATE(?tid);
-	activeThreads := remove(tid, activeThreads);
-        doneThreads := insert(tid, doneThreads);
-
-        -- If we reach here, then there is still at least one thread
-        -- which is not terminated. By construction, this thread ID
-        -- must be greater than hsaThread. Increment HSA thread until
-        -- we hit this thread index.
-        if tid == hsaThread then
-          while member(hsaThread, doneThreads) loop
-            hsaThread := hsaThread + 1
-          end loop
-        end if
+        fair := remove(tid, fair);
+        done := insert(tid, done);
+        while member(hsaThread, done) loop
+          hsaThread := hsaThread + 1
+        end loop
 
       end select
     end loop
   end var
 end process
 
-
 -- This process specifies the scheduler for the Linear OBE model,
 -- where threads are guaranteed fair scheduling as soon as any thread
 -- ID greater or equal to theirs has made a first execution step.
 process SCHEDULER_LOBE [EX: ExChan, TERMINATE: NatChan] is
-   var
-      doneThreads: nat,
-      tid: nat
-   in
-      doneThreads := 0;
+  var
+    fair: NatSet,
+    done: NatSet,
+    tid: nat,
+    i: nat
+  in
+    fair := {};
+    done := {};
 
-    loop sched_loop in
+    loop
       select
 
         -- any Thread up to highestID is guaranteed fairly scheduling
-        EX(?tid, ?any Instruction)
+        EX(?tid, ?any Instruction, fair);
+        for i := 0 while i <= tid by i := i + 1 loop
+          if not(member(i, done)) then
+            fair := insert(i, fair)
+          end if
+        end loop
 
       []
 
         -- Termination of a thread
         TERMINATE(?tid);
-	doneThreads := doneThreads + 1
+        fair := remove(tid, fair);
+        done := insert(tid, done)
 
       end select
     end loop

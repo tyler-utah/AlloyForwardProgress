@@ -4,7 +4,7 @@ process MAIN [EX: ExChan, TERMINATE: NatChan, ALL_DONE: none] is
   par EX, TERMINATE in
     SHARED_MEMORY [EX, TERMINATE, ALL_DONE] (2)
   ||
-    SCHEDULER_NONE [EX, TERMINATE]
+    SCHEDULER_NONE [EX, TERMINATE] ({0, 1})
   ||
     par
 
