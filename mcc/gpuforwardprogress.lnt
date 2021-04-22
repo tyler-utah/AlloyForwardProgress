@@ -159,9 +159,9 @@ end process
 process MAIN [STEP: StepChan, TERMINATE: NatChan, ALL_DONE: none] is
 
 par STEP, TERMINATE in
-   ALL_DONE -> sharedMemory[STEP, TERMINATE, ALL_DONE](6)
+   ALL_DONE -> sharedMemory[STEP, TERMINATE, ALL_DONE](7) -- This argument should reflect the total number of threads
 
--- Select a progress model here
+-- Select a progress model here by uncommenting
 -- || ALL_DONE -> UNFAIR[STEP, TERMINATE, ALL_DONE]
 || ALL_DONE -> LOBE[STEP, TERMINATE, ALL_DONE]
 
@@ -186,22 +186,12 @@ par STEP, TERMINATE in
                                         AXB(MemLoc(5), 0, 1, true, 1)
                                       })
    || interpreter[STEP, TERMINATE](5, {
-                                        AXB(MemLoc(5), 0, 1, false, 0)
+                                        AXB(MemLoc(5), 0, 1, false, 0),
+                                        AXB(MemLoc(6), 0, 1, true, 1)
                                       })
-
-
-   -- || interpreter[STEP, TERMINATE](5, {
-   --                                      AXB(MemLoc(5), 0, 1, false, 0),
-   --                                      AXB(MemLoc(6), 0, 1, true, 1)
-   --                                    })
-   -- || interpreter[STEP, TERMINATE](6, {
-   --                                      AXB(MemLoc(6), 0, 1, false, 0),
-   --                                      AXB(MemLoc(7), 0, 1, true, 1)
-   --                                    })
-   -- || interpreter[STEP, TERMINATE](7, {
-   --                                      AXB(MemLoc(7), 0, 1, false, 0)
-   --                                    })
-
+   || interpreter[STEP, TERMINATE](6, {
+                                        AXB(MemLoc(6), 0, 1, false, 0)
+                                      })
    end par
 end par
 
