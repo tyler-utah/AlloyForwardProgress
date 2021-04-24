@@ -10,15 +10,15 @@ end type
 
 -- Shared memory
 function NumMemLoc() : nat is
-  return 9
+  return 10
 end function
 
 type MemArray is
-  array [1..9] of int
+  array [1..10] of int
 end type
 
 type MemLoc is
-  range 1..9 of nat
+  range 1..10 of nat
 end type
 
 type Instruction is
@@ -159,42 +159,84 @@ end process
 process MAIN [STEP: StepChan, TERMINATE: NatChan, ALL_DONE: none] is
 
 par STEP, TERMINATE in
-   ALL_DONE -> sharedMemory[STEP, TERMINATE, ALL_DONE](7) -- This argument should reflect the total number of threads
+   ALL_DONE -> sharedMemory[STEP, TERMINATE, ALL_DONE](6) -- This argument should reflect the total number of threads
 
 -- Select a progress model here by uncommenting
 -- || ALL_DONE -> UNFAIR[STEP, TERMINATE, ALL_DONE]
 || ALL_DONE -> LOBE[STEP, TERMINATE, ALL_DONE]
-
 || par
+
       interpreter[STEP, TERMINATE](0, {
-                                        AXB(MemLoc(1), 0, 1, true, 1)
+                                        AXB(MemLoc(1), 0, 2, true, 1)
 				      })
    || interpreter[STEP, TERMINATE](1, {
                                         AXB(MemLoc(1), 0, 1, false, 0),
-                                        AXB(MemLoc(2), 0, 1, true, 1)
+                                        AXB(MemLoc(2), 0, 3, true, 1)
                                       })
    || interpreter[STEP, TERMINATE](2, {
                                         AXB(MemLoc(2), 0, 1, false, 0),
-                                        AXB(MemLoc(3), 0, 1, true, 1)
+                                        AXB(MemLoc(3), 0, 3, true, 1)
                                       })
    || interpreter[STEP, TERMINATE](3, {
                                         AXB(MemLoc(3), 0, 1, false, 0),
-                                        AXB(MemLoc(4), 0, 1, true, 1)
+                                        AXB(MemLoc(4), 0, 3, true, 1)
                                       })
    || interpreter[STEP, TERMINATE](4, {
                                         AXB(MemLoc(4), 0, 1, false, 0),
-                                        AXB(MemLoc(5), 0, 1, true, 1)
+                                        AXB(MemLoc(5), 0, 3, true, 1)
                                       })
    || interpreter[STEP, TERMINATE](5, {
-                                        AXB(MemLoc(5), 0, 1, false, 0),
-                                        AXB(MemLoc(6), 0, 1, true, 1)
-                                      })
-   || interpreter[STEP, TERMINATE](6, {
-                                        AXB(MemLoc(6), 0, 1, false, 0)
+                                        AXB(MemLoc(5), 0, 1, false, 0)
                                       })
    end par
 end par
 
 end process
+
+(*  Something a bit more complex:
+
+
+
+      interpreter[STEP, TERMINATE](0, {
+                                        AXB(MemLoc(1), 0, 2, true, 1), -- set 1
+                                        AXB(MemLoc(1), 1, 2, false, 0), -- while 1
+                                        AXB(MemLoc(10), 0, 99, true, 0)
+				      })
+   || interpreter[STEP, TERMINATE](1, {
+                                        AXB(MemLoc(1), 0, 1, false, 0), -- while 0
+                                        AXB(MemLoc(1), 0, 3, true, 0), -- set 0
+                                        AXB(MemLoc(2), 0, 4, true, 1), -- set 1
+                                        AXB(MemLoc(2), 1, 4, false, 0), -- while 1
+                                        AXB(MemLoc(10), 0, 99, true, 1)
+                                      })
+   || interpreter[STEP, TERMINATE](2, {
+                                        AXB(MemLoc(2), 0, 1, false, 0), -- while 0
+                                        AXB(MemLoc(2), 0, 3, true, 0), -- set 0
+                                        AXB(MemLoc(3), 0, 4, true, 1), -- set 1
+                                        AXB(MemLoc(3), 1, 4, false, 0), -- while 1
+                                        AXB(MemLoc(10), 0, 99, true, 1)
+                                      })
+   || interpreter[STEP, TERMINATE](3, {
+                                        AXB(MemLoc(3), 0, 1, false, 0), -- while 0
+                                        AXB(MemLoc(3), 0, 3, true, 0), -- set 0
+                                        AXB(MemLoc(4), 0, 4, true, 1), -- set 1
+                                        AXB(MemLoc(4), 1, 4, false, 0), -- while 1
+                                        AXB(MemLoc(10), 0, 99, true, 1)
+                                      })
+   || interpreter[STEP, TERMINATE](4, {
+                                        AXB(MemLoc(4), 0, 1, false, 0), -- while 0
+                                        AXB(MemLoc(4), 0, 3, true, 0), -- set 0
+                                        AXB(MemLoc(5), 0, 4, true, 1), -- set 1
+                                        AXB(MemLoc(5), 1, 4, false, 0), -- while 1
+                                        AXB(MemLoc(10), 0, 99, true, 1)
+                                      })
+   || interpreter[STEP, TERMINATE](5, {
+                                        AXB(MemLoc(5), 0, 1, false, 0), -- while 0
+                                        AXB(MemLoc(5), 0, 3, true, 0), -- set 0
+                                        AXB(MemLoc(10), 0, 99, true, 1)
+                                      })
+
+
+*)
 
 end module
