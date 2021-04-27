@@ -14,11 +14,11 @@ function NumMemLoc() : nat is
 end function
 
 type MemArray is
-  array [1..10] of int
+  array [0..9] of int
 end type
 
 type MemLoc is
-  range 1..10 of nat
+  range 0..9 of nat
 end type
 
 type Instruction is
@@ -155,16 +155,98 @@ process LOBE [STEP: StepChan, TERMINATE: NatChan, ALL_DONE: none] is
   end var
 end process
 
-
 process MAIN [STEP: StepChan, TERMINATE: NatChan, ALL_DONE: none] is
 
 par STEP, TERMINATE in
-   ALL_DONE -> sharedMemory[STEP, TERMINATE, ALL_DONE](6) -- This argument should reflect the total number of threads
+   ALL_DONE -> sharedMemory[STEP, TERMINATE, ALL_DONE](4) -- This argument should reflect the total number of threads
 
 -- Select a progress model here by uncommenting
--- || ALL_DONE -> UNFAIR[STEP, TERMINATE, ALL_DONE]
+--|| ALL_DONE -> UNFAIR[STEP, TERMINATE, ALL_DONE]
 || ALL_DONE -> LOBE[STEP, TERMINATE, ALL_DONE]
 || par
+
+(*
+
+*)
+
+      interpreter[STEP, TERMINATE](0, {
+                                        AXB(MemLoc(0), 0, 2, true, 1)   -- 1: m[0] = 1
+				      })
+   || interpreter[STEP, TERMINATE](1, {
+                                        AXB(MemLoc(1), 0, 2, true, 1),   -- 1: m[1] = 1
+                                        AXB(MemLoc(0), 1, 99, false, 0), -- 2: if (m[0] == 1) { jump end-of-program }
+                                        AXB(MemLoc(0), 0, 99, true, 1)   -- 3: m[0] = 1
+				      })
+   || interpreter[STEP, TERMINATE](2, {
+                                        AXB(MemLoc(2), 0, 2, true, 1),   -- 1: m[2] = 1
+                                        AXB(MemLoc(1), 1, 4, false, 0),  -- 2: if (m[1] == 1) { jump checkm0 }
+                                        AXB(MemLoc(1), 0, 4, true, 1),   -- 3: m[1] = 1
+                                        AXB(MemLoc(0), 1, 99, false, 0),  -- 4: if (m[0] == 1) { jump end }
+                                        AXB(MemLoc(0), 0, 99, true, 1)   -- 5: m[0] = 1
+				      })
+   || interpreter[STEP, TERMINATE](3, {
+                                        AXB(MemLoc(2), 0, 2, true, 1),   -- 1: m[2] = 1
+                                        AXB(MemLoc(1), 1, 4, false, 0),  -- 2: if (m[1] == 1) { jump checkm0 }
+                                        AXB(MemLoc(1), 0, 4, true, 1),   -- 3: m[1] = 1
+                                        AXB(MemLoc(0), 1, 99, false, 0),  -- 4: if (m[1] == 1) { jump checkm0 }
+                                        AXB(MemLoc(0), 0, 99, true, 1)   -- 5: m[1] = 1
+				      })
+					
+
+
+   end par
+end par
+
+end process
+
+-------------------------------------------------------------------------------
+
+(*
+
+This is a weird barrier: each thread tid starts by setting mem[tid]=1. Then, it
+checks in decreasing order other memloc[tid_N] to see if they are set. It
+assumes that if memloc[tid_N] == 1; then it ony has to busy wait on tids > tid_N
+for them to set their own memloc. For instance, if there are 4 threads with tids
+0, 1, 2, 3, then e.g. tid 1 sets memLoc[1] = 1; then checks if memLoc[3] is set
+(say it si not), then checks if memLoc[2] is set (say it is), then it thinks
+it's not worth checking lower tids, and so busy-waits on while(memLoc[3] == 0).
+
+This leads to decent state space size and some sort of asymmetry.
+
+*)
+
+(*
+      interpreter[STEP, TERMINATE](0, {
+                                        AXB(MemLoc(0), 0, 2, true, 1),   -- 1: m[0] = 1
+                                        AXB(MemLoc(2), 1, 99, false, 0), -- 2: if (m[2] == 1) { jump end-of-program }
+                                        AXB(MemLoc(1), 1, 7, false, 0),  -- 3: if (m[1] == 1) { jump wait-for-2 }
+                                        AXB(MemLoc(0), 1, 6, false, 0),  -- 4: if (m[0] == 1) { jump wait-for-1 }
+                                        AXB(MemLoc(0), 0, 5, false, 0),  -- 5: while (m[0] == 0) // wait-for-0
+                                        AXB(MemLoc(1), 0, 6, false, 0),  -- 6: while (m[1] == 0) // wait-for-1
+                                        AXB(MemLoc(2), 0, 7, false, 0)   -- 7: while (m[2] == 0) // wait-for-2
+				      })
+   || interpreter[STEP, TERMINATE](1, {
+                                        AXB(MemLoc(1), 0, 2, true, 1),   -- 1: m[1] = 1
+                                        AXB(MemLoc(2), 1, 99, false, 0), -- 2: if (m[2] == 1) { jump end-of-program }
+                                        AXB(MemLoc(1), 1, 7, false, 0),  -- 3: if (m[1] == 1) { jump wait-for-2 }
+                                        AXB(MemLoc(0), 1, 6, false, 0),  -- 4: if (m[0] == 1) { jump wait-for-1 }
+                                        AXB(MemLoc(0), 0, 5, false, 0),  -- 5: while (m[0] == 0) // wait-for-0
+                                        AXB(MemLoc(1), 0, 6, false, 0),  -- 6: while (m[1] == 0) // wait-for-1
+                                        AXB(MemLoc(2), 0, 7, false, 0)   -- 7: while (m[2] == 0) // wait-for-2
+                                      })
+   || interpreter[STEP, TERMINATE](2, {
+                                        AXB(MemLoc(2), 0, 2, true, 1),   -- 1: m[2] = 1
+                                        AXB(MemLoc(2), 1, 99, false, 0), -- 2: if (m[2] == 1) { jump end-of-program }
+                                        AXB(MemLoc(1), 1, 7, false, 0),  -- 3: if (m[1] == 1) { jump wait-for-2 }
+                                        AXB(MemLoc(0), 1, 6, false, 0),  -- 4: if (m[0] == 1) { jump wait-for-1 }
+                                        AXB(MemLoc(0), 0, 5, false, 0),  -- 5: while (m[0] == 0) // wait-for-0
+                                        AXB(MemLoc(1), 0, 6, false, 0),  -- 6: while (m[1] == 0) // wait-for-1
+                                        AXB(MemLoc(2), 0, 7, false, 0)   -- 7: while (m[2] == 0) // wait-for-2
+                                      })
+*)
+
+-------------------------------------------------------------------------------
+(* CUB style prod-cons
 
       interpreter[STEP, TERMINATE](0, {
                                         AXB(MemLoc(1), 0, 2, true, 1)
@@ -188,10 +270,9 @@ par STEP, TERMINATE in
    || interpreter[STEP, TERMINATE](5, {
                                         AXB(MemLoc(5), 0, 1, false, 0)
                                       })
-   end par
-end par
 
-end process
+*)
+-------------------------------------------------------------------------------
 
 (*  Something a bit more complex:
 
