@@ -12,7 +12,7 @@ function NumMemLoc() : nat is
 end function
 
 type MemArray is
-  array [0..99] of int
+  array [0..99] of nat
 end type
 
 type MemLoc is
@@ -20,7 +20,7 @@ type MemLoc is
 end type
 
 type Instruction is
-  AXB(checkLoc: MemLoc, checkVal: int, jumpInst: nat, doExch: bool, exchVal: int)
+  AXB(checkLoc: MemLoc, checkVal: nat, jumpInst: nat, doExch: bool, exchVal: nat)
 end type
 
 type Program is
@@ -41,7 +41,7 @@ process Interpreter [STEP: StepChan, TERMINATE: NatChan] (tid: nat, prog: Progra
   var
     pc: nat, -- program counter
     -- variables to match AXB operands:
-    checkLoc: MemLoc, checkVal: int, jumpInst: nat, doExch: bool, exchVal: int, doBranch: bool
+    checkLoc: MemLoc, checkVal: nat, jumpInst: nat, doExch: bool, exchVal: nat, doBranch: bool
  in
     pc := 1; -- start at first instruction (list indexes start at 1)
 
@@ -68,36 +68,75 @@ process Interpreter [STEP: StepChan, TERMINATE: NatChan] (tid: nat, prog: Progra
   end var
 end process
 
-process sharedMemory [STEP: StepChan, TERMINATE: NatChan, ALL_DONE: none] (numThreads: nat) is
+channel TermCheck is
+  (MemLoc, nat)
+end channel
+
+process terminationChecker [TERMCHECK: TermCheck, ALL_DONE: none] (numThreads: nat) is
+  var
+    tid: nat,
+    checkLoc: MemLoc
+  in
+    checkLoc := MemLoc(0);
+    loop L in
+      TERMCHECK(checkLoc, ?tid);
+      if nat(checkLoc) > numThreads then
+        break L
+      end if;
+      if tid >= (numThreads - 1) then
+        break L
+      end if;
+      if tid != 99 then
+        if tid == nat(checkLoc) then
+          checkLoc := MemLoc(nat(checkLoc) + 1)
+        else
+          checkLoc := MemLoc(tid)
+        end if
+      end if
+    end loop;
+    ALL_DONE
+  end var
+end process
+
+process sharedMemory [STEP: StepChan, TERMINATE: NatChan, TERMCHECK: TermCheck, ALL_DONE: none] (numThreads: nat) is
   var
     doneThread: nat,
+    tid: nat,
     mem: MemArray,
+    tidLookup: MemArray,
     -- variables to match AXB operands:
-    checkLoc: MemLoc, checkVal: int, doExch: bool, exchVal: int,
+    checkLoc: MemLoc, checkVal: nat, doExch: bool, exchVal: nat,
     doBranch: bool
   in
     doneThread := 0;
     mem := MemArray(0);
+    tidLookup := MemArray(99);
 
     -- main loop
     loop memLoop in
       select
-        STEP(?any nat, ?AXB(checkLoc, checkVal, any nat, doExch, exchVal), ?doBranch, ?any NatSet) where doBranch == (checkVal == mem[nat(checkLoc)]);
+        STEP(?tid, ?AXB(checkLoc, checkVal, any nat, doExch, exchVal), ?doBranch, ?any NatSet) where doBranch == (checkVal == mem[nat(checkLoc)]);
         if doExch then
+	  if (mem[nat(checkLoc)] == 0) and (exchVal == 1) then
+	    tidLookup[nat(checkLoc)] := tid
+          end if;
           mem[nat(checkLoc)] := exchVal
         end if
 
       []
+        TERMCHECK(?checkLoc, ?tid) where tidLookup[nat(checkLoc)] == tid
+      []
 
         TERMINATE(?any nat);
-        doneThread := doneThread + 1;
-        if doneThread == numThreads then
-          break memLoop
-        end if
-      end select
-    end loop;
+        doneThread := doneThread + 1
 
-    ALL_DONE
+      []
+
+        ALL_DONE where doneThread == numThreads;
+	break memLoop
+
+      end select
+    end loop
 
   end var
 end process
@@ -153,6 +192,6 @@ process LOBE [STEP: StepChan, TERMINATE: NatChan, ALL_DONE: none] is
   end var
 end process
 
-process MAIN [STEP: StepChan, TERMINATE: NatChan, ALL_DONE: none] is
+process MAIN [STEP: StepChan, TERMINATE: NatChan, TERMCHECK: TermCheck, ALL_DONE: none] is
 
-par STEP, TERMINATE in
+par

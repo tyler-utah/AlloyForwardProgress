@@ -15,9 +15,10 @@ echo "Generate ${module}.lnt"
 (
   echo "module ${module} is"
   cat header.lnt
-  echo "ALL_DONE -> sharedMemory[STEP, TERMINATE, ALL_DONE](${numthread})"
-  echo "|| ALL_DONE -> ${progressmodel}[STEP, TERMINATE, ALL_DONE]"
-  echo "|| par"
+  echo "STEP, TERMINATE, TERMCHECK, ALL_DONE -> sharedMemory[STEP, TERMINATE, TERMCHECK, ALL_DONE](${numthread})"
+  echo "|| TERMCHECK, ALL_DONE -> terminationChecker[TERMCHECK, ALL_DONE](${numthread})"
+  echo "|| STEP, TERMINATE, ALL_DONE -> ${progressmodel}[STEP, TERMINATE, ALL_DONE]"
+  echo "|| STEP, TERMINATE -> par"
   ./create.py ${numthread}
   echo "  end par"
   echo "end par"
@@ -29,11 +30,12 @@ set -x
 set -e
 
 #### Uncomment the follwoing to generate the BCGs
-#lnt.open ${module}.lnt generator ${module}.bcg
-#bcg_min ${module}.bcg ${module}.min.bcg
-#bcg_info ${module}.bcg
-#bcg_info ${module}.min.bcg
-#bcg_draw -ps ${module}.min.bcg
+# lnt.open ${module}.lnt generator ${module}.bcg
+# bcg_min ${module}.bcg ${module}.min.bcg
+# bcg_info ${module}.bcg
+# bcg_info ${module}.min.bcg
+# bcg_draw -ps ${module}.min.bcg
+# exit 1
 
 #### The MCC steps
 lnt.open ${module}.lnt -
@@ -42,5 +44,5 @@ caesar -prenupn ${module}.lotos
 mv ${module}.nupn ${module}.pre.nupn
 caesar -nupn -simulator ${module}.lotos
 mv ${module}.nupn ${module}.post.nupn
-time caesar.bdd -mcc ${module}.pre.nupn
+#time caesar.bdd -mcc ${module}.pre.nupn
 time caesar.bdd -mcc ${module}.post.nupn
