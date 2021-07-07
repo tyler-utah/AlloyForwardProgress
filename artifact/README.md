@@ -32,3 +32,35 @@ sudo docker start -ia gpufwd-container
 ```
 
 You should now have a Bash shell inside the container.
+
+## Test Generation
+
+_TODO: Tyler and Lucas figure out how to get test generation running_
+
+_TODO: instructions for running 2 thread 2 instruction variants_
+
+_TODO: State that running larger experiments require tons of time and tons of RAM_
+
+_TODO: point to Lucas Test explorer, both the Princeton hosted page and the git repo, as well as generated raw tests_
+
+## CADP
+
+_TODO: Hugues_
+
+## Emprical Testing
+
+### C++ Code
+
+_TODO: Tyler: this should work_
+
+### Vulkan Code
+
+_TODO: Tyler: install amber and switftshader_
+
+### CUDA and Metal Code
+
+_TODO: Tyler: will not be able to execute, but we can provide the xcode projects_
+
+## Data
+
+_TODO: Tyler_
