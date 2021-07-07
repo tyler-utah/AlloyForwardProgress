@@ -8,7 +8,15 @@ RUN \
   apt-get -qq update && \
   apt-get -y -qq install openjdk-8-jdk curl && \
   update-java-alternatives --set java-1.8.0-openjdk-amd64 && \
-  apt-get -y install git
+  apt-get -y install git && \
+  apt-get -y install python3 && \
+  apt-get -y install cmake && \
+  apt-get install ninja-build && \
+  apt-get -y install build-essential && \
+  apt-get -y install software-properties-common && \
+  apt-get -y install wget && \
+  apt-get -y install libssl-dev && \
+  apt-get -y install locate
 
 # Install Alloy
 RUN \
@@ -16,7 +24,16 @@ RUN \
   cd /data/alloy && \
   curl -fksLS --http1.1 --retry 3 -O https://github.com/AlloyTools/org.alloytools.alloy/releases/download/v5.1.0/org.alloytools.alloy.dist.jar
 
-
+# Install recent version of cmake (required by swiftshader)
+RUN \
+   mkdir -p /data/cmake && \
+   cd /data/cmake && \
+   wget https://github.com/Kitware/CMake/releases/download/v3.21.0-rc2/cmake-3.21.0-rc2.tar.gz && \
+   tar -xzf cmake-3.21.0-rc2.tar.gz && \
+   cd cmake-3.21.0-rc2 && \
+   ./bootstrap && \
+   make -j8 && \
+   make install
 
 # Login shell
 CMD ["/bin/bash", "--login"]
