@@ -16,7 +16,9 @@ RUN \
   apt-get -y install software-properties-common && \
   apt-get -y install wget && \
   apt-get -y install libssl-dev && \
-  apt-get -y install locate
+  apt-get -y install locate && \
+  apt-get -y install libxext-dev && \
+  apt-get install zlib1g-dev
 
 # Install Alloy
 RUN \
@@ -34,6 +36,21 @@ RUN \
    ./bootstrap && \
    make -j8 && \
    make install
+
+# Install Amber
+RUN \
+    mkdir -p /data/amber && \
+    cd /data/amber && \
+    git clone https://github.com/google/amber.git && \
+    cd amber && \
+    ./tools/git-sync-deps --with-swiftshader && \
+    mkdir -p out/Debug && \
+    cd out/Debug && \
+    cmake -GNinja -DAMBER_ENABLE_SWIFTSHADER=True ../.. && \
+    ninja -j8
+
+ENV VK_ICD_FILENAMES=/data/amber/amber/out/Debug/Linux/vk_swiftshader_icd.json
+
 
 # Login shell
 CMD ["/bin/bash", "--login"]
