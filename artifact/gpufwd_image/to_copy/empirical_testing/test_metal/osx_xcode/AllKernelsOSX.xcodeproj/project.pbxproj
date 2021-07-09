@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		E72AD5CD256C3D3700D3FA4B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E72AD5CC256C3D3700D3FA4B /* main.m */; };
-		E72AD5D5256C427400D3FA4B /* test.metal in Sources */ = {isa = PBXBuildFile; fileRef = E72AD5D4256C427400D3FA4B /* test.metal */; };
+		E72AD5D5256C427400D3FA4B /* compute.metal in Sources */ = {isa = PBXBuildFile; fileRef = E72AD5D4256C427400D3FA4B /* compute.metal */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -27,7 +27,7 @@
 		E715D22326980BDF0015946B /* test_list.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = test_list.h; sourceTree = "<group>"; };
 		E72AD5C9256C3D3700D3FA4B /* AllKernelsOSX */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = AllKernelsOSX; sourceTree = BUILT_PRODUCTS_DIR; };
 		E72AD5CC256C3D3700D3FA4B /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		E72AD5D4256C427400D3FA4B /* test.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = test.metal; sourceTree = "<group>"; };
+		E72AD5D4256C427400D3FA4B /* compute.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = compute.metal; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,7 +61,7 @@
 			isa = PBXGroup;
 			children = (
 				E72AD5CC256C3D3700D3FA4B /* main.m */,
-				E72AD5D4256C427400D3FA4B /* test.metal */,
+				E72AD5D4256C427400D3FA4B /* compute.metal */,
 				E715D22326980BDF0015946B /* test_list.h */,
 			);
 			path = TesterTemplate;
@@ -124,7 +124,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E72AD5CD256C3D3700D3FA4B /* main.m in Sources */,
-				E72AD5D5256C427400D3FA4B /* test.metal in Sources */,
+				E72AD5D5256C427400D3FA4B /* compute.metal in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
