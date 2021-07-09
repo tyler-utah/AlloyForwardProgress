@@ -18,7 +18,8 @@ RUN \
   apt-get -y install libssl-dev && \
   apt-get -y install locate && \
   apt-get -y install libxext-dev && \
-  apt-get install zlib1g-dev
+  apt-get -y install zlib1g-dev && \
+  apt-get -y install emacs
 
 # Install Alloy
 RUN \
@@ -50,6 +51,12 @@ RUN \
     ninja -j8
 
 ENV VK_ICD_FILENAMES=/data/amber/amber/out/Debug/Linux/vk_swiftshader_icd.json
+
+# Get C++ tester code copied over
+RUN \
+   mkdir -p /data/paper_experiments/
+
+COPY ./to_copy/empirical_testing /data/paper_experiments/
 
 
 # Login shell
