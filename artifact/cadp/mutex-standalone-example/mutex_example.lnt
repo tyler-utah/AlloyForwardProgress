@@ -1,0 +1,376 @@
+module mutex_example is
+
+-------------------------------------------------------------------------------
+-- This is a standalone example of our approach, using the mutex running
+-- example of the paper. All LNT code is contained in this file.
+-------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------
+-- Types
+-------------------------------------------------------------------------------
+
+-- NatSet is simply a set of naturals
+type NatSet is
+  set of nat
+  with length, remove, member
+end type
+
+-- MemArray is an array of memory locations, each one stores an integer.
+-- Here we thus have 10 meory locations, although the example uses only
+-- the one at index 0 to act as the mutex.
+type MemArray is
+  array [0..9] of int
+end type
+
+-- MemLoc represents indexes in MemArray.
+type MemLoc is
+  range 0..9 of nat
+end type
+
+-- Instruction represents possible instructions, here we have only
+-- one: Atomix Exchange Branch (AXB).
+type Instruction is
+  AXB(checkLoc: MemLoc, checkVal: int, jumpInst: nat, doExch: bool, exchVal: int)
+end type
+
+-- Program is simply a list of instructions
+type Program is
+   list of Instruction
+   with element, length
+end type
+
+-------------------------------------------------------------------------------
+-- Channels (types that can be used in inter-process communication)
+-------------------------------------------------------------------------------
+
+-- NatChan communicates naturals.
+channel NatChan is
+  (nat)
+end channel
+
+-- ExecutionStep communicates all info related to an execution step.
+channel ExecutionStep is
+  -- thread ID, instruction, doBranch, set of fairly scheduled threads
+  (nat, Instruction, bool, NatSet)
+end channel
+
+-------------------------------------------------------------------------------
+-- Processes
+-------------------------------------------------------------------------------
+
+-- Interpreter takes as input a thread ID and a Program, and executes
+-- instructions of the Program.
+process Interpreter [Step: ExecutionStep, Terminate: NatChan] (tid: nat, prog: Program) is
+  var
+    pc: nat, -- program counter
+    -- variables to match AXB operands:
+    checkLoc: MemLoc,
+    checkVal: int,
+    jumpInst: nat,
+    doExch: bool,
+    exchVal: int,
+    doBranch: bool
+  in
+    pc := 1; -- start at first instruction (list indexes start at 1)
+
+    loop interpreterLoop in
+
+      case element(prog, pc) of Instruction in
+         AXB(checkLoc, checkVal, jumpInst, doExch, exchVal) ->
+	   Step(tid, AXB(checkLoc, checkVal, jumpInst, doExch, exchVal), ?doBranch, ?any NatSet);
+	   if doBranch then
+             pc := jumpInst
+	   else
+             pc := pc + 1   
+           end if
+      end case;
+
+      -- Reach end of program?
+      if pc > length(prog) then
+        break interpreterLoop
+      end if
+
+    end loop;
+    -- signal end of thread to scheduler
+    Terminate(tid)
+  end var
+end process
+
+-------------------------------------------------------------------------------
+
+-- SharedMemory stores the shared memory of the system, it monitors all AXB
+-- instructions by all threads and takes care of the memory read/writes done
+-- in these instructions.
+process SharedMemory [Step: ExecutionStep, Terminate: NatChan, AllDone: none] (numThreads: nat) is
+  var
+    doneThread: nat,
+    mem: MemArray,
+    -- variables to match AXB operands:
+    checkLoc: MemLoc,
+    checkVal: int,
+    doExch: bool,
+    exchVal: int,
+    doBranch: bool
+  in
+    doneThread := 0;
+    mem := MemArray(0);
+
+    -- main loop
+    loop memLoop in
+      select
+        Step(?any nat,
+	     ?AXB(checkLoc, checkVal, any nat, doExch, exchVal),
+	     ?doBranch,
+	     ?any NatSet)
+	  where doBranch == (checkVal == mem[nat(checkLoc)]);
+        if doExch then
+          mem[nat(checkLoc)] := exchVal
+        end if
+
+      []
+
+        Terminate(?any nat);
+        doneThread := doneThread + 1;
+        if doneThread == numThreads then
+          break memLoop
+        end if
+      end select
+    end loop;
+
+    AllDone
+
+  end var
+end process
+
+-------------------------------------------------------------------------------
+
+-- HSA is the Heterogeneous System Architecture progress model.
+process HSA [Step : ExecutionStep, Terminate : NatChan, AllDone: none] is
+  var
+    tid: Nat,      -- thread ID
+    F:   NatSet,   -- set of threads guaranteed fair execution
+    smallest: Nat, -- smallest active thread
+    done: NatSet   -- set of terminated threads
+  in
+    smallest := 0;   -- Initially, the smallest non-terminated thread id is 0
+    F := {smallest}; -- At the beginning, no thread is guaranteed fair execution
+    done := {};
+
+    loop L in
+      select
+        Step(?any Nat, ?any Instruction, ?any bool, F) -- some thread executes a step
+      []
+        Terminate(?tid); -- thread tid has terminated its own program
+        done := insert(tid, done); -- remember this thread as terminated
+        -- get next smallest non-terminated thread id
+        while member(smallest, done) loop
+          smallest := smallest + 1
+        end loop;
+        F := {smallest} -- F contains the smallest, non-terminated thread id
+      []
+        AllDone;
+	break L
+      end select
+    end loop
+  end var
+end process
+
+-------------------------------------------------------------------------------
+
+-- OBE is the Occupancy Bound Execution progress model.
+process OBE [Step : ExecutionStep, Terminate : NatChan, AllDone: none] is
+  var
+    tid: Nat,    -- thread ID
+    F:   NatSet  -- set of threads guaranteed fair execution
+  in
+    F := {}; -- At the beginning, no thread is guaranteed fair execution
+    loop L in
+      select
+        Step(?tid, ?any Instruction, ?any bool, F); -- thread tid executes an instruction
+        F := insert(tid, F) -- thread tid is now guaranteed fair execution
+      []
+        Terminate (?tid);   -- thread tid has terminated its own program
+        F := remove(tid, F) -- thread tid will not be executed anymore
+      []
+        AllDone;
+	break L
+      end select
+    end loop
+  end var
+end process
+
+-------------------------------------------------------------------------------
+
+-- HSA_OBE is the combination of the HSA and OBE progress models.
+process HSA_OBE [Step : ExecutionStep, Terminate : NatChan, AllDone: none] is
+  var
+    tid: Nat,      -- thread ID
+    F:   NatSet,   -- set of threads guaranteed fair execution
+    smallest: Nat, -- smallest active thread
+    done: NatSet   -- set of terminated threads
+  in
+    smallest := 0;   -- Initially, the smallest non-terminated thread id is 0
+    F := {smallest}; -- At the beginning, no thread is guaranteed fair execution
+    done := {};
+
+    loop L in
+      select
+        Step(?tid, ?any Instruction, ?any bool, F); -- some thread executes a step
+        F := insert(tid, F) -- thread tid is now granted fair execution guarantee
+      []
+        Terminate(?tid); -- thread tid has terminated its own program
+        F := remove(tid, F); -- remove thread tid (if in F) from F
+        done := insert(tid, done); -- remember this thread as terminated
+        -- get next smallest non-terminated thread id
+        while member(smallest, done) loop
+          smallest := smallest + 1
+        end loop;
+        F := insert(smallest, F) -- make sure this thread id is fairly executed
+      []
+        AllDone;
+	break L
+      end select
+    end loop
+  end var
+end process
+
+-------------------------------------------------------------------------------
+
+-- LOBE is the Linear OBE progress model.
+process LOBE [Step : ExecutionStep, Terminate : NatChan, AllDone: none] is
+  var
+    tid: Nat,     -- thread ID
+    F:   NatSet,  -- set of threads guaranteed fair execution
+    done: NatSet, -- set of terminated threads
+    t: Nat        -- iteration variable
+  in
+    F := {}; -- At the beginning, no thread is guaranteed fair execution
+    done := {};
+
+    loop L in
+      select
+        Step(?tid, ?any Instruction, ?any bool, F); -- some thread executes a step
+        -- All non - terminated threads with an id lower or equal to tid are
+        -- guaranteed fair execution
+        for t := 0 while t <= tid by t := t + 1 loop
+          if not(member(t, done)) then
+            F := insert(t, F)
+          end if
+        end loop
+      []
+        Terminate(?tid); -- thread tid has terminated its own program
+        F := remove(tid, F); -- remove thread tid (if in F) from F
+        done := insert(tid, done) -- remember this thread as terminated
+      []
+        AllDone;
+	break L
+      end select
+    end loop
+  end var
+end process
+
+-------------------------------------------------------------------------------
+
+-- UNFAIR is the unfair progress model: no thread is ever guaranteed progress.
+process UNFAIR [Step : ExecutionStep, Terminate : NatChan, AllDone: none] is
+  var
+    F:   NatSet  -- set of threads guaranteed fair execution
+  in
+    F := {}; -- No thread is ever guaranteed progress
+
+    loop L in
+      select
+        Step(?any Nat, ?any Instruction, ?any bool, F) -- some thread executes a step
+      []
+        Terminate(?any Nat) -- some thread terminates
+      []
+        AllDone;
+	break L
+      end select
+    end loop
+  end var
+end process
+
+-------------------------------------------------------------------------------
+
+-- FAIR is the fair progress model: all threads are guaranteed progress.
+process FAIR [Step : ExecutionStep, Terminate : NatChan, AllDone: none] (max_tid: Nat) is
+  var
+    tid: Nat,     -- thread ID
+    F:   NatSet   -- set of threads guaranteed fair execution
+  in
+    -- Each thread is guaranteed fair execution, until it terminates
+    F := {};
+    for tid := 0 while tid < max_tid by tid := tid +1 loop
+      F := insert(tid, F)
+    end loop;
+
+    loop L in
+      select
+        Step(?any Nat, ?any Instruction, ?any bool, F) -- some thread executes a step
+      []
+        Terminate(?tid);    -- thread tid makes a step
+	F := remove(tid, F) -- remove thread tid (if in F) from F
+      []
+        AllDone;
+	break L
+      end select
+    end loop
+  end var
+end process
+
+-------------------------------------------------------------------------------
+
+process Main [Step: ExecutionStep, Terminate: NatChan, AllDone: none] is
+
+-- Parallel composition of:
+--   * shared memory
+--   * progress model
+--   * parallel composition of threads
+par Step, Terminate in
+
+  -- SharedMemory takes as argument the total number of threads.
+  AllDone -> SharedMemory[Step, Terminate, AllDone](2)
+
+||
+
+  -- Progress model: uncomment the one you want to use:
+  AllDone ->
+    -- HSA[Step, Terminate, AllDone]
+    -- OBE[Step, Terminate, AllDone]
+    -- HSA_OBE[Step, Terminate, AllDone]
+    LOBE[Step, Terminate, AllDone]
+    -- UNFAIR[Step, Terminate, AllDone]
+    -- FAIR[Step, Terminate, AllDone](2) -- FAIR need the number of threads
+
+||
+
+  -- Parallel composition of threads, each represented by an Interpreter.
+  -- Here the program implements the mutex example, with the mutex memory
+  -- location being MemLoc(0).
+  -- 
+  -- Note: in LNT, list indexes start at 1, so the index of the first
+  -- instruction is indeed 1 and not 0. This means that the value of
+  -- the jumpInst operand of AXB are different than in Fig. 1(b).
+  par
+
+    Interpreter[Step, Terminate](0,  -- thread ID: 0
+    {
+      AXB(MemLoc(0), 1, 1, true, 1), -- 1: acquire
+      AXB(MemLoc(0), 0, 3, true, 0)  -- 2: release
+    })
+
+  ||
+
+    Interpreter[Step, Terminate](1,  -- thread ID: 1
+    {
+      AXB(MemLoc(0), 1, 1, true, 1), -- 1: acquire
+      AXB(MemLoc(0), 0, 3, true, 0)  -- 2: release
+    })
+
+  end par
+end par
+
+end process
+
+end module
