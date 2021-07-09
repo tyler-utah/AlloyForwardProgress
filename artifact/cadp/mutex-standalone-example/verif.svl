@@ -1,0 +1,18 @@
+property WeakDeadlockFree(model)
+    "There are no weak deadlock in ${model}"
+is
+"diag_${model}.bcg" = "${model}.bcg" |= with evaluator4
+macro is_in (t, f) =
+  index(f, concat(concat(":", string(t)), ":")) <> 0
+end_macro
+< true* . { STEP ... ?F:String }  >
+  <
+    for tid:Nat from 0 to 2 do
+      if is_in(tid, F) then
+        true* . { STEP !tid ... }
+      end if
+    end for
+  >@;
+end property
+
+check WeakDeadlockFree(out);

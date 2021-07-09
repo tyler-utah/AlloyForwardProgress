@@ -324,9 +324,9 @@ end process
 process Main [Step: ExecutionStep, Terminate: NatChan, AllDone: none] is
 
 -- Parallel composition of:
---   * shared memory
---   * progress model
---   * parallel composition of threads
+--   - shared memory
+--   - progress model
+--   - parallel composition of threads
 par Step, Terminate in
 
   -- SharedMemory takes as argument the total number of threads.
@@ -339,8 +339,8 @@ par Step, Terminate in
     -- HSA[Step, Terminate, AllDone]
     -- OBE[Step, Terminate, AllDone]
     -- HSA_OBE[Step, Terminate, AllDone]
-    LOBE[Step, Terminate, AllDone]
-    -- UNFAIR[Step, Terminate, AllDone]
+    -- LOBE[Step, Terminate, AllDone]
+    UNFAIR[Step, Terminate, AllDone]
     -- FAIR[Step, Terminate, AllDone](2) -- FAIR need the number of threads
 
 ||
