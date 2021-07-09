@@ -19,6 +19,7 @@ from datetime import datetime
 import time
 
 AMBER_PATHS = ["amber",
+               "/data/amber/amber/out/Debug/amber",
                "/localdisk/tsoren99/amber/amber/out/Debug/amber",
                "/home/tyler/Documents/amber/amber/out/Debug/amber"]
 
@@ -238,15 +239,15 @@ def format_output_results(final_simple_results, final_verbose_results, all_confi
         if current_saturation == 0:
             if subgroup_setting == 0:
                 if threads_per_wg == 1:
-                    headers.append("No saturation (same subgroup)")
+                    headers.append("Plain")
                 else:
                     headers.append("No saturation (same subgroup, " + str(threads_per_wg) + " threads per workgroup)")
             elif subgroup_setting == 1:
                 headers.append("No saturation (diff. subgroup, " + str(threads_per_wg) + " threads per workgroup)")
         elif current_saturation == 1:
-            headers.append("Round Robin Saturation")
+            headers.append("Round Robin")
         elif current_saturation == 2:
-            headers.append("Chunking Saturation")
+            headers.append("Chunked")
         else:
             headers.append(str(current_saturation))
 

@@ -19,7 +19,10 @@ RUN \
   apt-get -y install locate && \
   apt-get -y install libxext-dev && \
   apt-get -y install zlib1g-dev && \
-  apt-get -y install emacs
+  apt-get -y install emacs && \
+  apt-get -y install python3-pip && \
+  apt-get -y install vulkan-utils && \
+  pip3 install tabulate
 
 # Install Alloy
 RUN \
