@@ -1,0 +1,7 @@
+"diag.bcg" = "out.bcg" |= with evaluator4
+macro is_in (t, f) =
+  index(f, concat(concat(":", string(t)), ":")) <> 0
+end_macro
+< true* . { STEP ... ?F:String } . for tid:nat from 0 to 1 do > true;
+
+-- < { STEP ?tid:nat ... where is_in(tid, F) } > @;

@@ -1,0 +1,17 @@
+module prod_cons_hsa_priority_strong(common_strong) is
+
+process MAIN [EX: ExChan, TERMINATE: NatChan] is
+  par EX, TERMINATE in
+    SHARED_MEMORY [EX, TERMINATE] ($N_THREADS$)
+  ||
+    SCHEDULER_HSA_PRIORITY [EX, TERMINATE] ($N_THREADS$)
+  ||
+    par
+
+$REPLACE$
+
+    end par
+  end par
+end process
+
+end module

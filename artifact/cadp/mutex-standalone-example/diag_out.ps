@@ -1,0 +1,192 @@
+%!PS-Adobe-2.0
+%%Title: ./diag_out.bcg
+%%Creator: bcg_draw
+%%CreationDate: Fri Jul  9 20:15:52 2021
+%%Pages: 1
+%%BoundingBox: 0 0 595 842
+%%EndComments
+%%Page: 1 1
+
+% BCG_BEGIN_SECTION_1
+/vertex_radius { 12.000000 } def
+/arrow_shape_1 { 7 } def
+/arrow_shape_2 { 9 } def
+/arrow_shape_3 { 3 } def
+/Times-Roman findfont 10.000000 scalefont setfont
+/text_y_shift { -3 } def
+% BCG_END_SECTION_1
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                B C G
+% ----------------------------------------------------------------------------
+%   INRIA - Unite de Recherche Rhone-Alpes
+%   655, avenue de l'Europe
+%   38330 Montbonnot Saint Martin
+%   FRANCE
+% ----------------------------------------------------------------------------
+%   Module             :       bcg_draw_header.ps
+%   Auteurs            :       R. RUFFIOT, H. GARAVEL, R. MATEESCU, L.P. TOCK
+%   Version            :       2.6
+%   Date               :       2006/10/30 10:38:31
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%/
+
+1 setlinewidth
+1 setlinejoin
+0 setgray
+
+/show_text {			
+  dup				
+  stringwidth			
+   pop				
+  -2 div			
+  text_y_shift rmoveto		
+  show   
+} def
+
+/vertex {			
+  newpath	
+  2 copy			
+  vertex_radius 0 360 arc	
+  stroke
+  moveto			
+  show_text	
+} def
+
+/arrow {                        
+  newpath 
+  /a3 2 1 roll def
+  /a2 2 1 roll def              
+  /a1 2 1 roll def   
+  0 0 moveto
+  a2 a1 sub neg a3 neg rlineto
+  a2 a3 rlineto
+  a2 neg a3 rlineto
+  closepath
+  fill
+} def
+
+/edge {			
+  newpath 
+  /h 2 1 roll def		
+  /y2 2 1 roll def		
+  /x2 2 1 roll def		
+  /y1 2 1 roll def		
+  /x1 2 1 roll def		
+  gsave
+    x1 y1 moveto
+    x2 y2 lineto
+    stroke
+    y2 y1 sub				
+    x2 x1 sub				
+    2 copy abs 2 1 roll abs add 0.0 eq	
+      {				
+      pop
+      pop
+      }
+      { 
+      atan                  	
+      x2 y2 translate
+      rotate                    
+      arrow_shape_1 h mul 	
+      arrow_shape_2 h mul 	
+      arrow_shape_3 h mul  	
+      arrow			
+      }    
+    ifelse
+  grestore
+  moveto			
+  show_text
+} def
+
+/spline {		
+  newpath
+  /h 2 1 roll def	
+  /y3 2 1 roll def	
+  /x3 2 1 roll def	
+  /y2 2 1 roll def	
+  /x2 2 1 roll def	
+  /y1 2 1 roll def	
+  /x1 2 1 roll def	
+  /y0 2 1 roll def	
+  /x0 2 1 roll def	
+  gsave
+    /c2 0.333 x0 mul
+        0.667 x1 mul
+        add def
+    /c3 0.333 y0 mul
+        0.667 y1 mul
+        add def  
+    /c6 0.5 x1 mul
+        0.5 x2 mul
+        add def
+    /c7 0.5 y1 mul
+        0.5 y2 mul
+        add def
+    /c4 0.333 c6 mul
+        0.667 x1 mul
+        add def
+    /c5 0.333 c7 mul
+        0.667 y1 mul
+        add def
+    x0 y0 moveto
+    c2 c3 c4 c5 c6 c7 curveto
+    /c2 0.333 c6 mul
+        0.667 x2 mul
+        add def
+    /c3 0.333 c7 mul
+        0.667 y2 mul
+        add def  
+    /c6 x3 def
+    /c7 y3 def
+    /c4 0.333 c6 mul
+        0.667 x2 mul
+        add def
+    /c5 0.333 c7 mul
+        0.667 y2 mul
+        add def
+    c2 c3 c4 c5 c6 c7 curveto
+    stroke
+    y3 y2 sub				
+    x3 x2 sub				
+    2 copy abs 2 1 roll abs add 0.0 eq	
+      {				
+      pop
+      pop
+      }
+      { 
+      atan              	
+      x3 y3 translate
+      rotate            	
+      arrow_shape_1 h mul 	
+      arrow_shape_2 h mul  	
+      arrow_shape_3 h mul  	
+      arrow
+      }
+    ifelse
+  grestore
+  moveto			
+  show_text
+  } def
+
+/initialisation { } def
+initialisation
+% BCG_BEGIN_SECTION_2
+(0) 305.500000 211.500000 vertex
+(1) 305.500000 580.500000 vertex
+(STEP !0 !AXB \(0, +1, 1, TRUE, +1\) !FALSE !"::") 305.500000 396.000000 305.500000 223.500000 305.500000 561.500000 1.000000 edge % 0 1 0.500000
+% BCG_END_SECTION_2
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                B C G
+% ----------------------------------------------------------------------------
+%   INRIA - Unite de Recherche Rhone-Alpes
+%   655, avenue de l'Europe
+%   38330 Montbonnot Saint Martin
+%   FRANCE
+% ----------------------------------------------------------------------------
+%   Module             :       bcg_draw_footer.ps
+%   Auteur             :       Renaud RUFFIOT
+%   Version            :       1.3
+%   Date               :       2013/09/09 10:10:05
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%/
+
+showpage
+%%EOF

@@ -1,0 +1,33 @@
+In specification MUTEX_EXAMPLE [3]
+
+   - process HSA [346] is never reached
+
+   - process LOOP__1 [358] is never reached
+
+   - process LOOP__2 [374] is never reached
+
+   - process WHILE_CONT__2 [386] is never reached
+
+   - process OBE [393] is never reached
+
+   - process LOOP__1 [399] is never reached
+
+   - process HSA_OBE [419] is never reached
+
+   - process LOOP__1 [431] is never reached
+
+   - process LOOP__2 [453] is never reached
+
+   - process WHILE_CONT__2 [465] is never reached
+
+   - process UNFAIR [528] is never reached
+
+   - process LOOP__1 [534] is never reached
+
+   - process FAIR [548] is never reached
+
+   - process LOOP__1 [557] is never reached
+
+   - process WHILE_CONT__1 [572] is never reached
+
+   - process LOOP__2 [577] is never reached
