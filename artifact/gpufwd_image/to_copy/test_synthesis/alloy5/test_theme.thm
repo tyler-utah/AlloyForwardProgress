@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+<alloy>
+
+<view>
+
+<defaultnode/>
+
+<defaultedge/>
+
+<node>
+   <type name="ATOMIC_EXCH_BRANCH"/>
+   <type name="END"/>
+   <type name="Int"/>
+   <type name="ONE"/>
+   <type name="START"/>
+   <type name="String"/>
+   <type name="univ"/>
+   <type name="ZERO"/>
+   <type name="seq/Int"/>
+   <set name="$interesting_a" type="A"/>
+</node>
+
+<node shape="Dbl Octagon" color="Red">
+   <type name="G_memory"/>
+</node>
+
+<node shape="Egg" color="Yellow">
+   <type name="Thread"/>
+</node>
+
+<node shape="Ellipse" color="Blue">
+   <type name="S"/>
+</node>
+
+<node shape="Octagon" color="White">
+   <type name="Instruction"/>
+</node>
+
+<node visible="no">
+   <type name="V"/>
+   <type name="X"/>
+</node>
+
+<node visible="yes" color="Green">
+   <type name="A"/>
+</node>
+
+<node visible="yes" hideunconnected="no" numberatoms="yes" shape="Octagon" color="Gray">
+   <type name="L_state"/>
+</node>
+
+<edge attribute="no" constraint="yes">
+   <relation name="po"> <type name="Instruction"/> <type name="Instruction"/> </relation>
+</edge>
+
+<edge attribute="yes">
+   <relation name="check_val"> <type name="ATOMIC_EXCH_BRANCH"/> <type name="V"/> </relation>
+   <relation name="exch_val"> <type name="ATOMIC_EXCH_BRANCH"/> <type name="V"/> </relation>
+</edge>
+
+<edge merge="no">
+   <relation name="branch_target"> <type name="ATOMIC_EXCH_BRANCH"/> <type name="Instruction"/> </relation>
+</edge>
+
+<edge visible="no">
+   <relation name="$ao"> <type name="A"/> <type name="A"/> </relation>
+   <relation name="$next"> <type name="A"/> <type name="A"/> </relation>
+   <relation name="$next_in_thd"> <type name="A"/> <type name="A"/> </relation>
+   <relation name="$to"> <type name="S"/> <type name="S"/> </relation>
+   <relation name="$to_run_a"> <type name="Thread"/> <type name="A"/> </relation>
+</edge>
+
+<edge visible="no" attribute="yes">
+   <relation name="check_loc"> <type name="ATOMIC_EXCH_BRANCH"/> <type name="X"/> </relation>
+   <relation name="G_state"> <type name="S"/> <type name="G_memory"/> </relation>
+   <relation name="ins"> <type name="A"/> <type name="Instruction"/> </relation>
+   <relation name="mem"> <type name="G_memory"/> <type name="X"/> <type name="V"/> </relation>
+   <relation name="next_ins"> <type name="L_state"/> <type name="Instruction"/> </relation>
+   <relation name="T_state"> <type name="S"/> <type name="Thread"/> <type name="L_state"/> </relation>
+   <relation name="thd"> <type name="Instruction"/> <type name="Thread"/> </relation>
+</edge>
+
+<edge visible="yes" constraint="no" layout="yes">
+   <relation name="pre"> <type name="A"/> <type name="S"/> </relation>
+</edge>
+
+</view>
+
+</alloy>
