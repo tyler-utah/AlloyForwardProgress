@@ -22,13 +22,14 @@ RUN \
   apt-get -y install emacs && \
   apt-get -y install python3-pip && \
   apt-get -y install vulkan-utils && \
+  apt-get -y install unzip && \
   pip3 install tabulate
 
 # Install Alloy
-RUN \
-  mkdir -p /data/alloy && \
-  cd /data/alloy && \
-  curl -fksLS --http1.1 --retry 3 -O https://github.com/AlloyTools/org.alloytools.alloy/releases/download/v5.1.0/org.alloytools.alloy.dist.jar
+#RUN \
+#  mkdir -p /data/alloy && \
+#  cd /data/alloy && \
+#  curl -fksLS --http1.1 --retry 3 -O https://github.com/AlloyTools/org.alloytools.alloy/releases/download/v5.1.0/org.alloytools.alloy.dist.jar
 
 # Install recent version of cmake (required by swiftshader)
 RUN \
@@ -57,10 +58,19 @@ ENV VK_ICD_FILENAMES=/data/amber/amber/out/Debug/Linux/vk_swiftshader_icd.json
 
 # Get C++ tester code copied over
 RUN \
-   mkdir -p /data/paper_experiments/
+   mkdir -p /data/paper_experiments && \
+   mkdir -p /data/test_synthesis
 
 COPY ./to_copy/empirical_testing /data/paper_experiments/
 
+COPY ./to_copy/test_synthesis /data/test_synthesis
+
+# Getting and building Alloy
+RUN \
+   cd /data/test_synthesis && \
+   cd alloy5 && \
+   ./gradlew && \
+   ./gradlew build  
 
 # Login shell
 CMD ["/bin/bash", "--login"]

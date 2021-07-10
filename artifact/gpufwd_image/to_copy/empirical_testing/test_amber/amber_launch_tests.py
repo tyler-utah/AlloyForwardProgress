@@ -19,7 +19,7 @@ def main():
                        "../ALL_tests_tmp/3_thread_4_instruction"]
 
     for name in directory_names:
-        os.system("python3 amber_test_driver.py " + name + " 1")
+        os.system("python3 amber_test_driver.py " + name + " 5")
 
 
 if __name__ == "__main__":
