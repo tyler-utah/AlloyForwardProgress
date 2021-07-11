@@ -1,0 +1,9 @@
+
+"test_3_none.bcg" = generation of "test_3_none.lnt"
+
+svl: ERROR command failed
+
+svl: see test_3.log for a detailed diagnostic of the verification
+
+svl: intermediate files are kept for diagnostics
+svl: run ``svl -sweep "test_3"'' to erase

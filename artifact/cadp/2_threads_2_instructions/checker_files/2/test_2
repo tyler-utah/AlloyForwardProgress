@@ -1,0 +1,301 @@
+#!/bin/sh 
+# Script generated with SVL version 2.10
+
+############
+# PROLOGUE #
+############
+. "${SVL:-$CADP}"/src/svl/standard
+
+SVL_DEBUG=""
+SVL_SILENT=""
+SVL_IGNORE=""
+
+########
+# BODY #
+########
+SVL_PROPERTY_AtLeastOneLassoUnderNoScheduler () {
+model="$1"
+shift
+SVL_PRINT_NEWLINE
+SVL_PRINT_MESSAGE \
+	"property AtLeastOneLassoUnderNoScheduler (`SVL_QUOTE_PROPERTY_ARG "$model"`)"
+SVL_PROPERTY_BEGIN \
+	"SOME" \
+	"AtLeastOneLassoUnderNoScheduler"
+SVL_CHECK_FILE \
+	"${model}.bcg"
+SVL_RECORD_FOR_SWEEP \
+	"svl001_formula_inline"
+cat > svl001_formula_inline << SVL_MARKER_END_OF_FORMULA
+< true* > < 'EX .*' > @
+SVL_MARKER_END_OF_FORMULA
+SVL_RECORD_FOR_CLEAN \
+	"${model}_one_lasso.bcg"
+SVL_VERIFY_INLINE \
+	"svl001_formula_inline" \
+	"${model}.bcg" \
+	"" \
+	"${model}_one_lasso.bcg" \
+	"$DEFAULT_VERIFY_METHOD" \
+	"evaluator4" \
+	"7"
+SVL_CHECK_EXPECTED_VALUE \
+	"TRUE"
+SVL_PROPERTY_END
+}
+SVL_PROPERTY_CanAlwaysReachTermination () {
+model="$1"
+shift
+SVL_PRINT_NEWLINE
+SVL_PRINT_MESSAGE \
+	"property CanAlwaysReachTermination (`SVL_QUOTE_PROPERTY_ARG "$model"`)"
+SVL_PROPERTY_BEGIN \
+	"SOME" \
+	"CanAlwaysReachTermination"
+SVL_CHECK_FILE \
+	"${model}.bcg"
+SVL_RECORD_FOR_SWEEP \
+	"svl002_formula_inline"
+cat > svl002_formula_inline << SVL_MARKER_END_OF_FORMULA
+[ true* . (not "exit") ] < (not "exit")* . "exit" > true
+SVL_MARKER_END_OF_FORMULA
+SVL_RECORD_FOR_CLEAN \
+	"${model}_no_termination.bcg"
+SVL_VERIFY_INLINE \
+	"svl002_formula_inline" \
+	"${model}.bcg" \
+	"" \
+	"${model}_no_termination.bcg" \
+	"$DEFAULT_VERIFY_METHOD" \
+	"evaluator4" \
+	"17"
+SVL_CHECK_EXPECTED_VALUE \
+	"TRUE"
+SVL_PROPERTY_END
+}
+SVL_RECORD_FOR_CLEAN \
+	"test_2_none.bcg"
+SVL_CHECK_FILE \
+	"test_2_none.lnt"
+SVL_COMPILE \
+	"test_2_none.lnt" \
+	"bcg" \
+	"" \
+	"test_2_none"
+SVL_PROPERTY_AtLeastOneLassoUnderNoScheduler \
+	"test_2_none"
+SVL_PROPERTY_CanAlwaysReachTermination \
+	"test_2_none"
+SVL_PROPERTY_FreeFromWeakDeadlockLasso () {
+model="$1"
+shift
+SVL_PRINT_NEWLINE
+SVL_PRINT_MESSAGE \
+	"property FreeFromWeakDeadlockLasso (`SVL_QUOTE_PROPERTY_ARG "$model"`)"
+SVL_PROPERTY_COMMENT_OPEN
+SVL_PROPERTY_COMMENT_MIDDLE \
+	"There are no deadlock lassos in Weak ${model}"
+SVL_PROPERTY_COMMENT_CLOSE
+SVL_PROPERTY_BEGIN \
+	"SOME" \
+	"FreeFromWeakDeadlockLasso"
+SVL_CHECK_FILE \
+	"${model}.bcg"
+SVL_RECORD_FOR_SWEEP \
+	"svl003_formula_inline"
+cat > svl003_formula_inline << SVL_MARKER_END_OF_FORMULA
+<true*> (( <  'EX !1 .* !{1}' . true* > @ ) or ( <  'EX !0 .* !{0}' . true* > @ ) or ( <  'EX !0 .* !{0, 1}' . true* . 'EX !1 .* !{0, 1}' . true* > @ ))
+SVL_MARKER_END_OF_FORMULA
+SVL_RECORD_FOR_CLEAN \
+	"${model}_deadlock.bcg"
+SVL_VERIFY_INLINE \
+	"svl003_formula_inline" \
+	"${model}.bcg" \
+	"" \
+	"${model}_deadlock.bcg" \
+	"$DEFAULT_VERIFY_METHOD" \
+	"evaluator4" \
+	"32"
+SVL_CHECK_EXPECTED_VALUE \
+	"FALSE"
+SVL_PROPERTY_END
+}
+SVL_PROPERTY_FreeFromStrongDeadlockLasso () {
+model="$1"
+shift
+SVL_PRINT_NEWLINE
+SVL_PRINT_MESSAGE \
+	"property FreeFromStrongDeadlockLasso (`SVL_QUOTE_PROPERTY_ARG "$model"`)"
+SVL_PROPERTY_COMMENT_OPEN
+SVL_PROPERTY_COMMENT_MIDDLE \
+	"There are no deadlock lassos in Strong ${model}"
+SVL_PROPERTY_COMMENT_CLOSE
+SVL_PROPERTY_BEGIN \
+	"SOME" \
+	"FreeFromStrongDeadlockLasso"
+SVL_CHECK_FILE \
+	"${model}.bcg"
+SVL_RECORD_FOR_SWEEP \
+	"svl004_formula_inline"
+cat > svl004_formula_inline << SVL_MARKER_END_OF_FORMULA
+macro is_in (t, f) =
+  ( index (f, concat (concat (":", string (t)), ":")) <> 0 )
+end_macro
+  [ (not "exit") * ]
+  < ( { EX ?tid:Nat ... ?fairlyScheduled:String where is_in (tid,
+fairlyScheduled) } or { TERMINATE ... } ) *
+    . ( "exit" or { EX ... ?f:String where f = "::" } )
+  > true
+SVL_MARKER_END_OF_FORMULA
+SVL_RECORD_FOR_CLEAN \
+	"${model}_deadlock.bcg"
+SVL_VERIFY_INLINE \
+	"svl004_formula_inline" \
+	"${model}.bcg" \
+	"" \
+	"${model}_deadlock.bcg" \
+	"$DEFAULT_VERIFY_METHOD" \
+	"evaluator4" \
+	"41"
+SVL_CHECK_EXPECTED_VALUE \
+	"TRUE"
+SVL_PROPERTY_END
+}
+SVL_RECORD_FOR_CLEAN \
+	"test_2_obe.bcg"
+SVL_CHECK_FILE \
+	"test_2_obe.lnt"
+SVL_COMPILE \
+	"test_2_obe.lnt" \
+	"bcg" \
+	"" \
+	"test_2_obe"
+SVL_PROPERTY_FreeFromWeakDeadlockLasso \
+	"test_2_obe"
+SVL_RECORD_FOR_CLEAN \
+	"test_2_obe_strong.bcg"
+SVL_CHECK_FILE \
+	"test_2_obe_strong.lnt"
+SVL_COMPILE \
+	"test_2_obe_strong.lnt" \
+	"bcg" \
+	"" \
+	"test_2_obe_strong"
+SVL_PROPERTY_FreeFromStrongDeadlockLasso \
+	"test_2_obe_strong"
+SVL_RECORD_FOR_CLEAN \
+	"test_2_hsa.bcg"
+SVL_CHECK_FILE \
+	"test_2_hsa.lnt"
+SVL_COMPILE \
+	"test_2_hsa.lnt" \
+	"bcg" \
+	"" \
+	"test_2_hsa"
+SVL_PROPERTY_FreeFromWeakDeadlockLasso \
+	"test_2_hsa"
+SVL_RECORD_FOR_CLEAN \
+	"test_2_hsa_strong.bcg"
+SVL_CHECK_FILE \
+	"test_2_hsa_strong.lnt"
+SVL_COMPILE \
+	"test_2_hsa_strong.lnt" \
+	"bcg" \
+	"" \
+	"test_2_hsa_strong"
+SVL_PROPERTY_FreeFromStrongDeadlockLasso \
+	"test_2_hsa_strong"
+SVL_RECORD_FOR_CLEAN \
+	"test_2_hsa_obe.bcg"
+SVL_CHECK_FILE \
+	"test_2_hsa_obe.lnt"
+SVL_COMPILE \
+	"test_2_hsa_obe.lnt" \
+	"bcg" \
+	"" \
+	"test_2_hsa_obe"
+SVL_PROPERTY_FreeFromWeakDeadlockLasso \
+	"test_2_hsa_obe"
+SVL_RECORD_FOR_CLEAN \
+	"test_2_hsa_obe_strong.bcg"
+SVL_CHECK_FILE \
+	"test_2_hsa_obe_strong.lnt"
+SVL_COMPILE \
+	"test_2_hsa_obe_strong.lnt" \
+	"bcg" \
+	"" \
+	"test_2_hsa_obe_strong"
+SVL_PROPERTY_FreeFromStrongDeadlockLasso \
+	"test_2_hsa_obe_strong"
+SVL_RECORD_FOR_CLEAN \
+	"test_2_hsa_priority.bcg"
+SVL_CHECK_FILE \
+	"test_2_hsa_priority.lnt"
+SVL_COMPILE \
+	"test_2_hsa_priority.lnt" \
+	"bcg" \
+	"" \
+	"test_2_hsa_priority"
+SVL_PROPERTY_FreeFromWeakDeadlockLasso \
+	"test_2_hsa_priority"
+SVL_RECORD_FOR_CLEAN \
+	"test_2_hsa_priority_strong.bcg"
+SVL_CHECK_FILE \
+	"test_2_hsa_priority_strong.lnt"
+SVL_COMPILE \
+	"test_2_hsa_priority_strong.lnt" \
+	"bcg" \
+	"" \
+	"test_2_hsa_priority_strong"
+SVL_PROPERTY_FreeFromStrongDeadlockLasso \
+	"test_2_hsa_priority_strong"
+SVL_RECORD_FOR_CLEAN \
+	"test_2_lobe.bcg"
+SVL_CHECK_FILE \
+	"test_2_lobe.lnt"
+SVL_COMPILE \
+	"test_2_lobe.lnt" \
+	"bcg" \
+	"" \
+	"test_2_lobe"
+SVL_PROPERTY_FreeFromWeakDeadlockLasso \
+	"test_2_lobe"
+SVL_RECORD_FOR_CLEAN \
+	"test_2_lobe_strong.bcg"
+SVL_CHECK_FILE \
+	"test_2_lobe_strong.lnt"
+SVL_COMPILE \
+	"test_2_lobe_strong.lnt" \
+	"bcg" \
+	"" \
+	"test_2_lobe_strong"
+SVL_PROPERTY_FreeFromStrongDeadlockLasso \
+	"test_2_lobe_strong"
+SVL_RECORD_FOR_CLEAN \
+	"test_2_weak.bcg"
+SVL_CHECK_FILE \
+	"test_2_weak.lnt"
+SVL_COMPILE \
+	"test_2_weak.lnt" \
+	"bcg" \
+	"" \
+	"test_2_weak"
+SVL_PROPERTY_FreeFromWeakDeadlockLasso \
+	"test_2_weak"
+SVL_RECORD_FOR_CLEAN \
+	"test_2_strong.bcg"
+SVL_CHECK_FILE \
+	"test_2_strong.lnt"
+SVL_COMPILE \
+	"test_2_strong.lnt" \
+	"bcg" \
+	"" \
+	"test_2_strong"
+SVL_PROPERTY_FreeFromStrongDeadlockLasso \
+	"test_2_strong"
+
+############
+# EPILOGUE #
+############
+SVL_PRINT_NEWLINE
+SVL_EXIT

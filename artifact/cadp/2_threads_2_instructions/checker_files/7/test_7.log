@@ -1,0 +1,42 @@
+
+svl clean info: [persistent] test_7_none.bcg
+
+"test_7_none.bcg" = generation of "test_7_none.lnt"
+
+svl clean info: [temporary] generator
+
+svl clean info: [temporary] generator.o
+
+svl clean info: [temporary] test_7_none.o
+
+svl clean info: [temporary] test_7_none.err
+
+% lnt.open   "test_7_none.lnt"  generator  "test_7_none.bcg"
+
+lnt.open: translating ``common.lnt'' to ``/tmp/hevrard_lnt.open_IgyP0c/COMMON.lib'' ...
+
+      case access(prog, pc) of Instruction in
+	   ^
+[/tmp/hevrard_lnt.open_IgyP0c/common:67] warning: ``access'' is replaced by ``{''
+
+      case access(prog, pc) of Instruction in
+		      ^
+[/tmp/hevrard_lnt.open_IgyP0c/common:67] warning: ``)'' is inserted before ``,''
+
+      case access(prog, pc) of Instruction in
+			  ^
+[/tmp/hevrard_lnt.open_IgyP0c/common:67] warning: ``('' is inserted before ``)''
+
+      case access(prog, pc) of Instruction in
+					   ^
+[/tmp/hevrard_lnt.open_IgyP0c/common:67] warning: ``}'' is inserted before ``in''
+lnt2lotos: double quotes around function identifiers in ``with'' clauses are deprecated and should be removed (6 occurrences found)
+/tmp/hevrard_lnt.open_IgyP0c/common.lnt:34: error:  the predefined function ``access'' should be renamed to ``element''
+/tmp/hevrard_lnt.open_IgyP0c/common.lnt:401: warning: variable NUMCU is declared but not used
+/tmp/hevrard_lnt.open_IgyP0c/common.lnt:67: error: the type of the expression filtered by this ``case'' statement could
+	not be determined. Use type coercion ``V of T'' to solve ambiguity
+lnt2lotos: LNT program is semantically incorrect
+lnt2lotos: quit
+command exit with status 1
+
+svl: ERROR command failed
