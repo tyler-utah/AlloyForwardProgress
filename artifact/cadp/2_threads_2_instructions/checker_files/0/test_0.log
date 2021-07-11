@@ -13,27 +13,27 @@ svl clean info: [temporary] test_0_none.err
 
 % lnt.open   "test_0_none.lnt"  generator  "test_0_none.bcg"
 
-lnt.open: translating ``common.lnt'' to ``/tmp/hevrard_lnt.open_hc4C1k/COMMON.lib'' ...
+lnt.open: translating ``common.lnt'' to ``/tmp/hevrard_lnt.open_YLncax/COMMON.lib'' ...
 
       case access(prog, pc) of Instruction in
 	   ^
-[/tmp/hevrard_lnt.open_hc4C1k/common:67] warning: ``access'' is replaced by ``{''
+[/tmp/hevrard_lnt.open_YLncax/common:67] warning: ``access'' is replaced by ``{''
 
       case access(prog, pc) of Instruction in
 		      ^
-[/tmp/hevrard_lnt.open_hc4C1k/common:67] warning: ``)'' is inserted before ``,''
+[/tmp/hevrard_lnt.open_YLncax/common:67] warning: ``)'' is inserted before ``,''
 
       case access(prog, pc) of Instruction in
 			  ^
-[/tmp/hevrard_lnt.open_hc4C1k/common:67] warning: ``('' is inserted before ``)''
+[/tmp/hevrard_lnt.open_YLncax/common:67] warning: ``('' is inserted before ``)''
 
       case access(prog, pc) of Instruction in
 					   ^
-[/tmp/hevrard_lnt.open_hc4C1k/common:67] warning: ``}'' is inserted before ``in''
+[/tmp/hevrard_lnt.open_YLncax/common:67] warning: ``}'' is inserted before ``in''
 lnt2lotos: double quotes around function identifiers in ``with'' clauses are deprecated and should be removed (6 occurrences found)
-/tmp/hevrard_lnt.open_hc4C1k/common.lnt:34: error:  the predefined function ``access'' should be renamed to ``element''
-/tmp/hevrard_lnt.open_hc4C1k/common.lnt:401: warning: variable NUMCU is declared but not used
-/tmp/hevrard_lnt.open_hc4C1k/common.lnt:67: error: the type of the expression filtered by this ``case'' statement could
+/tmp/hevrard_lnt.open_YLncax/common.lnt:34: error:  the predefined function ``access'' should be renamed to ``element''
+/tmp/hevrard_lnt.open_YLncax/common.lnt:401: warning: variable NUMCU is declared but not used
+/tmp/hevrard_lnt.open_YLncax/common.lnt:67: error: the type of the expression filtered by this ``case'' statement could
 	not be determined. Use type coercion ``V of T'' to solve ambiguity
 lnt2lotos: LNT program is semantically incorrect
 lnt2lotos: quit
