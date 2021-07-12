@@ -67,7 +67,7 @@ to install this version.
 
 For users who cannot easily obtain CADP, we still provide a standalone example
 that shows CADP input and output files, to illustrate how we use the toolbox and
-how it lets us check for test 5~termination.
+how it lets us check for test termination.
 
 ### Standalone example: mutex litmus test
 
@@ -161,16 +161,24 @@ We have scripts to automatically process the litmus tests obtained with Alloy.
 
 These scripts start from files produced by Alloy as an input, generate LNT and
 SVL files, call CADP tools on them, and process the results. The top-level
-script is `cadp/scripts/process.sh`. On a machine with CADP installed, we can
-reproduce our experiments with these commands:
+script is `cadp/scripts/process.sh`, it is meant to be invoked on a directory
+containing litmus test files produced by Alloy.
+
+Our litmus tests are divided into directories with respect to the number of
+threads and instructions present in the tests
+(e.g. `2_threads_2_instructions`). The files produced by Alloy are under
+`alloy_output` subdirectories.
+
+On a machine with CADP installed, we can reproduce our experiments with these
+commands:
 
 ```sh
 cd cadp/
-./scripts/process.sh 2_threads_2_instructions
-./scripts/process.sh 2_threads_3_instructions
-./scripts/process.sh 2_threads_4_instructions
-./scripts/process.sh 3_threads_3_instructions
-./scripts/process.sh 3_threads_4_instructions
+./scripts/process.sh 2_threads_2_instructions/alloy_output
+./scripts/process.sh 2_threads_3_instructions/alloy_output
+./scripts/process.sh 2_threads_4_instructions/alloy_output
+./scripts/process.sh 3_threads_3_instructions/alloy_output
+./scripts/process.sh 3_threads_4_instructions/alloy_output
 ```
 
 On a powerful desktop machine (`Intel(R) Xeon(R) Gold 6154 CPU @ 3.00GHz`), here
@@ -184,10 +192,13 @@ is the approximate time it takes to process these various groups of tests:
 | 3_threads_3_instructions | 21      | 38                 |
 | 3_threads_4_instructions | 105     | 194                |
 
-Inside each test group directory, the files outputed by Alloy during the test
-generation phase are under `alloy_output`. Our scripts generate the
+Inside each test group directory, our scripts generate and populate the
 `alloy_output_processed` and `checker_files` directories.
 
+If you cannot easily install CADP, our artifact provides the results for the
+`2_threads_2_instructions` group. In particular, the
+`2_threads_2_instructions/alloy_output_processed/testExplorer.html` file can be
+open locally with a web browser to explore the test results.
 
 ## Emprical Testing
 
