@@ -114,7 +114,33 @@ svl
 
 This generates the state space of the mutex example for all our progress models,
 and check the presence of potential deadlocks. It should produce a log similar
-to `expected_output.log`.
+to `expected_output.log`. We can see for instance that for this mutex litmus
+test, CADP reports potential deadlock under both weak and strong fairness for
+the HSA progress model, but no risk of deadlock under the OBE progress model:
+
+```sh
+property DeadlockFreeWeak (mutex_HSA)
+ | There is no deadlock under weak fairness in mutex_HSA
+
+FAIL
+
+property DeadlockFreeStrong (mutex_HSA)
+ | There is no deadlock under strong fairness in mutex_HSA
+
+FAIL
+
+[...]
+
+property DeadlockFreeWeak (mutex_OBE)
+ | There is no deadlock under weak fairness in mutex_OBE
+
+PASS
+
+property DeadlockFreeStrong (mutex_OBE)
+ | There is no deadlock under strong fairness in mutex_OBE
+
+PASS
+```
 
 We also include a series of PDFs that represent the LTSs obtained for various
 progress models. On a machine with CADP installed, the commands to reproduce
@@ -133,10 +159,10 @@ ps2pdf mutex_OBE.ps
 
 We have scripts to automatically process the litmus tests obtained with Alloy.
 
-These scripts take files produced by Alloy as an input, generate LNT and SVL
-files, call CADP tools on them, and process the results. The top-level script is
-`cadp/scripts/process.sh`. On a machine with CADP installed, we can reproduce
-our experiments with these commands:
+These scripts start from files produced by Alloy as an input, generate LNT and
+SVL files, call CADP tools on them, and process the results. The top-level
+script is `cadp/scripts/process.sh`. On a machine with CADP installed, we can
+reproduce our experiments with these commands:
 
 ```sh
 cd cadp/
@@ -147,66 +173,21 @@ cd cadp/
 ./scripts/process.sh 3_threads_4_instructions
 ```
 
-### timings
+On a powerful desktop machine (`Intel(R) Xeon(R) Gold 6154 CPU @ 3.00GHz`), here
+is the approximate time it takes to process these various groups of tests:
 
-#### 2t2i
+| Test group               | # tests | Process time (min) |
+|--------------------------|---------|--------------------|
+| 2_threads_2_instructions | 8       | 14                 |
+| 2_threads_3_instructions | 176     | 320                |
+| 2_threads_4_instructions | 173     | 314                |
+| 3_threads_3_instructions | 21      | 38                 |
+| 3_threads_4_instructions | 105     | 194                |
 
-real    14m24.671s
-user    9m45.832s
-sys     6m21.656s
+Inside each test group directory, the files outputed by Alloy during the test
+generation phase are under `alloy_output`. Our scripts generate the
+`alloy_output_processed` and `checker_files` directories.
 
-#### 2t3i
-
-real    320m19.241s
-user    216m53.571s
-sys     142m21.101s
-
-
-#### 2t4i
-
-real    314m27.747s
-user    212m44.130s
-sys     139m57.769s
-
-#### 3t3i
-
-real    38m32.482s
-user    25m59.678s
-sys     17m2.172s
-
-#### 3t4i
-
-real    194m3.329s
-user    130m55.362s
-sys     86m0.682s
-
-
-This results in 
-
-
-check termination of the litmus tests obtained via
-Alloy. These scripts automatically generate LNT and SVL files, call CADP tools
-on them, and process the results. The top-level script is
-`cadp/scripts/process.sh`.
-
-On a machine where CADP is installed, 
-
-Hugues: TODO once we have the test generation in a good shape.
-
-
-
-_TODO: Hugues_
-
-At the core, we have the LNT spec that's parametrized by test programs.
-
-Ship one stand-alone example.
-
-Then explain that we have scripts to generate litmus test programs in their LNT
-forms from the ones produced by Alloy.
-
-How to get CADP with a license.
-
-Ship C code?
 
 ## Emprical Testing
 
