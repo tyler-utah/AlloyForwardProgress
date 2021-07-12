@@ -1,0 +1,49 @@
+digraph "graph" {
+graph [fontsize=12]
+node [fontsize=12]
+edge [fontsize=12]
+rankdir=TB;
+"N24" -> "N23" [uuid = "<A0, S2>", color = "#000000", fontcolor = "#ffffff", style = "solid", label = "", dir = "forward", weight = "1"]
+"N27" -> "N20" [uuid = "<A1, START>", color = "#ff0000", fontcolor = "#ffffff", style = "solid", label = "", dir = "back", weight = "1"]
+"N26" -> "N25" [uuid = "<A2, S1>", color = "#000000", fontcolor = "#ffffff", style = "solid", label = "", dir = "forward", weight = "1"]
+"N13" -> "N12" [uuid = "<A3, END>", color = "#000000", fontcolor = "#ffffff", style = "solid", label = "", dir = "forward", weight = "1"]
+"N23" -> "N22" [uuid = "<A4, S2>", color = "#ff0000", fontcolor = "#ffffff", style = "solid", label = "", dir = "back", weight = "1"]
+"N25" -> "N21" [uuid = "<A5, S1>", color = "#ff0000", fontcolor = "#ffffff", style = "solid", label = "", dir = "back", weight = "1"]
+"N15" -> "N14" [uuid = "<A6, S0>", color = "#000000", fontcolor = "#ffffff", style = "solid", label = "", dir = "forward", weight = "1"]
+"N27" -> "N19" [uuid = "<A7, START>", color = "#ff0000", fontcolor = "#ffffff", style = "solid", label = "", dir = "back", weight = "1"]
+"N25" -> "N24" [uuid = "<A0, S1>", color = "#000000", fontcolor = "#ffffff", style = "solid", label = "", dir = "forward", weight = "1"]
+"N27" -> "N20" [uuid = "<A1, START>", color = "#ff0000", fontcolor = "#ffffff", style = "solid", label = "", dir = "forward", weight = "1"]
+"N27" -> "N26" [uuid = "<A2, START>", color = "#000000", fontcolor = "#ffffff", style = "solid", label = "", dir = "forward", weight = "1"]
+"N14" -> "N13" [uuid = "<A3, S0>", color = "#000000", fontcolor = "#ffffff", style = "solid", label = "", dir = "forward", weight = "1"]
+"N23" -> "N22" [uuid = "<A4, S2>", color = "#ff0000", fontcolor = "#ffffff", style = "solid", label = "", dir = "forward", weight = "1"]
+"N25" -> "N21" [uuid = "<A5, S1>", color = "#ff0000", fontcolor = "#ffffff", style = "solid", label = "", dir = "forward", weight = "1"]
+"N23" -> "N15" [uuid = "<A6, S2>", color = "#000000", fontcolor = "#ffffff", style = "solid", label = "", dir = "forward", weight = "1"]
+"N27" -> "N19" [uuid = "<A7, START>", color = "#ff0000", fontcolor = "#ffffff", style = "solid", label = "", dir = "forward", weight = "1"]
+"N12" [uuid="END", label="Mem[0] = 1, Mem[1] = 1", fillcolor = "#31cf31", fontcolor = "#000000", shape = "ellipse", style = "filled, solid"]
+"N13" [uuid="A3", label="Thread 1 Instruction 0
+if (Mem[1] ==0)
+ goto 0;", fillcolor = "#ffffff", fontcolor = "#000000", shape = "box", style = "filled, solid"]
+"N14" [uuid="S0", label="Mem[0] = 1, Mem[1] = 1", fillcolor = "#ffffff", fontcolor = "#000000", shape = "ellipse", style = "filled, solid"]
+"N15" [uuid="A6", label="Thread 2 Instruction 1
+Mem[1] =1;", fillcolor = "#ffffff", fontcolor = "#000000", shape = "box", style = "filled, solid"]
+"N19" [uuid="A7", label="Thread 1 Instruction 0
+if (Mem[1] ==0)
+ goto 0;", fillcolor = "#ffffff", fontcolor = "#000000", shape = "box", style = "filled, solid"]
+"N20" [uuid="A1", label="Thread 2 Instruction 0
+if (Mem[0] ==0)
+ goto 0;", fillcolor = "#ffffff", fontcolor = "#000000", shape = "box", style = "filled, solid"]
+"N21" [uuid="A5", label="Thread 1 Instruction 0
+if (Mem[1] ==0)
+ goto 0;", fillcolor = "#ffffff", fontcolor = "#000000", shape = "box", style = "filled, solid"]
+"N22" [uuid="A4", label="Thread 1 Instruction 0
+if (Mem[1] ==0)
+ goto 0;", fillcolor = "#ffffff", fontcolor = "#000000", shape = "box", style = "filled, solid"]
+"N23" [uuid="S2", label="Mem[0] = 1, Mem[1] = 0", fillcolor = "#ffffff", fontcolor = "#000000", shape = "ellipse", style = "filled, solid"]
+"N24" [uuid="A0", label="Thread 2 Instruction 0
+if (Mem[0] ==0)
+ goto 0;", fillcolor = "#ffffff", fontcolor = "#000000", shape = "box", style = "filled, solid"]
+"N25" [uuid="S1", label="Mem[0] = 1, Mem[1] = 0", fillcolor = "#ffffff", fontcolor = "#000000", shape = "ellipse", style = "filled, solid"]
+"N26" [uuid="A2", label="Thread 0 Instruction 0
+Mem[0] =1;", fillcolor = "#ffffff", fontcolor = "#000000", shape = "box", style = "filled, solid"]
+"N27" [uuid="START", label="Mem[0] = 0, Mem[1] = 0", fillcolor = "#6396ef", fontcolor = "#000000", shape = "ellipse", style = "filled, solid"]
+}

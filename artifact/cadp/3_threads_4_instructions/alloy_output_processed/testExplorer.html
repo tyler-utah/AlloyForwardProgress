@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        .split {
+            height: 95%;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            overflow-x: hidden;
+            padding-top: 20px;
+        }
+
+        .left {
+            width: 16%;
+            left: 5px;
+        }
+
+        .right {
+            right: 2%;
+            width: 80%;
+        }
+
+        #png-viewer{
+            float: left;
+            width: 60%;
+        }
+
+        #words{
+            float: right;
+            width:40%;
+            height: 100%;
+        }
+
+        #text{
+            width: 100%;
+            height: 20%;
+        }
+
+        #labels{
+            width: 100%;
+            height: 25%;
+        }
+
+        #xml{
+            width: 100%;
+            height: 45%;
+        }
+    </style>
+
+    <script>
+        n = 105;
+
+        window.onload = function() {
+            createFileDirectory();
+        };
+
+        function createFileDirectory() {  
+            dirList = document.getElementById("directory")
+            for (i = 0; i < n; i++){
+                item = document.createElement("li");
+                item2 = document.createElement("a");
+                item2.innerHTML = "Test " + i;
+                item2.href='javascript:openTestCase('+i+');';
+                item.appendChild(item2);
+                dirList.appendChild(item);
+            }
+        }
+
+	function openTestCase(i) {
+	    t = document.getElementById("number");
+	    t.innerHTML = "Test Number " + i
+			    
+            image = document.getElementById("image");
+            image.src = i + '/' + i + '.png';
+
+            xml = document.getElementById("xml");
+            xml.src = i + '/' + i + '.amber';
+
+            txt = document.getElementById("text");
+            txt.src = i + '/' + i + '_simple.txt';
+
+            txt = document.getElementById("labels");
+            txt.src = i + '/label_'+i+'.txt';
+        }
+
+    </script>
+</head>
+<body>
+
+    <div class="split left">
+        <ul id = "directory">
+            
+        </ul>
+        <h3>Acknowledgements</h3>
+        <p id="ack">
+            Amber files by Hari Raval. Alloy description by Tyler Sorensen. Test labeling by Hugues Evrard and Lucas Salvador.
+        </p>
+    </div>
+
+    <div class="split right">
+        <div id="png-viewer">
+            <img id="image" src=""\>
+        </div>
+
+        <div id="words">
+	    <h3 id="number">Test Number</h3>
+            <iframe id="text" src=""></iframe>
+            <iframe id="labels" src=""></iframe>
+            <iframe id="xml" src=""></iframe>
+        </div>
+    </div>
+        
+</body>
+</html> 

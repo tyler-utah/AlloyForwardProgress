@@ -1,0 +1,75 @@
+digraph "graph" {
+graph [fontsize=12]
+node [fontsize=12]
+edge [fontsize=12]
+rankdir=TB;
+"N18" -> "N14" [uuid = "<A0, END0>", color = "#000000", fontcolor = "#ffffff", style = "solid", label = "", dir = "forward", weight = "1"]
+"N32" -> "N31" [uuid = "<A1, S5>", color = "#000000", fontcolor = "#ffffff", style = "solid", label = "", dir = "forward", weight = "1"]
+"N30" -> "N25" [uuid = "<A2, S0>", color = "#ff0000", fontcolor = "#ffffff", style = "solid", label = "", dir = "back", weight = "1"]
+"N31" -> "N24" [uuid = "<A3, S5>", color = "#ff0000", fontcolor = "#ffffff", style = "solid", label = "", dir = "back", weight = "1"]
+"N27" -> "N26" [uuid = "<A4, S4>", color = "#ff0000", fontcolor = "#ffffff", style = "solid", label = "", dir = "forward", weight = "1"]
+"N20" -> "N19" [uuid = "<A5, S3>", color = "#000000", fontcolor = "#ffffff", style = "solid", label = "", dir = "forward", weight = "1"]
+"N17" -> "N16" [uuid = "<A6, S2>", color = "#000000", fontcolor = "#ffffff", style = "solid", label = "", dir = "forward", weight = "1"]
+"N13" -> "N12" [uuid = "<A7, S1>", color = "#000000", fontcolor = "#ffffff", style = "solid", label = "", dir = "forward", weight = "1"]
+"N34" -> "N23" [uuid = "<A8, START>", color = "#ff0000", fontcolor = "#ffffff", style = "solid", label = "", dir = "back", weight = "1"]
+"N15" -> "N14" [uuid = "<A9, END0>", color = "#000000", fontcolor = "#ffffff", style = "solid", label = "", dir = "forward", weight = "1"]
+"N33" -> "N30" [uuid = "<A10, S0>", color = "#000000", fontcolor = "#ffffff", style = "solid", label = "", dir = "forward", weight = "1"]
+"N11" -> "N10" [uuid = "<A11, END1>", color = "#000000", fontcolor = "#ffffff", style = "solid", label = "", dir = "forward", weight = "1"]
+"N19" -> "N18" [uuid = "<A0, S3>", color = "#000000", fontcolor = "#ffffff", style = "solid", label = "", dir = "forward", weight = "1"]
+"N34" -> "N32" [uuid = "<A1, START>", color = "#000000", fontcolor = "#ffffff", style = "solid", label = "", dir = "forward", weight = "1"]
+"N26" -> "N25" [uuid = "<A2, S4>", color = "#ff0000", fontcolor = "#ffffff", style = "solid", label = "", dir = "forward", weight = "1"]
+"N31" -> "N24" [uuid = "<A3, S5>", color = "#ff0000", fontcolor = "#ffffff", style = "solid", label = "", dir = "forward", weight = "1"]
+"N30" -> "N27" [uuid = "<A4, S0>", color = "#ff0000", fontcolor = "#ffffff", style = "solid", label = "", dir = "forward", weight = "1"]
+"N30" -> "N20" [uuid = "<A5, S0>", color = "#000000", fontcolor = "#ffffff", style = "solid", label = "", dir = "forward", weight = "1"]
+"N31" -> "N17" [uuid = "<A6, S5>", color = "#000000", fontcolor = "#ffffff", style = "solid", label = "", dir = "forward", weight = "1"]
+"N26" -> "N13" [uuid = "<A7, S4>", color = "#000000", fontcolor = "#ffffff", style = "solid", label = "", dir = "forward", weight = "1"]
+"N34" -> "N23" [uuid = "<A8, START>", color = "#ff0000", fontcolor = "#ffffff", style = "solid", label = "", dir = "forward", weight = "1"]
+"N16" -> "N15" [uuid = "<A9, S2>", color = "#000000", fontcolor = "#ffffff", style = "solid", label = "", dir = "forward", weight = "1"]
+"N34" -> "N33" [uuid = "<A10, START>", color = "#000000", fontcolor = "#ffffff", style = "solid", label = "", dir = "forward", weight = "1"]
+"N12" -> "N11" [uuid = "<A11, S1>", color = "#000000", fontcolor = "#ffffff", style = "solid", label = "", dir = "forward", weight = "1"]
+"N10" [uuid="END1", label="Mem[0] = 0", fillcolor = "#31cf31", fontcolor = "#000000", shape = "ellipse", style = "filled, solid"]
+"N11" [uuid="A11", label="Thread 2 Instruction 1
+if (Mem[0] ==1)
+ goto 0;", fillcolor = "#ffffff", fontcolor = "#000000", shape = "box", style = "filled, solid"]
+"N12" [uuid="S1", label="Mem[0] = 0", fillcolor = "#ffffff", fontcolor = "#000000", shape = "ellipse", style = "filled, solid"]
+"N13" [uuid="A7", label="Thread 0 Instruction 0
+if (Exch(Mem[0], 0) == 0)
+ goto 0;", fillcolor = "#ffffff", fontcolor = "#000000", shape = "box", style = "filled, solid"]
+"N14" [uuid="END0", label="Mem[0] = 1", fillcolor = "#31cf31", fontcolor = "#000000", shape = "ellipse", style = "filled, solid"]
+"N15" [uuid="A9", label="Thread 1 Instruction 0
+if (Exch(Mem[0], 1) == 1)
+ goto 0;", fillcolor = "#ffffff", fontcolor = "#000000", shape = "box", style = "filled, solid"]
+"N16" [uuid="S2", label="Mem[0] = 0", fillcolor = "#ffffff", fontcolor = "#000000", shape = "ellipse", style = "filled, solid"]
+"N17" [uuid="A6", label="Thread 0 Instruction 0
+if (Exch(Mem[0], 0) == 0)
+ goto 0;", fillcolor = "#ffffff", fontcolor = "#000000", shape = "box", style = "filled, solid"]
+"N18" [uuid="A0", label="Thread 2 Instruction 0
+if (Exch(Mem[0], 1) == 0)
+ goto END;", fillcolor = "#ffffff", fontcolor = "#000000", shape = "box", style = "filled, solid"]
+"N19" [uuid="S3", label="Mem[0] = 0", fillcolor = "#ffffff", fontcolor = "#000000", shape = "ellipse", style = "filled, solid"]
+"N20" [uuid="A5", label="Thread 0 Instruction 0
+if (Exch(Mem[0], 0) == 0)
+ goto 0;", fillcolor = "#ffffff", fontcolor = "#000000", shape = "box", style = "filled, solid"]
+"N23" [uuid="A8", label="Thread 0 Instruction 0
+if (Exch(Mem[0], 0) == 0)
+ goto 0;", fillcolor = "#ffffff", fontcolor = "#000000", shape = "box", style = "filled, solid"]
+"N24" [uuid="A3", label="Thread 1 Instruction 0
+if (Exch(Mem[0], 1) == 1)
+ goto 0;", fillcolor = "#ffffff", fontcolor = "#000000", shape = "box", style = "filled, solid"]
+"N25" [uuid="A2", label="Thread 2 Instruction 1
+if (Mem[0] ==1)
+ goto 0;", fillcolor = "#ffffff", fontcolor = "#000000", shape = "box", style = "filled, solid"]
+"N26" [uuid="S4", label="Mem[0] = 1", fillcolor = "#ffffff", fontcolor = "#000000", shape = "ellipse", style = "filled, solid"]
+"N27" [uuid="A4", label="Thread 2 Instruction 0
+if (Exch(Mem[0], 1) == 0)
+ goto END;", fillcolor = "#ffffff", fontcolor = "#000000", shape = "box", style = "filled, solid"]
+"N30" [uuid="S0", label="Mem[0] = 1", fillcolor = "#ffffff", fontcolor = "#000000", shape = "ellipse", style = "filled, solid"]
+"N31" [uuid="S5", label="Mem[0] = 1", fillcolor = "#ffffff", fontcolor = "#000000", shape = "ellipse", style = "filled, solid"]
+"N32" [uuid="A1", label="Thread 2 Instruction 0
+if (Exch(Mem[0], 1) == 0)
+ goto END;", fillcolor = "#ffffff", fontcolor = "#000000", shape = "box", style = "filled, solid"]
+"N33" [uuid="A10", label="Thread 1 Instruction 0
+if (Exch(Mem[0], 1) == 1)
+ goto 0;", fillcolor = "#ffffff", fontcolor = "#000000", shape = "box", style = "filled, solid"]
+"N34" [uuid="START", label="Mem[0] = 0", fillcolor = "#6396ef", fontcolor = "#000000", shape = "ellipse", style = "filled, solid"]
+}

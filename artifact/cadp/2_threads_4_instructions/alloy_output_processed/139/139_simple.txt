@@ -1,0 +1,8 @@
+THREAD 0
+0: Mem[0] = 1;
+
+THREAD 1
+0: if (Mem[0] == 1) goto END;
+1: if (Mem[0] == 1) goto END;
+2: if (Mem[0] == 0) goto 2;
+

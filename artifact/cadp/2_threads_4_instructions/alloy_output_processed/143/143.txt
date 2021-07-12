@@ -1,0 +1,12 @@
+THREAD0
+atomic_exch_branch(0,1,1,END)
+
+atomic_exch_branch(0,1,0,0)
+
+
+THREAD1
+atomic_exch_branch(0,1,0,END)
+
+atomic_exch_branch(0,1,1,0)
+
+
