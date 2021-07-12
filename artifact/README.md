@@ -55,40 +55,40 @@ verification.
 ### CADP install
 
 CADP is a closed-source research software that requires a license to run, and as
-such it is not possible for us to embed it in this artifact.
+such it was not possible for us to embed it in this artifact.
 
 To install CADP and get a license, see:
 https://cadp.inria.fr/registration/
 
 Academic users can obtain a personal, free-of-charge license.
 
-Our experiments are known to work with CADP version `2020-l`.
+Our experiments are known to work with CADP version `2020-l`, please make sure
+to install this version.
 
 For users who cannot easily obtain CADP, we still provide a standalone example
 that shows CADP input and output files, to illustrate how we use the toolbox and
-how it lets us check for test termination.
+how it lets us check for test 5~termination.
 
-### Standalone example (does not require a CADP install)
+### Standalone example: mutex litmus test
 
-We use the paper's running example of two threads competing for a mutex as a
+We use the article's running example of two threads competing for a mutex as a
 standalone example.
 
-In our case, there are two types of input files to CADP:
+We have two types of input files to CADP:
 
  - `*.lnt` files represent models written in the LNT formal language.
  
  - `*.svl` files represent verification scenarios written in the script
    verification language (SVL), where we typically check properties expressed in
-   the model checking language (MCL) upond some model written in LNT.
+   the model checking language (MCL) on some model written in LNT.
 
-The `cadp/mutex-standalone-example` directory contains all related files:
+The `cadp/mutex-standalone-example/` directory contains the following files.
 
-`mutex.lnt` contains the LNT model of our mutex example. In this file we find
-the definition of the various types and processes needed to express our litmus
+`mutex.lnt` is the LNT model of our mutex example. In this file we find the
+definition of the various types and processes needed to express our litmus
 tests, including the definition of the progress models. These LNT sources are
-the basis for the LNT listing shown in the paper, where they are only slightly
-edited to be shorter and remove small implementation details irrelevant to the
-presentation in the paper.
+the basis for the LNT listings of the article, where they are only slightly
+edited to be shorter and remove small and irrelevant implementation details.
 
 Most of the code of `mutex.lnt` is generic, only the AXB instructions given in
 argument to the INTERPRETER processes are specific to the mutex example. For the
@@ -97,8 +97,8 @@ a single file containing both generic code and the mutex-specific AXB programs.
 
 `verif.svl` contains the SVL verification script with the MCL formulas used to
 check deadlocks under both weak and strong fairness, as discussed in the
-paper. Similar to LNT listings, the MCL formulas listed in the paper have been
-only slightly edited in order to ease their presentation.
+article. Similar to LNT listings, the MCL formulas listed in the article have
+been only slightly edited in order to ease their presentation.
 
 `labels.rename` is a utility file used to work around a limitation of CADP
 concerning the formatting of values of sets of naturals, and how they can be
@@ -114,7 +114,7 @@ svl
 
 This generates the state space of the mutex example for all our progress models,
 and check the presence of potential deadlocks. It should produce a log similar
-to what is in `expected_output.log`.
+to `expected_output.log`.
 
 We also include a series of PDFs that represent the LTSs obtained for various
 progress models. On a machine with CADP installed, the commands to reproduce
