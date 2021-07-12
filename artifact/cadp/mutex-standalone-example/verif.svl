@@ -14,15 +14,15 @@ is
       index(f, concat(concat(":", string(t)), ":")) <> 0
     end_macro
 
-    macro is_empty(f) =
-      f = "::"
+    macro is_not_empty(f) =
+      f <> "::"
     end_macro
 
-    < true* . { STEP ... ?F:String where is_empty(F) }  >
+    < true* . { STEP ... ?F:String where is_not_empty(F) } >
       <
         for tid:Nat from 0 to 5 do
           if is_in(tid, F) then
-            true* . { STEP !tid ... }
+            true* . { STEP !tid ... !F }
           end if
         end for
       >@;
