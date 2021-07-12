@@ -8,7 +8,7 @@ module common is
 
 type NatSet is
   sorted set of nat
-  with "length", "remove", "member"
+  with length, remove, member
 end type
 
 -- Shared memory
@@ -26,12 +26,12 @@ end type
 
 type Instruction is
   ATOMIC_EXCH_BRANCH(check_loc: MemLoc, exch_val: int, do_exch: bool, check_val: int, branch_target: nat, do_branch: bool)
-   with "get"
+   with get
 end type
 
 type Program is
    list of Instruction
-   with "access", "length"
+   with element, length
 end type
 
 -- A channel is a way to type the interactions between processes
@@ -64,7 +64,7 @@ process Thread [EX: ExChan, TERMINATE: NatChan] (tid: nat, prog: Program) is
 
     loop execute_loop in
 
-      case access(prog, pc) of Instruction in
+      case element(prog, pc) of Instruction in
          ATOMIC_EXCH_BRANCH(check_loc, exch_val, do_exch, check_val, branch_target, any bool) ->
             select
                EX(tid, ATOMIC_EXCH_BRANCH(check_loc, exch_val, do_exch, check_val, branch_target, true), ?any NatSet);

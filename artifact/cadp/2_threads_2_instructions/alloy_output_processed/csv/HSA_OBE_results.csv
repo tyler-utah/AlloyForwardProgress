@@ -2,9 +2,9 @@ Test File Name,No saturation Result,Round Robin Saturation Result,Chunking Satur
 0,F,F,F,F
 1,F,F,F,F
 2,F,F,F,F
-3,F,F,F,F
+3,P,P,P,P
 4,F,F,F,F
-5,F,F,F,F
-6,F,F,F,F
+5,P,P,P,P
+6,P,P,P,P
 7,F,F,F,F
-Total failures:,8,8,8,8
+Total failures:,5,5,5,5

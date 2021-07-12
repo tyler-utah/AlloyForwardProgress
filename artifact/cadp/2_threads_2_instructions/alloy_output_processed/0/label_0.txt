@@ -1,6 +1,6 @@
 SANITY CHECK ---------------------
-Unfair - At least one lasso: FAIL
-Unfair - Can reach termination: FAIL
+Unfair - At least one lasso: PASS
+Unfair - Can reach termination: PASS
 
 SCHEDULER RESULTS ---------------------
 WEAK VARIANTS ---------------------
@@ -11,9 +11,9 @@ LOBE - Termination: FAIL
 WEAK_FAIR - Termination: FAIL
 
 STRONG VARIANTS ---------------------
-OBE_STRONG - Termination: FAIL
-HSA_STRONG - Termination: FAIL
-HSA_OBE_STRONG - Termination: FAIL
-LOBE_STRONG - Termination: FAIL
-STRONG_FAIR - Termination: FAIL
+OBE_STRONG - Termination: PASS
+HSA_STRONG - Termination: PASS
+HSA_OBE_STRONG - Termination: PASS
+LOBE_STRONG - Termination: PASS
+STRONG_FAIR - Termination: PASS
 
