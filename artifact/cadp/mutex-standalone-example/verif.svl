@@ -1,18 +1,85 @@
-property WeakDeadlockFree(model)
-    "There are no weak deadlock in ${model}"
+-- This is an SVL script for the verification of the Mutex standalone example.
+-- Lines starting with '--' are comments
+-- Lines starting with '%' are shell-script lines
+-- For more info, see http://cadp.inria.fr/man/svl-lang.html
+
+-------------------------------------------------------------------------------
+
+property DeadlockFreeWeak(model)
+  "There is no deadlock under weak fairness in ${model}"
 is
-"diag_${model}.bcg" = "${model}.bcg" |= with evaluator4
-macro is_in (t, f) =
-  index(f, concat(concat(":", string(t)), ":")) <> 0
-end_macro
-< true* . { STEP ... ?F:String }  >
-  <
-    for tid:Nat from 0 to 2 do
-      if is_in(tid, F) then
-        true* . { STEP !tid ... }
-      end if
-    end for
-  >@;
+  "diag_weak_${model}.bcg" = "${model}.bcg" |= with evaluator4
+
+    macro is_in(t, f) =
+      index(f, concat(concat(":", string(t)), ":")) <> 0
+    end_macro
+
+    macro is_empty(f) =
+      f = "::"
+    end_macro
+
+    < true* . { STEP ... ?F:String where is_empty(F) }  >
+      <
+        for tid:Nat from 0 to 5 do
+          if is_in(tid, F) then
+            true* . { STEP !tid ... }
+          end if
+        end for
+      >@;
+      expected FALSE;
+
 end property
 
-check WeakDeadlockFree(out);
+-------------------------------------------------------------------------------
+
+property DeadlockFreeStrong(model)
+  "There is no deadlock under strong fairness in ${model}"
+is
+  "diag_strong_${model}.bcg" = "${model}.bcg" |= with evaluator4
+
+    macro is_in(t, f) =
+      index(f, concat(concat(":", string(t)), ":")) <> 0
+    end_macro
+
+    macro is_empty(f) =
+      f = "::"
+    end_macro
+
+    [ (not "ALLDONE")* ]
+      < ( { STEP ?tid:Nat ... ?F:String where is_in(tid, F)}
+          or { TERMINATE ... }
+        )* . ( "ALLDONE"
+          or { STEP ... ?F:String where is_empty(F)}
+        )
+      > true;
+      expected TRUE;
+
+end property
+
+-------------------------------------------------------------------------------
+
+-- Verification procedure, takes a progress model name as argument.
+
+% verif() {
+%   progmod=$1 # Sole argument it progress model name, e.g. "LOBE"
+%   lnt.open -root MAIN_${progmod} mutex.lnt generator m_${progmod}
+
+"mutex_${progmod}.bcg" = total rename using "labels.rename" in
+                           strong reduction of "m_${progmod}.bcg";
+
+check DeadlockFreeWeak("mutex_${progmod}");
+
+check DeadlockFreeStrong("mutex_${progmod}");
+
+% }
+
+-------------------------------------------------------------------------------
+
+-- Run the verification procedure for all progress models
+
+% verif HSA
+% verif OBE
+% verif HSA_OBE
+% verif LOBE
+% verif UNFAIR
+% verif FAIR

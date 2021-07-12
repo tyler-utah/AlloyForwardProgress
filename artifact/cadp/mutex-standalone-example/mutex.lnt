@@ -1,4 +1,4 @@
-module mutex_example is
+module mutex is
 
 -------------------------------------------------------------------------------
 -- This is a standalone example of our approach, using the mutex running
@@ -58,9 +58,9 @@ end channel
 -- Processes
 -------------------------------------------------------------------------------
 
--- Interpreter takes as input a thread ID and a Program, and executes
+-- INTERPRETER takes as input a thread ID and a Program, and executes
 -- instructions of the Program.
-process Interpreter [Step: ExecutionStep, Terminate: NatChan] (tid: nat, prog: Program) is
+process INTERPRETER [Step: ExecutionStep, Terminate: NatChan] (tid: nat, prog: Program) is
   var
     pc: nat, -- program counter
     -- variables to match AXB operands:
@@ -98,10 +98,10 @@ end process
 
 -------------------------------------------------------------------------------
 
--- SharedMemory stores the shared memory of the system, it monitors all AXB
+-- SHARED_MEMORY stores the shared memory of the system, it monitors all AXB
 -- instructions by all threads and takes care of the memory read/writes done
 -- in these instructions.
-process SharedMemory [Step: ExecutionStep, Terminate: NatChan, AllDone: none] (numThreads: nat) is
+process SHARED_MEMORY [Step: ExecutionStep, Terminate: NatChan, AllDone: none] (numThreads: nat) is
   var
     doneThread: nat,
     mem: MemArray,
@@ -321,56 +321,115 @@ end process
 
 -------------------------------------------------------------------------------
 
-process Main [Step: ExecutionStep, Terminate: NatChan, AllDone: none] is
+-- MUTEX is the parallel composition of shared memory and the two
+-- threads competing for a mutex.
+process MUTEX[Step: ExecutionStep, Terminate: NatChan, AllDone: none] is
 
--- Parallel composition of:
---   - shared memory
---   - progress model
---   - parallel composition of threads
-par Step, Terminate in
+  -- Parallel composition of:
+  --   - shared memory
+  --   - parallel composition of threads
+  par Step, Terminate in
 
-  -- SharedMemory takes as argument the total number of threads.
-  AllDone -> SharedMemory[Step, Terminate, AllDone](2)
-
-||
-
-  -- Progress model: uncomment the one you want to use:
-  AllDone ->
-    -- HSA[Step, Terminate, AllDone]
-    -- OBE[Step, Terminate, AllDone]
-    -- HSA_OBE[Step, Terminate, AllDone]
-    -- LOBE[Step, Terminate, AllDone]
-    UNFAIR[Step, Terminate, AllDone]
-    -- FAIR[Step, Terminate, AllDone](2) -- FAIR need the number of threads
-
-||
-
-  -- Parallel composition of threads, each represented by an Interpreter.
-  -- Here the program implements the mutex example, with the mutex memory
-  -- location being MemLoc(0).
-  -- 
-  -- Note: in LNT, list indexes start at 1, so the index of the first
-  -- instruction is indeed 1 and not 0. This means that the value of
-  -- the jumpInst operand of AXB are different than in Fig. 1(b).
-  par
-
-    Interpreter[Step, Terminate](0,  -- thread ID: 0
-    {
-      AXB(MemLoc(0), 1, 1, true, 1), -- 1: acquire
-      AXB(MemLoc(0), 0, 3, true, 0)  -- 2: release
-    })
+    -- SHARED_MEMORY takes as argument the total number of threads.
+    SHARED_MEMORY[Step, Terminate, AllDone](2)
 
   ||
 
-    Interpreter[Step, Terminate](1,  -- thread ID: 1
-    {
-      AXB(MemLoc(0), 1, 1, true, 1), -- 1: acquire
-      AXB(MemLoc(0), 0, 3, true, 0)  -- 2: release
-    })
+    -- Parallel composition of threads, each represented by an INTERPRETER.
+    -- Here the program implements the mutex example, with the mutex memory
+    -- location being MemLoc(0).
+    -- 
+    -- Note: in LNT, list indexes start at 1, so the index of the first
+    -- instruction is indeed 1 and not 0. This means that the value of
+    -- the jumpInst operand of AXB are different than in Fig. 1(b).
+    par
 
+      INTERPRETER[Step, Terminate](0,  -- thread ID: 0
+      {
+        AXB(MemLoc(0), 1, 1, true, 1), -- 1: acquire
+        AXB(MemLoc(0), 0, 3, true, 0)  -- 2: release
+      })
+
+    ||
+
+      INTERPRETER[Step, Terminate](1,  -- thread ID: 1
+      {
+        AXB(MemLoc(0), 1, 1, true, 1), -- 1: acquire
+        AXB(MemLoc(0), 0, 3, true, 0)  -- 2: release
+      })
+
+    end par
   end par
-end par
-
 end process
+
+-------------------------------------------------------------------------------
+-- Alternative main processes for automated generation
+-------------------------------------------------------------------------------
+
+-- MAIN_HSA is the top-level process using the HSA progress model.
+process MAIN_HSA [Step: ExecutionStep, Terminate: NatChan, AllDone: none] is
+  par Step, Terminate, AllDone in
+    HSA[Step, Terminate, AllDone]
+  ||
+    MUTEX[Step, Terminate, AllDone]
+  end par
+end process
+
+-------------------------------------------------------------------------------
+
+-- MAIN_OBE is the top-level process using the OBE progress model.
+process MAIN_OBE [Step: ExecutionStep, Terminate: NatChan, AllDone: none] is
+  par Step, Terminate, AllDone in
+    OBE[Step, Terminate, AllDone]
+  ||
+    MUTEX[Step, Terminate, AllDone]
+  end par
+end process
+
+-------------------------------------------------------------------------------
+
+-- MAIN_HSA_OBE is the top-level process using the HSA_OBE progress model.
+process MAIN_HSA_OBE [Step: ExecutionStep, Terminate: NatChan, AllDone: none] is
+  par Step, Terminate, AllDone in
+    HSA_OBE[Step, Terminate, AllDone]
+  ||
+    MUTEX[Step, Terminate, AllDone]
+  end par
+end process
+
+-------------------------------------------------------------------------------
+
+-- MAIN_LOBE is the top-level process using the LOBE progress model.
+process MAIN_LOBE [Step: ExecutionStep, Terminate: NatChan, AllDone: none] is
+  par Step, Terminate, AllDone in
+    LOBE[Step, Terminate, AllDone]
+  ||
+    MUTEX[Step, Terminate, AllDone]
+  end par
+end process
+
+-------------------------------------------------------------------------------
+
+-- MAIN_UNFAIR is the top-level process using the UNFAIR progress model.
+process MAIN_UNFAIR [Step: ExecutionStep, Terminate: NatChan, AllDone: none] is
+  par Step, Terminate, AllDone in
+    UNFAIR[Step, Terminate, AllDone]
+  ||
+    MUTEX[Step, Terminate, AllDone]
+  end par
+end process
+
+-------------------------------------------------------------------------------
+
+-- MAIN_FAIR is the top-level process using the FAIR progress model.
+process MAIN_FAIR [Step: ExecutionStep, Terminate: NatChan, AllDone: none] is
+  par Step, Terminate, AllDone in
+    FAIR[Step, Terminate, AllDone](2)
+  ||
+    MUTEX[Step, Terminate, AllDone]
+  end par
+end process
+
+-------------------------------------------------------------------------------
 
 end module
