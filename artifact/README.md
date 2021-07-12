@@ -195,10 +195,13 @@ is the approximate time it takes to process these various groups of tests:
 Inside each test group directory, our scripts generate and populate the
 `alloy_output_processed` and `checker_files` directories.
 
-If you cannot easily install CADP, our artifact provides the results for the
-`2_threads_2_instructions` group. In particular, the
-`2_threads_2_instructions/alloy_output_processed/testExplorer.html` file can be
-open locally with a web browser to explore the test results.
+If you cannot easily install CADP, our artifact provides all expected output
+files for the `2_threads_2_instructions` group. In order to keep the artifact
+size under control, it includes only the `alloy_output_processed` part of the
+expected results for other test groups.
+
+In each test group, you can use a web browser to locally open the
+`<test-group>/alloy_output_processed/testExplorer.html` and explore the results.
 
 ## Emprical Testing
 
