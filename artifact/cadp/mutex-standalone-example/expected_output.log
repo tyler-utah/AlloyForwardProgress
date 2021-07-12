@@ -1,0 +1,145 @@
+
+lnt.open: translating ``mutex.lnt'' to ``/tmp/hevrard_lnt.open_nzB5Tg/mutex.lotos'' ...
+
+lnt.open: calling lotos.open for ``mutex.lotos'' ...
+lotos.open: using ``(direct) caesar''
+lotos.open: calling ``caesar.adt -debug -silent mutex''
+lotos.open: calling ``lnt_check'' for ``mutex.h''
+lotos.open: calling ``caesar -root 'MAIN_HSA' -silent mutex''
+
+"svl003_reduced_m_HSA.bcg" = strong reduction of "m_HSA.bcg"
+    (* 17 states, 24 transitions, 2.8 Kbytes *)
+
+"mutex_HSA.bcg" = total rename using "labels.rename"
+    in "svl003_reduced_m_HSA.bcg"
+
+property DeadlockFreeWeak (mutex_HSA)
+ | There is no deadlock under weak fairness in mutex_HSA
+
+PASS
+
+property DeadlockFreeStrong (mutex_HSA)
+ | There is no deadlock under strong fairness in mutex_HSA
+
+FAIL
+
+lnt.open: translating ``mutex.lnt'' to ``/tmp/hevrard_lnt.open_lmmnf7/mutex.lotos'' ...
+
+lnt.open: calling lotos.open for ``mutex.lotos'' ...
+lotos.open: using ``(direct) caesar''
+lotos.open: calling ``caesar.adt -debug -silent mutex''
+lotos.open: calling ``lnt_check'' for ``mutex.h''
+lotos.open: calling ``caesar -root 'MAIN_OBE' -silent mutex''
+
+"svl003_reduced_m_OBE.bcg" = strong reduction of "m_OBE.bcg"
+    (* 23 states, 34 transitions, 3.2 Kbytes *)
+
+"mutex_OBE.bcg" = total rename using "labels.rename"
+    in "svl003_reduced_m_OBE.bcg"
+
+property DeadlockFreeWeak (mutex_OBE)
+ | There is no deadlock under weak fairness in mutex_OBE
+
+FAIL
+
+property DeadlockFreeStrong (mutex_OBE)
+ | There is no deadlock under strong fairness in mutex_OBE
+
+PASS
+
+lnt.open: translating ``mutex.lnt'' to ``/tmp/hevrard_lnt.open_lmmNmO/mutex.lotos'' ...
+
+lnt.open: calling lotos.open for ``mutex.lotos'' ...
+lotos.open: using ``(direct) caesar''
+lotos.open: calling ``caesar.adt -debug -silent mutex''
+lotos.open: calling ``lnt_check'' for ``mutex.h''
+lotos.open: calling ``caesar -root 'MAIN_HSA_OBE' -silent mutex''
+
+"svl003_reduced_m_HSA_OBE.bcg" = strong reduction of "m_HSA_OBE.bcg"
+    (* 19 states, 28 transitions, 3.0 Kbytes *)
+
+"mutex_HSA_OBE.bcg" = total rename using "labels.rename"
+    in "svl003_reduced_m_HSA_OBE.bcg"
+
+property DeadlockFreeWeak (mutex_HSA_OBE)
+ | There is no deadlock under weak fairness in mutex_HSA_OBE
+
+PASS
+
+property DeadlockFreeStrong (mutex_HSA_OBE)
+ | There is no deadlock under strong fairness in mutex_HSA_OBE
+
+PASS
+
+lnt.open: translating ``mutex.lnt'' to ``/tmp/hevrard_lnt.open_cNt8NC/mutex.lotos'' ...
+
+lnt.open: calling lotos.open for ``mutex.lotos'' ...
+lotos.open: using ``(direct) caesar''
+lotos.open: calling ``caesar.adt -debug -silent mutex''
+lotos.open: calling ``lnt_check'' for ``mutex.h''
+lotos.open: calling ``caesar -root 'MAIN_LOBE' -silent mutex''
+
+"svl003_reduced_m_LOBE.bcg" = strong reduction of "m_LOBE.bcg"
+    (* 20 states, 29 transitions, 3.1 Kbytes *)
+
+"mutex_LOBE.bcg" = total rename using "labels.rename"
+    in "svl003_reduced_m_LOBE.bcg"
+
+property DeadlockFreeWeak (mutex_LOBE)
+ | There is no deadlock under weak fairness in mutex_LOBE
+
+FAIL
+
+property DeadlockFreeStrong (mutex_LOBE)
+ | There is no deadlock under strong fairness in mutex_LOBE
+
+PASS
+
+lnt.open: translating ``mutex.lnt'' to ``/tmp/hevrard_lnt.open_DnfjEl/mutex.lotos'' ...
+
+lnt.open: calling lotos.open for ``mutex.lotos'' ...
+lotos.open: using ``(direct) caesar''
+lotos.open: calling ``caesar.adt -debug -silent mutex''
+lotos.open: calling ``lnt_check'' for ``mutex.h''
+lotos.open: calling ``caesar -root 'MAIN_UNFAIR' -silent mutex''
+
+"svl003_reduced_m_UNFAIR.bcg" = strong reduction of "m_UNFAIR.bcg"
+    (* 17 states, 24 transitions, 2.7 Kbytes *)
+
+"mutex_UNFAIR.bcg" = total rename using "labels.rename"
+    in "svl003_reduced_m_UNFAIR.bcg"
+
+property DeadlockFreeWeak (mutex_UNFAIR)
+ | There is no deadlock under weak fairness in mutex_UNFAIR
+
+FAIL
+
+property DeadlockFreeStrong (mutex_UNFAIR)
+ | There is no deadlock under strong fairness in mutex_UNFAIR
+
+PASS
+
+lnt.open: translating ``mutex.lnt'' to ``/tmp/hevrard_lnt.open_MNri43/mutex.lotos'' ...
+
+lnt.open: calling lotos.open for ``mutex.lotos'' ...
+lotos.open: using ``(direct) caesar''
+lotos.open: calling ``caesar.adt -debug -silent mutex''
+lotos.open: calling ``lnt_check'' for ``mutex.h''
+lotos.open: calling ``caesar -root 'MAIN_FAIR' -silent mutex''
+
+"svl003_reduced_m_FAIR.bcg" = strong reduction of "m_FAIR.bcg"
+    (* 17 states, 24 transitions, 2.9 Kbytes *)
+
+"mutex_FAIR.bcg" = total rename using "labels.rename"
+    in "svl003_reduced_m_FAIR.bcg"
+
+property DeadlockFreeWeak (mutex_FAIR)
+ | There is no deadlock under weak fairness in mutex_FAIR
+
+PASS
+
+property DeadlockFreeStrong (mutex_FAIR)
+ | There is no deadlock under strong fairness in mutex_FAIR
+
+PASS
+
