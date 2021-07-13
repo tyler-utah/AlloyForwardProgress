@@ -2,15 +2,32 @@
 
 ## Abstract
 
-TODO
+This is the OOPSLA '21 artifact for the paper "Specifying and Testing GPU Workgroup Progress Models". We assume that the user has read the paper, and this documentation will refer to the paper (and use notation from the paper) throughout. 
+
+We admit that this artifact might be different than traditional artifacts submitted to OOPLSA. Our results are not reproducible on traditional linux servers. If you have read the paper, you will notice that we test a diversity of devices, from Iphones, to Ipads, to Android tablets. We have done a best-effort to show that our results are reproducible and have included all software to reproduce our results. 
+
+of the formal tools we use, [CADP](https://en.wikipedia.org/wiki/Construction_and_Analysis_of_Distributed_Processes), requires a license to run. Academic licenses are free and easily acquired with a simple email form; however, we could not legally bundle the source (or an executable) of this tool. We hope the evaluators will follow our simple rules for obtaining the tool to run this section of experiments.
+
+While we appreciate that the evaluators may not have access to the GPUs we used in our experiments, we have included the ability to run our experiments on a software-emulated GPU called [Swift Shader](https://github.com/google/swiftshader). We have included all data from running our experiments across a diversity of devices.
+
+Our synthesis results require over 1 month of execution time on a big server. We have included scripts to run a subset of the synthesis runs. 
+
+We hope the AE committee will consider the unique components of our work and appreciate the wide applicability of our experiments (even if they are not easily reproduced in a clean traditional academic environment).
 
 ## Getting started
 
 These instructions have been tested on a 64-bit Linux machine running an OS
-similar to Ubuntu 18.04 with Docker installed and with Bash as the shell. Other
-configurations are likely to work since we mostly use Docker.
+similar to Ubuntu 18.04 with Docker installed and with Bash as the shell. Most of our software is included in the docker image. All data and most software required for the artifact is also included in this repository in the `to_copy` directory.
+
+## Accessing the docker image
+
+This repo contains the necessary data and scripts to build a docker container; however, this can be a lengthy process. For convenience, we have provided a pre-built docker image at: TODO
+
+To launch the docker image, please run: TODO
 
 ## Build the docker image
+
+(this step is unnecessary if you have obtained the prebuilt docker image from the previous step)
 
 Change into the directory:
 
@@ -35,14 +52,18 @@ You should now have a Bash shell inside the container.
 
 ## Test Generation
 
-_TODO: Tyler and Lucas figure out how to get test generation running_
+We begin by discussing the test synthesis process described in Section 5 "Automatic Synthesis of Progress Litmus Tests". This component requires a slightly modified version of the [Alloy](https://alloytools.org/) relational model checker, which we have included in this repo, copied into the docker and built.
 
-_TODO: instructions for running 2 thread 2 instruction variants_
+To run these experiments, change into the `/data/test_synthesis/alloy5` directory. The formal model describing the LTS and semantics of our simple programming language can be found in `progress.als`.
 
-_TODO: State that running larger experiments require tons of time and tons of RAM_
+Recall from the paper, that there are 5 different test configurations, which vary the number of threads and instructions in the synthesis run. Recall that all configurations except for the smallest configuation (2 threads and 2 instructions) timed out, running for approximately 1 week on a very large server (i.e. with 1 TB of main memory). We appreciate that this may be too long and too large of a machine for the reviews, thus we suggest the reviews run only the smallest configuration.
 
-_TODO: point to Lucas Test explorer, both the Princeton hosted page and the git repo, as well as generated raw tests
-> Hugues: we can probably include the html pages directly in the artifact image, for local browsing?
+To do this, we have provided the simple `to_run.sh` bash script in this directory. This script shows the 5 commands to run the 5 configurations described in the paper. Please note the values for each of the calls, which vary the number of components to run the synthesis, including the number of threads and instructions. We have commented all lines except for the smallest configuration; this command should execute in several minutes on a moderately sized server. 
+
+Upon launching the `to_run.sh` script, the user will see a stream of two characters. The `x` character means that a unique test was found. On the other hand, a `.` character means that a redundant test was found. The synthesis should complete showing 6 unique tests were found, and a large number of total tests (most of which are redundant, as described in Section 5 of the paper). The unique tests can be observed in the directory `../out/2t_2i`. There is an integer number describing each test (0-5 inclusive). 
+
+Each test directory will contain several files: the `.xml` and `.dot` files are generated by Alloy. The `.txt` files are produced by our simple post processing to create a pseudo-code representation of each test. The `_simple.txt` file performs some additional syntax sugar to the tests to make them even easier to read.
+
 
 ## CADP: model-checking test termination
 
