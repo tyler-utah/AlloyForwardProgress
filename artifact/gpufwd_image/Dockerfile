@@ -77,5 +77,7 @@ RUN \
 
 COPY ./to_copy/synthesis_analysis /data/synthesis_analysis
 
+COPY ./to_copy/empirical_analysis /data/empirical_analysis
+
 # Login shell
 CMD ["/bin/bash", "--login"]
