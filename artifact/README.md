@@ -302,6 +302,34 @@ Similar to CUDA, we do not believe building and deploying IOS applications is po
 
 We warn the reviewers that running the IOS application can cause alarming visual artifacts to appear on the device. Hopefully it goes without saying that we do not assume liability for any damage done to your devices when running our test harness (although we have run it many times over without permanant issue on an Iphone 11 and Ipad Air 3). That said, it is interesting and fun to run these tests on IOS devices and hope that some reviewer will be adventurous enough to try it! 
 
-## Data
+The results of our empirical runs are stored in `/data/empirical_analysis/empirical_results`. That directory contains a subfolder for each of the synthesis configurations (i.e. the number of threads and instructions). Each of these directories contains a sub directory for the three frameworks we tested: CUDA, Vulkan and Metal. Each of those directores contains a CSV describing the device we tested and the results of running each of the test. 
 
-_TODO: Tyler_
+### Analyzing the Results
+
+All the scripts discussed here are in the `analysis_scripts` directory.
+
+The first analysis we perform is for Figure 9. To do this, go into the `figure_9` directory. First, we must generate the csv for figure 9. This is done by running:
+
+`python3 mk_fig_9.py`
+
+This creates `output.csv`. The pdf of figure 9 can then be made by running:
+
+`gnuplot plot.gnu`
+
+Next, we discuss how to check for LOBE conformance, as discussed in Section 6.3.2. This is done in the `check_lobe_conformance` directory. The empirical results (per device) can be checked against the formal LOBE results by running:
+
+`python3 check.py`
+
+You will see displayed on the output the per-device results. You should see that all devices, except the Mali and A12 pass. The two chips that fail have 11 failed tests. If you run the above command with a `-v` option, you will see the test configuration and id that failed (which you could then examine in the test explorer). 
+
+Next, we will explore the uniform behaviors under the chunked hueristic (Section 6.3.3). This is given in the `check_lobe_tightness` directory. You run this check the same way that lobe conformance was checked. As described in the paper, you should observe that each device deterministically passes 5 of the distinguishing tests for the fully fair schedulers under the chunked hueristic. If you run with `-v` you can see more information about the 5 tests that pass.
+
+### Additional results
+
+Finally, we will check the two additional results discussed in Section 6.4. First we will check Nvidia cooperative groups. To do this, go into the `check_nvidia_cooperative_groups` directory. This directory has a similar `check.py` script to run. You should observe that all weak fairness tests pass, however several strong fairness tests fail. You can run with `-v` to observe more details about the failing tests. 
+
+To check the Nvidia independent warp scheduler (IWS), go into `check_IWS_scheduler`. This directory also has a `check.py` script to run. You should see output indicating that the IWS setting passes all weak fairness tests, but the non-IWS setting fails many of them. Convsersly, the strong fairness tests should pass under the non-IWS setting, and have a relatively small number of failures with the IWS setting.
+
+## Thanks!
+
+Thanks for all your work! We're happy for any feedback and we hope you enjoyed reading our paper and running our code!
