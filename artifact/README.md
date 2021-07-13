@@ -266,7 +266,7 @@ The data file for figure out is in `data.dat`, and the gnuplot script to generat
 
 This will create `output.pdf` with the visual of figure 8.
 
-## Emprical Testing
+## Empirical Testing
 
 The empirical testing code is all found in the `/data/empirical_testing` directory on the docker image.
 
