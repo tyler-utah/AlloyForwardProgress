@@ -1,0 +1,18 @@
+digraph BCG {
+size = "7, 10.5";
+center = TRUE;
+node [shape = circle];
+0 [peripheries = 2];
+0 -> 1 [label = "EX !0 !ATOMIC_EXCH_BRANCH (1, +1, TRUE, +0, 2, TRUE) !::"];
+1 -> 2 [label = "EX !2 !ATOMIC_EXCH_BRANCH (1, +0, FALSE, +0, 1, FALSE) !:0:"];
+2 -> 3 [label = "TERMINATE !0"];
+2 -> 4 [label = "EX !2 !ATOMIC_EXCH_BRANCH (2, +0, FALSE, +0, 1, TRUE) !:0:2:"];
+3 -> 5 [label = "EX !2 !ATOMIC_EXCH_BRANCH (2, +0, FALSE, +0, 1, TRUE) !:2:"];
+4 -> 6 [label = "TERMINATE !0"];
+4 -> 7 [label = "EX !2 !ATOMIC_EXCH_BRANCH (1, +0, FALSE, +0, 1, FALSE) !:0:2:"];
+5 -> 8 [label = "EX !2 !ATOMIC_EXCH_BRANCH (1, +0, FALSE, +0, 1, FALSE) !:2:"];
+6 -> 8 [label = "EX !2 !ATOMIC_EXCH_BRANCH (1, +0, FALSE, +0, 1, FALSE) !:2:"];
+7 -> 3 [label = "TERMINATE !0"];
+7 -> 4 [label = "EX !2 !ATOMIC_EXCH_BRANCH (2, +0, FALSE, +0, 1, TRUE) !:0:2:"];
+8 -> 5 [label = "EX !2 !ATOMIC_EXCH_BRANCH (2, +0, FALSE, +0, 1, TRUE) !:2:"];
+}

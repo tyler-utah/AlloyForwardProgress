@@ -1,0 +1,108 @@
+
+"test_171_none.bcg" = generation of "test_171_none.lnt"
+    (* 33 states, 47 transitions, 2.8 Kbytes *)
+
+property AtLeastOneLassoUnderNoScheduler (test_171_none)
+
+PASS
+
+property CanAlwaysReachTermination (test_171_none)
+
+PASS
+
+"test_171_obe.bcg" = generation of "test_171_obe.lnt"
+    (* 33 states, 47 transitions, 3.3 Kbytes *)
+
+property FreeFromWeakDeadlockLasso (test_171_obe)
+ | There are no deadlock lassos in Weak test_171_obe
+
+FAIL
+
+"test_171_obe_strong.bcg" = generation of "test_171_obe_strong.lnt"
+    (* 33 states, 47 transitions, 3.3 Kbytes *)
+
+property FreeFromStrongDeadlockLasso (test_171_obe_strong)
+ | There are no deadlock lassos in Strong test_171_obe_strong
+
+PASS
+
+"test_171_hsa.bcg" = generation of "test_171_hsa.lnt"
+    (* 35 states, 49 transitions, 3.0 Kbytes *)
+
+property FreeFromWeakDeadlockLasso (test_171_hsa)
+ | There are no deadlock lassos in Weak test_171_hsa
+
+FAIL
+
+"test_171_hsa_strong.bcg" = generation of "test_171_hsa_strong.lnt"
+    (* 35 states, 49 transitions, 3.0 Kbytes *)
+
+property FreeFromStrongDeadlockLasso (test_171_hsa_strong)
+ | There are no deadlock lassos in Strong test_171_hsa_strong
+
+PASS
+
+"test_171_hsa_obe.bcg" = generation of "test_171_hsa_obe.lnt"
+    (* 35 states, 49 transitions, 3.3 Kbytes *)
+
+property FreeFromWeakDeadlockLasso (test_171_hsa_obe)
+ | There are no deadlock lassos in Weak test_171_hsa_obe
+
+FAIL
+
+"test_171_hsa_obe_strong.bcg" = generation of "test_171_hsa_obe_strong.lnt"
+    (* 35 states, 49 transitions, 3.3 Kbytes *)
+
+property FreeFromStrongDeadlockLasso (test_171_hsa_obe_strong)
+ | There are no deadlock lassos in Strong test_171_hsa_obe_strong
+
+PASS
+
+"test_171_hsa_priority.bcg" = generation of "test_171_hsa_priority.lnt"
+    (* 35 states, 49 transitions, 3.0 Kbytes *)
+
+property FreeFromWeakDeadlockLasso (test_171_hsa_priority)
+ | There are no deadlock lassos in Weak test_171_hsa_priority
+
+FAIL
+
+"test_171_hsa_priority_strong.bcg" = generation of "test_171_hsa_priority_strong.lnt"
+    (* 35 states, 49 transitions, 3.0 Kbytes *)
+
+property FreeFromStrongDeadlockLasso (test_171_hsa_priority_strong)
+ | There are no deadlock lassos in Strong test_171_hsa_priority_strong
+
+PASS
+
+"test_171_lobe.bcg" = generation of "test_171_lobe.lnt"
+    (* 37 states, 54 transitions, 3.3 Kbytes *)
+
+property FreeFromWeakDeadlockLasso (test_171_lobe)
+ | There are no deadlock lassos in Weak test_171_lobe
+
+FAIL
+
+"test_171_lobe_strong.bcg" = generation of "test_171_lobe_strong.lnt"
+    (* 37 states, 54 transitions, 3.3 Kbytes *)
+
+property FreeFromStrongDeadlockLasso (test_171_lobe_strong)
+ | There are no deadlock lassos in Strong test_171_lobe_strong
+
+PASS
+
+"test_171_weak.bcg" = generation of "test_171_weak.lnt"
+    (* 33 states, 47 transitions, 3.1 Kbytes *)
+
+property FreeFromWeakDeadlockLasso (test_171_weak)
+ | There are no deadlock lassos in Weak test_171_weak
+
+FAIL
+
+"test_171_strong.bcg" = generation of "test_171_strong.lnt"
+    (* 33 states, 47 transitions, 3.2 Kbytes *)
+
+property FreeFromStrongDeadlockLasso (test_171_strong)
+ | There are no deadlock lassos in Strong test_171_strong
+
+PASS
+

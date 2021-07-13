@@ -1,0 +1,85 @@
+#!amber
+
+SET ENGINE_DATA fence_timeout_ms 20000
+
+SHADER compute test GLSL
+#version 430
+
+layout(set = 0, binding = 0) volatile buffer TEST {
+	uint x;
+	uint counter;
+} test; 
+
+layout(local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+
+void main()
+{
+	uint gid_x = gl_GlobalInvocationID.x;
+	int pc = 0;
+
+	if (gid_x == 0) { 
+	   int terminate = 0;
+
+	while (true) {
+	   if (terminate == 1) {
+	   break;
+	}
+	switch(pc) {
+
+	  case 0: 
+		if (atomicExchange(test.x, 0) ==  1) { 
+		   pc = 0;
+		}
+		else {
+		   pc = pc + 1;
+		}
+		break;
+
+	  case 1:
+		terminate = 1;
+		break;
+
+	     }
+	   }
+	}
+
+	if (gid_x == 1) { 
+	   int terminate = 0;
+
+	while (true) {
+	   if (terminate == 1) {
+	   break;
+	}
+	switch(pc) {
+
+	  case 0: 
+		if (atomicExchange(test.x, 1) ==  0) { 
+		   pc = 0;
+		}
+		else {
+		   pc = pc + 1;
+		}
+		break;
+
+	  case 1:
+		terminate = 1;
+		break;
+
+	     }
+	   }
+	}
+
+	atomicAdd(test.counter, 1);
+}
+END
+
+BUFFER tester DATA_TYPE uint32 SIZE 2 FILL 0
+
+PIPELINE compute test_pipe
+  ATTACH test
+  BIND BUFFER tester AS storage DESCRIPTOR_SET 0 BINDING 0 
+
+END
+
+RUN test_pipe 65535 1 1
+EXPECT tester IDX 4 EQ 65535

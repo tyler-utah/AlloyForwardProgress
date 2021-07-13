@@ -1,0 +1,10 @@
+THREAD 0
+0: if (Exch(Mem[0],1) == 0) goto END;
+1: if (Mem[0] == 1) goto 1;
+
+THREAD 1
+0: if (Exch(Mem[0],1) == 1) goto 0;
+
+THREAD 2
+0: if (Exch(Mem[0],0) == 0) goto 0;
+

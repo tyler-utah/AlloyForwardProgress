@@ -1,0 +1,33 @@
+module test_25_lobe(common) is
+
+process MAIN [EX: ExChan, TERMINATE: NatChan] is
+  par EX, TERMINATE in
+    SHARED_MEMORY [EX, TERMINATE] (3)
+  ||
+    SCHEDULER_LOBE [EX, TERMINATE] (3)
+  ||
+    par
+
+       THREAD [EX, TERMINATE] (0, {
+                            ATOMIC_EXCH_BRANCH(MemLoc(1), 0, true, 0, 1, true),
+                            ATOMIC_EXCH_BRANCH(MemLoc(1), 0, false, 0, 2, true)
+      })
+
+    ||
+
+       THREAD [EX, TERMINATE] (1, {
+                            ATOMIC_EXCH_BRANCH(MemLoc(1), 1, true, 1, 1, true)
+      })
+
+    ||
+
+       THREAD [EX, TERMINATE] (2, {
+                            ATOMIC_EXCH_BRANCH(MemLoc(1), 1, true, 1, 1, true)
+      })
+
+
+    end par
+  end par
+end process
+
+end module

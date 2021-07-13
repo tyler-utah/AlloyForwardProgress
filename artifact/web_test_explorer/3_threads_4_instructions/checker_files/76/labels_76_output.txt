@@ -1,0 +1,108 @@
+
+"test_76_none.bcg" = generation of "test_76_none.lnt"
+    (* 76 states, 153 transitions, 3.1 Kbytes *)
+
+property AtLeastOneLassoUnderNoScheduler (test_76_none)
+
+PASS
+
+property CanAlwaysReachTermination (test_76_none)
+
+PASS
+
+"test_76_obe.bcg" = generation of "test_76_obe.lnt"
+    (* 76 states, 153 transitions, 5.1 Kbytes *)
+
+property FreeFromWeakDeadlockLasso (test_76_obe)
+ | There are no deadlock lassos in Weak test_76_obe
+
+FAIL
+
+"test_76_obe_strong.bcg" = generation of "test_76_obe_strong.lnt"
+    (* 76 states, 153 transitions, 5.1 Kbytes *)
+
+property FreeFromStrongDeadlockLasso (test_76_obe_strong)
+ | There are no deadlock lassos in Strong test_76_obe_strong
+
+FAIL
+
+"test_76_hsa.bcg" = generation of "test_76_hsa.lnt"
+    (* 87 states, 164 transitions, 3.3 Kbytes *)
+
+property FreeFromWeakDeadlockLasso (test_76_hsa)
+ | There are no deadlock lassos in Weak test_76_hsa
+
+FAIL
+
+"test_76_hsa_strong.bcg" = generation of "test_76_hsa_strong.lnt"
+    (* 87 states, 164 transitions, 3.3 Kbytes *)
+
+property FreeFromStrongDeadlockLasso (test_76_hsa_strong)
+ | There are no deadlock lassos in Strong test_76_hsa_strong
+
+FAIL
+
+"test_76_hsa_obe.bcg" = generation of "test_76_hsa_obe.lnt"
+    (* 93 states, 170 transitions, 4.2 Kbytes *)
+
+property FreeFromWeakDeadlockLasso (test_76_hsa_obe)
+ | There are no deadlock lassos in Weak test_76_hsa_obe
+
+FAIL
+
+"test_76_hsa_obe_strong.bcg" = generation of "test_76_hsa_obe_strong.lnt"
+    (* 93 states, 170 transitions, 4.2 Kbytes *)
+
+property FreeFromStrongDeadlockLasso (test_76_hsa_obe_strong)
+ | There are no deadlock lassos in Strong test_76_hsa_obe_strong
+
+FAIL
+
+"test_76_hsa_priority.bcg" = generation of "test_76_hsa_priority.lnt"
+    (* 91 states, 168 transitions, 3.3 Kbytes *)
+
+property FreeFromWeakDeadlockLasso (test_76_hsa_priority)
+ | There are no deadlock lassos in Weak test_76_hsa_priority
+
+FAIL
+
+"test_76_hsa_priority_strong.bcg" = generation of "test_76_hsa_priority_strong.lnt"
+    (* 91 states, 168 transitions, 3.3 Kbytes *)
+
+property FreeFromStrongDeadlockLasso (test_76_hsa_priority_strong)
+ | There are no deadlock lassos in Strong test_76_hsa_priority_strong
+
+FAIL
+
+"test_76_lobe.bcg" = generation of "test_76_lobe.lnt"
+    (* 77 states, 156 transitions, 4.2 Kbytes *)
+
+property FreeFromWeakDeadlockLasso (test_76_lobe)
+ | There are no deadlock lassos in Weak test_76_lobe
+
+FAIL
+
+"test_76_lobe_strong.bcg" = generation of "test_76_lobe_strong.lnt"
+    (* 77 states, 156 transitions, 4.2 Kbytes *)
+
+property FreeFromStrongDeadlockLasso (test_76_lobe_strong)
+ | There are no deadlock lassos in Strong test_76_lobe_strong
+
+FAIL
+
+"test_76_weak.bcg" = generation of "test_76_weak.lnt"
+    (* 76 states, 153 transitions, 4.0 Kbytes *)
+
+property FreeFromWeakDeadlockLasso (test_76_weak)
+ | There are no deadlock lassos in Weak test_76_weak
+
+PASS
+
+"test_76_strong.bcg" = generation of "test_76_strong.lnt"
+    (* 76 states, 153 transitions, 4.0 Kbytes *)
+
+property FreeFromStrongDeadlockLasso (test_76_strong)
+ | There are no deadlock lassos in Strong test_76_strong
+
+PASS
+

@@ -1,0 +1,12 @@
+THREAD0
+atomic_store(0,1)
+
+atomic_exch_branch(0,1,0,0)
+
+
+THREAD1
+atomic_chk_branch(0,0,0)
+
+atomic_exch_branch(0,0,0,1)
+
+

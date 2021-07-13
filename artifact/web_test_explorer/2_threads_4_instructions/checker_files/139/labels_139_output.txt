@@ -1,0 +1,108 @@
+
+"test_139_none.bcg" = generation of "test_139_none.lnt"
+    (* 15 states, 21 transitions, 2.7 Kbytes *)
+
+property AtLeastOneLassoUnderNoScheduler (test_139_none)
+
+PASS
+
+property CanAlwaysReachTermination (test_139_none)
+
+PASS
+
+"test_139_obe.bcg" = generation of "test_139_obe.lnt"
+    (* 15 states, 21 transitions, 3.1 Kbytes *)
+
+property FreeFromWeakDeadlockLasso (test_139_obe)
+ | There are no deadlock lassos in Weak test_139_obe
+
+FAIL
+
+"test_139_obe_strong.bcg" = generation of "test_139_obe_strong.lnt"
+    (* 15 states, 21 transitions, 3.1 Kbytes *)
+
+property FreeFromStrongDeadlockLasso (test_139_obe_strong)
+ | There are no deadlock lassos in Strong test_139_obe_strong
+
+FAIL
+
+"test_139_hsa.bcg" = generation of "test_139_hsa.lnt"
+    (* 16 states, 22 transitions, 2.8 Kbytes *)
+
+property FreeFromWeakDeadlockLasso (test_139_hsa)
+ | There are no deadlock lassos in Weak test_139_hsa
+
+PASS
+
+"test_139_hsa_strong.bcg" = generation of "test_139_hsa_strong.lnt"
+    (* 16 states, 22 transitions, 2.9 Kbytes *)
+
+property FreeFromStrongDeadlockLasso (test_139_hsa_strong)
+ | There are no deadlock lassos in Strong test_139_hsa_strong
+
+PASS
+
+"test_139_hsa_obe.bcg" = generation of "test_139_hsa_obe.lnt"
+    (* 16 states, 22 transitions, 3.0 Kbytes *)
+
+property FreeFromWeakDeadlockLasso (test_139_hsa_obe)
+ | There are no deadlock lassos in Weak test_139_hsa_obe
+
+PASS
+
+"test_139_hsa_obe_strong.bcg" = generation of "test_139_hsa_obe_strong.lnt"
+    (* 16 states, 22 transitions, 3.1 Kbytes *)
+
+property FreeFromStrongDeadlockLasso (test_139_hsa_obe_strong)
+ | There are no deadlock lassos in Strong test_139_hsa_obe_strong
+
+PASS
+
+"test_139_hsa_priority.bcg" = generation of "test_139_hsa_priority.lnt"
+    (* 16 states, 22 transitions, 2.8 Kbytes *)
+
+property FreeFromWeakDeadlockLasso (test_139_hsa_priority)
+ | There are no deadlock lassos in Weak test_139_hsa_priority
+
+PASS
+
+"test_139_hsa_priority_strong.bcg" = generation of "test_139_hsa_priority_strong.lnt"
+    (* 16 states, 22 transitions, 2.9 Kbytes *)
+
+property FreeFromStrongDeadlockLasso (test_139_hsa_priority_strong)
+ | There are no deadlock lassos in Strong test_139_hsa_priority_strong
+
+PASS
+
+"test_139_lobe.bcg" = generation of "test_139_lobe.lnt"
+    (* 17 states, 24 transitions, 3.1 Kbytes *)
+
+property FreeFromWeakDeadlockLasso (test_139_lobe)
+ | There are no deadlock lassos in Weak test_139_lobe
+
+PASS
+
+"test_139_lobe_strong.bcg" = generation of "test_139_lobe_strong.lnt"
+    (* 17 states, 24 transitions, 3.1 Kbytes *)
+
+property FreeFromStrongDeadlockLasso (test_139_lobe_strong)
+ | There are no deadlock lassos in Strong test_139_lobe_strong
+
+PASS
+
+"test_139_weak.bcg" = generation of "test_139_weak.lnt"
+    (* 15 states, 21 transitions, 2.9 Kbytes *)
+
+property FreeFromWeakDeadlockLasso (test_139_weak)
+ | There are no deadlock lassos in Weak test_139_weak
+
+PASS
+
+"test_139_strong.bcg" = generation of "test_139_strong.lnt"
+    (* 15 states, 21 transitions, 2.9 Kbytes *)
+
+property FreeFromStrongDeadlockLasso (test_139_strong)
+ | There are no deadlock lassos in Strong test_139_strong
+
+PASS
+

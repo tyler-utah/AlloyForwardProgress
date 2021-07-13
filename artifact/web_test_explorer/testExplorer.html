@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        .split {
+            height: 95%;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            overflow-x: hidden;
+            padding-top: 20px;
+        }
+
+        .left {
+            width: 16%;
+            left: 5px;
+        }
+
+        .right {
+            right: 2%;
+            width: 80%;
+        }
+
+        #png-viewer{
+            float: left;
+            width: 60%;
+        }
+
+        #words{
+            float: right;
+            width:40%;
+            height: 100%;
+        }
+
+        #text{
+            width: 100%;
+            height: 20%;
+        }
+
+        #labels{
+            width: 100%;
+            height: 25%;
+        }
+
+        #xml{
+            width: 100%;
+            height: 45%;
+        }
+    </style>
+
+    <script>
+        function rememberOffset() { 
+            document.cookie = "explorer_offset="+ Math.round(document.getElementById("leftdiv").scrollTop);
+        }
+        
+        window.onload = function() {
+            createFileDirectory();
+
+            var urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('test') && urlParams.has('threads') && urlParams.has('instructions')){
+                var test = urlParams.get('test');
+                var threads = urlParams.get('threads');
+                var instructions = urlParams.get('instructions');
+
+                openTestCase(test,threads,instructions);
+            }
+
+            var str = document.cookie;
+            var pos = str.indexOf("explorer_offset");
+            if (pos != -1){
+                var posEnd = str.indexOf(";", pos);
+                offset = parseInt(str.substring(pos+16, posEnd));
+                document.getElementById("leftdiv").scrollTop = offset;
+            }
+        };
+
+        function createFileDirectory() {  
+            var dirList = document.getElementById("directory22")
+            var item, item2;
+            for (i = 0; i < 8; i++){
+                item = document.createElement("li");
+                item2 = document.createElement("a");
+                item2.innerHTML = "Test " + i;
+                item2.href='testExplorer.html?threads=2&instructions=2&test=' + i;
+                item.appendChild(item2);
+                dirList.appendChild(item);
+            }
+            
+            dirList = document.getElementById("directory23")
+            for (i = 0; i < 176; i++){
+                item = document.createElement("li");
+                item2 = document.createElement("a");
+                item2.innerHTML = "Test " + i;
+                item2.href='testExplorer.html?threads=2&instructions=3&test=' + i;
+                item.appendChild(item2);
+                dirList.appendChild(item);
+            }
+
+            dirList = document.getElementById("directory24")
+            for (i = 0; i < 173; i++){
+                item = document.createElement("li");
+                item2 = document.createElement("a");
+                item2.innerHTML = "Test " + i;
+                item2.href='testExplorer.html?threads=2&instructions=4&test=' + i;
+                item.appendChild(item2);
+                dirList.appendChild(item);
+            }
+
+            dirList = document.getElementById("directory33")
+            for (i = 0; i < 21; i++){
+                item = document.createElement("li");
+                item2 = document.createElement("a");
+                item2.innerHTML = "Test " + i;
+                item2.href='testExplorer.html?threads=3&instructions=3&test=' + i;
+                item.appendChild(item2);
+                dirList.appendChild(item);
+            }
+
+            dirList = document.getElementById("directory34")
+            for (i = 0; i < 105; i++){
+                item = document.createElement("li");
+                item2 = document.createElement("a");
+                item2.innerHTML = "Test " + i;
+                item2.href='testExplorer.html?threads=3&instructions=4&test=' + i;
+                item.appendChild(item2);
+                dirList.appendChild(item);
+            }
+        }
+
+	function openTestCase(i, th, ins) {
+	    var t = document.getElementById("number");
+	    t.innerHTML = "Test Number " + i + " - " + th + " Threads " + ins + " Instructions"
+			    
+            var image = document.getElementById("image");
+            image.src = th + '_threads_' + ins + '_instructions/' + i + '/' + i + '.png';
+
+            var xml = document.getElementById("xml");
+            xml.src = th + '_threads_' + ins + '_instructions/' + i + '/' + i + '.amber';
+
+            var txt = document.getElementById("text");
+            txt.src = th + '_threads_' + ins + '_instructions/' + i + '/' + i + '_simple.txt';
+
+            txt = document.getElementById("labels");
+            txt.src = th + '_threads_' + ins + '_instructions/' + i + '/label_' + i + '.txt';
+        }
+
+    </script>
+</head>
+<body>
+
+    <div class="split left" id="leftdiv" onscroll="rememberOffset()">
+        <div id="tests">
+            <h3>2 Threads 2 Instructions</h3>
+            <ul id = "directory22">
+            
+            </ul>
+
+            <h3>2 Threads 3 Instructions</h3>
+            <ul id = "directory23">
+            
+            </ul>
+
+            <h3>2 Threads 4 Instructions</h3>
+            <ul id = "directory24">
+            
+            </ul>
+
+            <h3>3 Threads 3 Instructions</h3>
+            <ul id = "directory33">
+            
+            </ul>
+
+            <h3>3 Threads 4 Instructions</h3>
+            <ul id = "directory34">
+            
+            </ul>
+        </div>
+        <h3>Acknowledgements</h3>
+        <p id="ack">
+            Amber files by Hari Raval. Alloy description by Tyler Sorensen. Test labeling by Hugues Evrard and Lucas Salvador.
+        </p>
+    </div>
+
+    <div class="split right">
+        <div id="png-viewer">
+            <img id="image" src=""\>
+        </div>
+
+        <div id="words">
+	    <h3 id="number">Test Number</h3>
+            <iframe id="text" src=""></iframe>
+            <iframe id="labels" src=""></iframe>
+            <iframe id="xml" src=""></iframe>
+        </div>
+    </div>
+        
+</body>
+</html> 

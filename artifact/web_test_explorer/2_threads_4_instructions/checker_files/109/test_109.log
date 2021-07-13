@@ -1,0 +1,1627 @@
+
+svl clean info: [persistent] test_109_none.bcg
+
+"test_109_none.bcg" = generation of "test_109_none.lnt"
+
+svl clean info: [temporary] generator
+
+svl clean info: [temporary] generator.o
+
+svl clean info: [temporary] test_109_none.o
+
+svl clean info: [temporary] test_109_none.err
+
+% lnt.open   "test_109_none.lnt"  generator  "test_109_none.bcg"
+
+lnt.open: translating ``common.lnt'' to ``/tmp/ls24_lnt.open_8rHxzw/COMMON.lib'' ...
+/tmp/ls24_lnt.open_8rHxzw/common.lnt:401: warning: variable NUMCU is declared but not used
+
+lnt.open: translating ``test_109_none.lnt'' to ``/tmp/ls24_lnt.open_8rHxzw/test_109_none.lotos'' ...
+
+lnt.open: calling lotos.open for ``test_109_none.lotos'' ...
+lotos.open: using ``(direct) caesar''
+lotos.open: calling ``caesar.adt -debug -silent test_109_none''
+cadp_indent: cannot find ``indent''
+             file ``test_109_none.h'' will not be formatted
+lotos.open: calling ``lnt_check'' for ``test_109_none.h''
+lotos.open: calling ``caesar -silent test_109_none''
+#109 warning during restriction:
+     detection of unreachable processes
+In specification TEST_109_NONE [3]
+
+   - process SCHEDULER_WEAK_FAIR [COMMON:351] is never reached
+
+   - process LOOP__1 [COMMON:363] is never reached
+
+   - process WHILE_CONT__1 [COMMON:378] is never reached
+
+   - process LOOP__2 [COMMON:383] is never reached
+
+   - process SCHEDULER_OBE [COMMON:403] is never reached
+
+   - process LOOP__1 [COMMON:415] is never reached
+
+   - process SCHEDULER_HSA [COMMON:441] is never reached
+
+   - process LOOP__1 [COMMON:456] is never reached
+
+   - process COND__2 [COMMON:475] is never reached
+
+   - process LOOP__2 [COMMON:480] is never reached
+
+   - process WHILE_CONT__2 [COMMON:492] is never reached
+
+   - process SCHEDULER_HSA_PRIORITY [COMMON:499] is never reached
+
+   - process LOOP__1 [COMMON:517] is never reached
+
+   - process LOOP__2 [COMMON:545] is never reached
+
+   - process WHILE_CONT__2 [COMMON:557] is never reached
+
+   - process COND__2 [COMMON:570] is never reached
+
+   - process SCHEDULER_HSA_OBE [COMMON:580] is never reached
+
+   - process LOOP__1 [COMMON:595] is never reached
+
+   - process COND__2 [COMMON:620] is never reached
+
+   - process LOOP__2 [COMMON:629] is never reached
+
+   - process SCHEDULER_LOBE [COMMON:649] is never reached
+
+   - process LOOP__1 [COMMON:661] is never reached
+
+   - process LOOP__2 [COMMON:689] is never reached
+
+   - process COND__3 [COMMON:707] is never reached
+
+   - process WHILE_CONT__2 [COMMON:713] is never reached
+command exit with status 0
+
+info about test_109_none.bcg:
+    (* 20 states, 31 transitions, 2.8 Kbytes *)
+
+property AtLeastOneLassoUnderNoScheduler (test_109_none)
+
+svl clean info: [temporary] svl000_display.txt
+
+svl clean info: [temporary] svl001_formula_inline
+
+svl clean info: [persistent] test_109_none_one_lasso.bcg
+
+svl clean info: [temporary] svl001_formula_inline.mcl
+
+svl clean info: [temporary] svl001_formula_inline.xm
+
+"svl001_formula_inline.mcl" =
+    < true* > < 'EX .*' > @
+
+"test_109_none_one_lasso.bcg" = verify "svl001_formula_inline.mcl" in "test_109_none.bcg"
+
+svl clean info: [temporary] svl000_output.bcg
+
+svl clean info: [temporary] evaluator4
+
+svl clean info: [temporary] evaluator4.o
+
+% bcg_open   "test_109_none.bcg"  evaluator4 -source "test_109.svl:7" -dfs -diag "svl000_output.bcg"  "svl001_formula_inline.mcl"
+
+svl clean info: [temporary] svl000_stdout
+bcg_open: using ``/home/ts20/cadp/bin.x64/evaluator4.a''
+bcg_open: running ``evaluator4 -source test_109.svl:7 -dfs -diag svl000_output.bcg svl001_formula_inline.mcl'' for ``./test_109_none.bcg''
+
+TRUE
+(consult diagnostic in file ``svl000_output.bcg'')
+command exit with status 0
+
+% bcg_io   "svl000_output.bcg"   "test_109_none_one_lasso.bcg"
+command exit with status 0
+
+PASS
+
+property CanAlwaysReachTermination (test_109_none)
+
+svl clean info: [temporary] svl000_display.txt
+
+svl clean info: [temporary] svl002_formula_inline
+
+svl clean info: [persistent] test_109_none_no_termination.bcg
+
+svl clean info: [temporary] svl002_formula_inline.mcl
+
+svl clean info: [temporary] svl002_formula_inline.xm
+
+"svl002_formula_inline.mcl" =
+    [ true* . (not "exit") ] < (not "exit")* . "exit" > true
+
+"test_109_none_no_termination.bcg" = verify "svl002_formula_inline.mcl" in "test_109_none.bcg"
+
+svl clean info: [temporary] svl000_output.bcg
+
+svl clean info: [temporary] evaluator4
+
+svl clean info: [temporary] evaluator4.o
+
+% bcg_open   "test_109_none.bcg"  evaluator4 -source "test_109.svl:17" -dfs -diag "svl000_output.bcg"  "svl002_formula_inline.mcl"
+
+svl clean info: [temporary] svl000_stdout
+bcg_open: using ``/home/ts20/cadp/bin.x64/evaluator4.a''
+bcg_open: running ``evaluator4 -source test_109.svl:17 -dfs -diag svl000_output.bcg svl002_formula_inline.mcl'' for ``./test_109_none.bcg''
+
+TRUE
+(consult diagnostic in file ``svl000_output.bcg'')
+command exit with status 0
+
+% bcg_io   "svl000_output.bcg"   "test_109_none_no_termination.bcg"
+command exit with status 0
+
+PASS
+
+svl clean info: [persistent] test_109_obe.bcg
+
+"test_109_obe.bcg" = generation of "test_109_obe.lnt"
+
+svl clean info: [temporary] generator
+
+svl clean info: [temporary] generator.o
+
+svl clean info: [temporary] test_109_obe.o
+
+svl clean info: [temporary] test_109_obe.err
+
+% lnt.open   "test_109_obe.lnt"  generator  "test_109_obe.bcg"
+
+lnt.open: translating ``common.lnt'' to ``/tmp/ls24_lnt.open_BLvwNq/COMMON.lib'' ...
+/tmp/ls24_lnt.open_BLvwNq/common.lnt:401: warning: variable NUMCU is declared but not used
+
+lnt.open: translating ``test_109_obe.lnt'' to ``/tmp/ls24_lnt.open_BLvwNq/test_109_obe.lotos'' ...
+
+lnt.open: calling lotos.open for ``test_109_obe.lotos'' ...
+lotos.open: using ``(direct) caesar''
+lotos.open: calling ``caesar.adt -debug -silent test_109_obe''
+cadp_indent: cannot find ``indent''
+             file ``test_109_obe.h'' will not be formatted
+lotos.open: calling ``lnt_check'' for ``test_109_obe.h''
+lotos.open: calling ``caesar -silent test_109_obe''
+#109 warning during restriction:
+     detection of unreachable processes
+In specification TEST_109_OBE [3]
+
+   - process SCHEDULER_NONE [COMMON:325] is never reached
+
+   - process LOOP__1 [COMMON:334] is never reached
+
+   - process SCHEDULER_WEAK_FAIR [COMMON:351] is never reached
+
+   - process LOOP__1 [COMMON:363] is never reached
+
+   - process WHILE_CONT__1 [COMMON:378] is never reached
+
+   - process LOOP__2 [COMMON:383] is never reached
+
+   - process SCHEDULER_HSA [COMMON:441] is never reached
+
+   - process LOOP__1 [COMMON:456] is never reached
+
+   - process COND__2 [COMMON:475] is never reached
+
+   - process LOOP__2 [COMMON:480] is never reached
+
+   - process WHILE_CONT__2 [COMMON:492] is never reached
+
+   - process SCHEDULER_HSA_PRIORITY [COMMON:499] is never reached
+
+   - process LOOP__1 [COMMON:517] is never reached
+
+   - process LOOP__2 [COMMON:545] is never reached
+
+   - process WHILE_CONT__2 [COMMON:557] is never reached
+
+   - process COND__2 [COMMON:570] is never reached
+
+   - process SCHEDULER_HSA_OBE [COMMON:580] is never reached
+
+   - process LOOP__1 [COMMON:595] is never reached
+
+   - process COND__2 [COMMON:620] is never reached
+
+   - process LOOP__2 [COMMON:629] is never reached
+
+   - process SCHEDULER_LOBE [COMMON:649] is never reached
+
+   - process LOOP__1 [COMMON:661] is never reached
+
+   - process LOOP__2 [COMMON:689] is never reached
+
+   - process COND__3 [COMMON:707] is never reached
+
+   - process WHILE_CONT__2 [COMMON:713] is never reached
+command exit with status 0
+
+info about test_109_obe.bcg:
+    (* 20 states, 31 transitions, 3.2 Kbytes *)
+
+property FreeFromWeakDeadlockLasso (test_109_obe)
+ | There are no deadlock lassos in Weak test_109_obe
+
+svl clean info: [temporary] svl000_display.txt
+
+svl clean info: [temporary] svl003_formula_inline
+
+svl clean info: [persistent] test_109_obe_deadlock.bcg
+
+svl clean info: [temporary] svl003_formula_inline.mcl
+
+svl clean info: [temporary] svl003_formula_inline.xm
+
+"svl003_formula_inline.mcl" =
+    <true*> (( <  'EX !1 .* !{1}' . true* > @ ) or ( <  'EX !0 .* !{0}' . true* > @ ) or ( <  'EX !0 .* !{0, 1}' . true* . 'EX !1 .* !{0, 1}' . true* > @ ))
+
+"test_109_obe_deadlock.bcg" = verify "svl003_formula_inline.mcl" in "test_109_obe.bcg"
+
+svl clean info: [temporary] svl000_output.bcg
+
+svl clean info: [temporary] evaluator4
+
+svl clean info: [temporary] evaluator4.o
+
+% bcg_open   "test_109_obe.bcg"  evaluator4 -source "test_109.svl:32" -dfs -diag "svl000_output.bcg"  "svl003_formula_inline.mcl"
+
+svl clean info: [temporary] svl000_stdout
+bcg_open: using ``/home/ts20/cadp/bin.x64/evaluator4.a''
+bcg_open: running ``evaluator4 -source test_109.svl:32 -dfs -diag svl000_output.bcg svl003_formula_inline.mcl'' for ``./test_109_obe.bcg''
+
+TRUE
+(consult diagnostic in file ``svl000_output.bcg'')
+command exit with status 0
+
+% bcg_io   "svl000_output.bcg"   "test_109_obe_deadlock.bcg"
+command exit with status 0
+
+FAIL
+
+svl clean info: [persistent] test_109_obe_strong.bcg
+
+"test_109_obe_strong.bcg" = generation of "test_109_obe_strong.lnt"
+
+svl clean info: [temporary] generator
+
+svl clean info: [temporary] generator.o
+
+svl clean info: [temporary] test_109_obe_strong.o
+
+svl clean info: [temporary] test_109_obe_strong.err
+
+% lnt.open   "test_109_obe_strong.lnt"  generator  "test_109_obe_strong.bcg"
+
+lnt.open: translating ``common_strong.lnt'' to ``/tmp/ls24_lnt.open_B1nG3G/COMMON_STRONG.lib'' ...
+/tmp/ls24_lnt.open_B1nG3G/common_strong.lnt:424: warning: value stored in variable NUMCU is not used later
+
+lnt.open: translating ``test_109_obe_strong.lnt'' to ``/tmp/ls24_lnt.open_B1nG3G/test_109_obe_strong.lotos'' ...
+
+lnt.open: calling lotos.open for ``test_109_obe_strong.lotos'' ...
+lotos.open: using ``(direct) caesar''
+lotos.open: calling ``caesar.adt -debug -silent test_109_obe_strong''
+cadp_indent: cannot find ``indent''
+             file ``test_109_obe_strong.h'' will not be formatted
+lotos.open: calling ``lnt_check'' for ``test_109_obe_strong.h''
+lotos.open: calling ``caesar -silent test_109_obe_strong''
+#109 warning during restriction:
+     detection of unreachable processes
+In specification TEST_109_OBE_STRONG [3]
+
+   - process SCHEDULER_NONE [COMMON_STRONG:338] is never reached
+
+   - process LOOP__1 [COMMON_STRONG:347] is never reached
+
+   - process SCHEDULER_WEAK_FAIR [COMMON_STRONG:364] is never reached
+
+   - process LOOP__1 [COMMON_STRONG:376] is never reached
+
+   - process WHILE_CONT__1 [COMMON_STRONG:391] is never reached
+
+   - process LOOP__2 [COMMON_STRONG:396] is never reached
+
+   - process SCHEDULER_HSA [COMMON_STRONG:454] is never reached
+
+   - process LOOP__1 [COMMON_STRONG:469] is never reached
+
+   - process COND__2 [COMMON_STRONG:488] is never reached
+
+   - process LOOP__2 [COMMON_STRONG:493] is never reached
+
+   - process WHILE_CONT__2 [COMMON_STRONG:505] is never reached
+
+   - process SCHEDULER_HSA_PRIORITY [COMMON_STRONG:512] is never reached
+
+   - process LOOP__1 [COMMON_STRONG:530] is never reached
+
+   - process LOOP__2 [COMMON_STRONG:558] is never reached
+
+   - process WHILE_CONT__2 [COMMON_STRONG:570] is never reached
+
+   - process COND__2 [COMMON_STRONG:583] is never reached
+
+   - process SCHEDULER_HSA_OBE [COMMON_STRONG:593] is never reached
+
+   - process LOOP__1 [COMMON_STRONG:608] is never reached
+
+   - process COND__2 [COMMON_STRONG:633] is never reached
+
+   - process LOOP__2 [COMMON_STRONG:642] is never reached
+
+   - process SCHEDULER_LOBE [COMMON_STRONG:662] is never reached
+
+   - process LOOP__1 [COMMON_STRONG:677] is never reached
+
+   - process LOOP__2 [COMMON_STRONG:705] is never reached
+
+   - process COND__3 [COMMON_STRONG:723] is never reached
+
+   - process WHILE_CONT__2 [COMMON_STRONG:729] is never reached
+command exit with status 0
+
+info about test_109_obe_strong.bcg:
+    (* 20 states, 31 transitions, 3.2 Kbytes *)
+
+property FreeFromStrongDeadlockLasso (test_109_obe_strong)
+ | There are no deadlock lassos in Strong test_109_obe_strong
+
+svl clean info: [temporary] svl000_display.txt
+
+svl clean info: [temporary] svl004_formula_inline
+
+svl clean info: [persistent] test_109_obe_strong_deadlock.bcg
+
+svl clean info: [temporary] svl004_formula_inline.mcl
+
+svl clean info: [temporary] svl004_formula_inline.xm
+
+"svl004_formula_inline.mcl" =
+    macro is_in (t, f) =
+      ( index (f, concat (concat (":", string (t)), ":")) <> 0 )
+    end_macro
+      [ (not "exit") * ]
+      < ( { EX ?tid:Nat ... ?fairlyScheduled:String where is_in (tid,
+    fairlyScheduled) } or { TERMINATE ... } ) *
+        . ( "exit" or { EX ... ?f:String where f = "::" } )
+      > true
+
+"test_109_obe_strong_deadlock.bcg" = verify "svl004_formula_inline.mcl" in "test_109_obe_strong.bcg"
+
+svl clean info: [temporary] svl000_output.bcg
+
+svl clean info: [temporary] evaluator4
+
+svl clean info: [temporary] evaluator4.o
+
+% bcg_open   "test_109_obe_strong.bcg"  evaluator4 -source "test_109.svl:41" -dfs -diag "svl000_output.bcg"  "svl004_formula_inline.mcl"
+
+svl clean info: [temporary] svl000_stdout
+bcg_open: using ``/home/ts20/cadp/bin.x64/evaluator4.a''
+bcg_open: running ``evaluator4 -source test_109.svl:41 -dfs -diag svl000_output.bcg svl004_formula_inline.mcl'' for ``./test_109_obe_strong.bcg''
+
+FALSE
+(consult diagnostic in file ``svl000_output.bcg'')
+command exit with status 0
+
+% bcg_io   "svl000_output.bcg"   "test_109_obe_strong_deadlock.bcg"
+command exit with status 0
+
+FAIL
+
+svl clean info: [persistent] test_109_hsa.bcg
+
+"test_109_hsa.bcg" = generation of "test_109_hsa.lnt"
+
+svl clean info: [temporary] generator
+
+svl clean info: [temporary] generator.o
+
+svl clean info: [temporary] test_109_hsa.o
+
+svl clean info: [temporary] test_109_hsa.err
+
+% lnt.open   "test_109_hsa.lnt"  generator  "test_109_hsa.bcg"
+
+lnt.open: translating ``common.lnt'' to ``/tmp/ls24_lnt.open_xzWwJT/COMMON.lib'' ...
+/tmp/ls24_lnt.open_xzWwJT/common.lnt:401: warning: variable NUMCU is declared but not used
+
+lnt.open: translating ``test_109_hsa.lnt'' to ``/tmp/ls24_lnt.open_xzWwJT/test_109_hsa.lotos'' ...
+
+lnt.open: calling lotos.open for ``test_109_hsa.lotos'' ...
+lotos.open: using ``(direct) caesar''
+lotos.open: calling ``caesar.adt -debug -silent test_109_hsa''
+cadp_indent: cannot find ``indent''
+             file ``test_109_hsa.h'' will not be formatted
+lotos.open: calling ``lnt_check'' for ``test_109_hsa.h''
+lotos.open: calling ``caesar -silent test_109_hsa''
+#109 warning during restriction:
+     detection of unreachable processes
+In specification TEST_109_HSA [3]
+
+   - process SCHEDULER_NONE [COMMON:325] is never reached
+
+   - process LOOP__1 [COMMON:334] is never reached
+
+   - process SCHEDULER_WEAK_FAIR [COMMON:351] is never reached
+
+   - process LOOP__1 [COMMON:363] is never reached
+
+   - process WHILE_CONT__1 [COMMON:378] is never reached
+
+   - process LOOP__2 [COMMON:383] is never reached
+
+   - process SCHEDULER_OBE [COMMON:403] is never reached
+
+   - process LOOP__1 [COMMON:415] is never reached
+
+   - process SCHEDULER_HSA_PRIORITY [COMMON:499] is never reached
+
+   - process LOOP__1 [COMMON:517] is never reached
+
+   - process LOOP__2 [COMMON:545] is never reached
+
+   - process WHILE_CONT__2 [COMMON:557] is never reached
+
+   - process COND__2 [COMMON:570] is never reached
+
+   - process SCHEDULER_HSA_OBE [COMMON:580] is never reached
+
+   - process LOOP__1 [COMMON:595] is never reached
+
+   - process COND__2 [COMMON:620] is never reached
+
+   - process LOOP__2 [COMMON:629] is never reached
+
+   - process SCHEDULER_LOBE [COMMON:649] is never reached
+
+   - process LOOP__1 [COMMON:661] is never reached
+
+   - process LOOP__2 [COMMON:689] is never reached
+
+   - process COND__3 [COMMON:707] is never reached
+
+   - process WHILE_CONT__2 [COMMON:713] is never reached
+command exit with status 0
+
+info about test_109_hsa.bcg:
+    (* 21 states, 32 transitions, 2.9 Kbytes *)
+
+property FreeFromWeakDeadlockLasso (test_109_hsa)
+ | There are no deadlock lassos in Weak test_109_hsa
+
+svl clean info: [temporary] svl000_display.txt
+
+svl clean info: [temporary] svl003_formula_inline
+
+svl clean info: [persistent] test_109_hsa_deadlock.bcg
+
+svl clean info: [temporary] svl003_formula_inline.mcl
+
+svl clean info: [temporary] svl003_formula_inline.xm
+
+"svl003_formula_inline.mcl" =
+    <true*> (( <  'EX !1 .* !{1}' . true* > @ ) or ( <  'EX !0 .* !{0}' . true* > @ ) or ( <  'EX !0 .* !{0, 1}' . true* . 'EX !1 .* !{0, 1}' . true* > @ ))
+
+"test_109_hsa_deadlock.bcg" = verify "svl003_formula_inline.mcl" in "test_109_hsa.bcg"
+
+svl clean info: [temporary] svl000_output.bcg
+
+svl clean info: [temporary] evaluator4
+
+svl clean info: [temporary] evaluator4.o
+
+% bcg_open   "test_109_hsa.bcg"  evaluator4 -source "test_109.svl:32" -dfs -diag "svl000_output.bcg"  "svl003_formula_inline.mcl"
+
+svl clean info: [temporary] svl000_stdout
+bcg_open: using ``/home/ts20/cadp/bin.x64/evaluator4.a''
+bcg_open: running ``evaluator4 -source test_109.svl:32 -dfs -diag svl000_output.bcg svl003_formula_inline.mcl'' for ``./test_109_hsa.bcg''
+
+TRUE
+(consult diagnostic in file ``svl000_output.bcg'')
+command exit with status 0
+
+% bcg_io   "svl000_output.bcg"   "test_109_hsa_deadlock.bcg"
+command exit with status 0
+
+FAIL
+
+svl clean info: [persistent] test_109_hsa_strong.bcg
+
+"test_109_hsa_strong.bcg" = generation of "test_109_hsa_strong.lnt"
+
+svl clean info: [temporary] generator
+
+svl clean info: [temporary] generator.o
+
+svl clean info: [temporary] test_109_hsa_strong.o
+
+svl clean info: [temporary] test_109_hsa_strong.err
+
+% lnt.open   "test_109_hsa_strong.lnt"  generator  "test_109_hsa_strong.bcg"
+
+lnt.open: translating ``common_strong.lnt'' to ``/tmp/ls24_lnt.open_ghUgF4/COMMON_STRONG.lib'' ...
+/tmp/ls24_lnt.open_ghUgF4/common_strong.lnt:424: warning: value stored in variable NUMCU is not used later
+
+lnt.open: translating ``test_109_hsa_strong.lnt'' to ``/tmp/ls24_lnt.open_ghUgF4/test_109_hsa_strong.lotos'' ...
+
+lnt.open: calling lotos.open for ``test_109_hsa_strong.lotos'' ...
+lotos.open: using ``(direct) caesar''
+lotos.open: calling ``caesar.adt -debug -silent test_109_hsa_strong''
+cadp_indent: cannot find ``indent''
+             file ``test_109_hsa_strong.h'' will not be formatted
+lotos.open: calling ``lnt_check'' for ``test_109_hsa_strong.h''
+lotos.open: calling ``caesar -silent test_109_hsa_strong''
+#109 warning during restriction:
+     detection of unreachable processes
+In specification TEST_109_HSA_STRONG [3]
+
+   - process SCHEDULER_NONE [COMMON_STRONG:338] is never reached
+
+   - process LOOP__1 [COMMON_STRONG:347] is never reached
+
+   - process SCHEDULER_WEAK_FAIR [COMMON_STRONG:364] is never reached
+
+   - process LOOP__1 [COMMON_STRONG:376] is never reached
+
+   - process WHILE_CONT__1 [COMMON_STRONG:391] is never reached
+
+   - process LOOP__2 [COMMON_STRONG:396] is never reached
+
+   - process SCHEDULER_OBE [COMMON_STRONG:416] is never reached
+
+   - process LOOP__1 [COMMON_STRONG:428] is never reached
+
+   - process SCHEDULER_HSA_PRIORITY [COMMON_STRONG:512] is never reached
+
+   - process LOOP__1 [COMMON_STRONG:530] is never reached
+
+   - process LOOP__2 [COMMON_STRONG:558] is never reached
+
+   - process WHILE_CONT__2 [COMMON_STRONG:570] is never reached
+
+   - process COND__2 [COMMON_STRONG:583] is never reached
+
+   - process SCHEDULER_HSA_OBE [COMMON_STRONG:593] is never reached
+
+   - process LOOP__1 [COMMON_STRONG:608] is never reached
+
+   - process COND__2 [COMMON_STRONG:633] is never reached
+
+   - process LOOP__2 [COMMON_STRONG:642] is never reached
+
+   - process SCHEDULER_LOBE [COMMON_STRONG:662] is never reached
+
+   - process LOOP__1 [COMMON_STRONG:677] is never reached
+
+   - process LOOP__2 [COMMON_STRONG:705] is never reached
+
+   - process COND__3 [COMMON_STRONG:723] is never reached
+
+   - process WHILE_CONT__2 [COMMON_STRONG:729] is never reached
+command exit with status 0
+
+info about test_109_hsa_strong.bcg:
+    (* 21 states, 32 transitions, 2.9 Kbytes *)
+
+property FreeFromStrongDeadlockLasso (test_109_hsa_strong)
+ | There are no deadlock lassos in Strong test_109_hsa_strong
+
+svl clean info: [temporary] svl000_display.txt
+
+svl clean info: [temporary] svl004_formula_inline
+
+svl clean info: [persistent] test_109_hsa_strong_deadlock.bcg
+
+svl clean info: [temporary] svl004_formula_inline.mcl
+
+svl clean info: [temporary] svl004_formula_inline.xm
+
+"svl004_formula_inline.mcl" =
+    macro is_in (t, f) =
+      ( index (f, concat (concat (":", string (t)), ":")) <> 0 )
+    end_macro
+      [ (not "exit") * ]
+      < ( { EX ?tid:Nat ... ?fairlyScheduled:String where is_in (tid,
+    fairlyScheduled) } or { TERMINATE ... } ) *
+        . ( "exit" or { EX ... ?f:String where f = "::" } )
+      > true
+
+"test_109_hsa_strong_deadlock.bcg" = verify "svl004_formula_inline.mcl" in "test_109_hsa_strong.bcg"
+
+svl clean info: [temporary] svl000_output.bcg
+
+svl clean info: [temporary] evaluator4
+
+svl clean info: [temporary] evaluator4.o
+
+% bcg_open   "test_109_hsa_strong.bcg"  evaluator4 -source "test_109.svl:41" -dfs -diag "svl000_output.bcg"  "svl004_formula_inline.mcl"
+
+svl clean info: [temporary] svl000_stdout
+bcg_open: using ``/home/ts20/cadp/bin.x64/evaluator4.a''
+bcg_open: running ``evaluator4 -source test_109.svl:41 -dfs -diag svl000_output.bcg svl004_formula_inline.mcl'' for ``./test_109_hsa_strong.bcg''
+
+FALSE
+(consult diagnostic in file ``svl000_output.bcg'')
+command exit with status 0
+
+% bcg_io   "svl000_output.bcg"   "test_109_hsa_strong_deadlock.bcg"
+command exit with status 0
+
+FAIL
+
+svl clean info: [persistent] test_109_hsa_obe.bcg
+
+"test_109_hsa_obe.bcg" = generation of "test_109_hsa_obe.lnt"
+
+svl clean info: [temporary] generator
+
+svl clean info: [temporary] generator.o
+
+svl clean info: [temporary] test_109_hsa_obe.o
+
+svl clean info: [temporary] test_109_hsa_obe.err
+
+% lnt.open   "test_109_hsa_obe.lnt"  generator  "test_109_hsa_obe.bcg"
+
+lnt.open: translating ``common.lnt'' to ``/tmp/ls24_lnt.open_QLUQbc/COMMON.lib'' ...
+/tmp/ls24_lnt.open_QLUQbc/common.lnt:401: warning: variable NUMCU is declared but not used
+
+lnt.open: translating ``test_109_hsa_obe.lnt'' to ``/tmp/ls24_lnt.open_QLUQbc/test_109_hsa_obe.lotos'' ...
+
+lnt.open: calling lotos.open for ``test_109_hsa_obe.lotos'' ...
+lotos.open: using ``(direct) caesar''
+lotos.open: calling ``caesar.adt -debug -silent test_109_hsa_obe''
+cadp_indent: cannot find ``indent''
+             file ``test_109_hsa_obe.h'' will not be formatted
+lotos.open: calling ``lnt_check'' for ``test_109_hsa_obe.h''
+lotos.open: calling ``caesar -silent test_109_hsa_obe''
+#109 warning during restriction:
+     detection of unreachable processes
+In specification TEST_109_HSA_OBE [3]
+
+   - process SCHEDULER_NONE [COMMON:325] is never reached
+
+   - process LOOP__1 [COMMON:334] is never reached
+
+   - process SCHEDULER_WEAK_FAIR [COMMON:351] is never reached
+
+   - process LOOP__1 [COMMON:363] is never reached
+
+   - process WHILE_CONT__1 [COMMON:378] is never reached
+
+   - process LOOP__2 [COMMON:383] is never reached
+
+   - process SCHEDULER_OBE [COMMON:403] is never reached
+
+   - process LOOP__1 [COMMON:415] is never reached
+
+   - process SCHEDULER_HSA [COMMON:441] is never reached
+
+   - process LOOP__1 [COMMON:456] is never reached
+
+   - process COND__2 [COMMON:475] is never reached
+
+   - process LOOP__2 [COMMON:480] is never reached
+
+   - process WHILE_CONT__2 [COMMON:492] is never reached
+
+   - process SCHEDULER_HSA_PRIORITY [COMMON:499] is never reached
+
+   - process LOOP__1 [COMMON:517] is never reached
+
+   - process LOOP__2 [COMMON:545] is never reached
+
+   - process WHILE_CONT__2 [COMMON:557] is never reached
+
+   - process COND__2 [COMMON:570] is never reached
+
+   - process SCHEDULER_LOBE [COMMON:649] is never reached
+
+   - process LOOP__1 [COMMON:661] is never reached
+
+   - process LOOP__2 [COMMON:689] is never reached
+
+   - process COND__3 [COMMON:707] is never reached
+
+   - process WHILE_CONT__2 [COMMON:713] is never reached
+command exit with status 0
+
+info about test_109_hsa_obe.bcg:
+    (* 21 states, 32 transitions, 3.0 Kbytes *)
+
+property FreeFromWeakDeadlockLasso (test_109_hsa_obe)
+ | There are no deadlock lassos in Weak test_109_hsa_obe
+
+svl clean info: [temporary] svl000_display.txt
+
+svl clean info: [temporary] svl003_formula_inline
+
+svl clean info: [persistent] test_109_hsa_obe_deadlock.bcg
+
+svl clean info: [temporary] svl003_formula_inline.mcl
+
+svl clean info: [temporary] svl003_formula_inline.xm
+
+"svl003_formula_inline.mcl" =
+    <true*> (( <  'EX !1 .* !{1}' . true* > @ ) or ( <  'EX !0 .* !{0}' . true* > @ ) or ( <  'EX !0 .* !{0, 1}' . true* . 'EX !1 .* !{0, 1}' . true* > @ ))
+
+"test_109_hsa_obe_deadlock.bcg" = verify "svl003_formula_inline.mcl" in "test_109_hsa_obe.bcg"
+
+svl clean info: [temporary] svl000_output.bcg
+
+svl clean info: [temporary] evaluator4
+
+svl clean info: [temporary] evaluator4.o
+
+% bcg_open   "test_109_hsa_obe.bcg"  evaluator4 -source "test_109.svl:32" -dfs -diag "svl000_output.bcg"  "svl003_formula_inline.mcl"
+
+svl clean info: [temporary] svl000_stdout
+bcg_open: using ``/home/ts20/cadp/bin.x64/evaluator4.a''
+bcg_open: running ``evaluator4 -source test_109.svl:32 -dfs -diag svl000_output.bcg svl003_formula_inline.mcl'' for ``./test_109_hsa_obe.bcg''
+
+TRUE
+(consult diagnostic in file ``svl000_output.bcg'')
+command exit with status 0
+
+% bcg_io   "svl000_output.bcg"   "test_109_hsa_obe_deadlock.bcg"
+command exit with status 0
+
+FAIL
+
+svl clean info: [persistent] test_109_hsa_obe_strong.bcg
+
+"test_109_hsa_obe_strong.bcg" = generation of "test_109_hsa_obe_strong.lnt"
+
+svl clean info: [temporary] generator
+
+svl clean info: [temporary] generator.o
+
+svl clean info: [temporary] test_109_hsa_obe_strong.o
+
+svl clean info: [temporary] test_109_hsa_obe_strong.err
+
+% lnt.open   "test_109_hsa_obe_strong.lnt"  generator  "test_109_hsa_obe_strong.bcg"
+
+lnt.open: translating ``common_strong.lnt'' to ``/tmp/ls24_lnt.open_XW8amA/COMMON_STRONG.lib'' ...
+/tmp/ls24_lnt.open_XW8amA/common_strong.lnt:424: warning: value stored in variable NUMCU is not used later
+
+lnt.open: translating ``test_109_hsa_obe_strong.lnt'' to ``/tmp/ls24_lnt.open_XW8amA/test_109_hsa_obe_strong.lotos'' ...
+
+lnt.open: calling lotos.open for ``test_109_hsa_obe_strong.lotos'' ...
+lotos.open: using ``(direct) caesar''
+lotos.open: calling ``caesar.adt -debug -silent test_109_hsa_obe_strong''
+cadp_indent: cannot find ``indent''
+             file ``test_109_hsa_obe_strong.h'' will not be formatted
+lotos.open: calling ``lnt_check'' for ``test_109_hsa_obe_strong.h''
+lotos.open: calling ``caesar -silent test_109_hsa_obe_strong''
+#109 warning during restriction:
+     detection of unreachable processes
+In specification TEST_109_HSA_OBE_STRONG [3]
+
+   - process SCHEDULER_NONE [COMMON_STRONG:338] is never reached
+
+   - process LOOP__1 [COMMON_STRONG:347] is never reached
+
+   - process SCHEDULER_WEAK_FAIR [COMMON_STRONG:364] is never reached
+
+   - process LOOP__1 [COMMON_STRONG:376] is never reached
+
+   - process WHILE_CONT__1 [COMMON_STRONG:391] is never reached
+
+   - process LOOP__2 [COMMON_STRONG:396] is never reached
+
+   - process SCHEDULER_OBE [COMMON_STRONG:416] is never reached
+
+   - process LOOP__1 [COMMON_STRONG:428] is never reached
+
+   - process SCHEDULER_HSA [COMMON_STRONG:454] is never reached
+
+   - process LOOP__1 [COMMON_STRONG:469] is never reached
+
+   - process COND__2 [COMMON_STRONG:488] is never reached
+
+   - process LOOP__2 [COMMON_STRONG:493] is never reached
+
+   - process WHILE_CONT__2 [COMMON_STRONG:505] is never reached
+
+   - process SCHEDULER_HSA_PRIORITY [COMMON_STRONG:512] is never reached
+
+   - process LOOP__1 [COMMON_STRONG:530] is never reached
+
+   - process LOOP__2 [COMMON_STRONG:558] is never reached
+
+   - process WHILE_CONT__2 [COMMON_STRONG:570] is never reached
+
+   - process COND__2 [COMMON_STRONG:583] is never reached
+
+   - process SCHEDULER_LOBE [COMMON_STRONG:662] is never reached
+
+   - process LOOP__1 [COMMON_STRONG:677] is never reached
+
+   - process LOOP__2 [COMMON_STRONG:705] is never reached
+
+   - process COND__3 [COMMON_STRONG:723] is never reached
+
+   - process WHILE_CONT__2 [COMMON_STRONG:729] is never reached
+command exit with status 0
+
+info about test_109_hsa_obe_strong.bcg:
+    (* 21 states, 32 transitions, 3.0 Kbytes *)
+
+property FreeFromStrongDeadlockLasso (test_109_hsa_obe_strong)
+ | There are no deadlock lassos in Strong test_109_hsa_obe_strong
+
+svl clean info: [temporary] svl000_display.txt
+
+svl clean info: [temporary] svl004_formula_inline
+
+svl clean info: [persistent] test_109_hsa_obe_strong_deadlock.bcg
+
+svl clean info: [temporary] svl004_formula_inline.mcl
+
+svl clean info: [temporary] svl004_formula_inline.xm
+
+"svl004_formula_inline.mcl" =
+    macro is_in (t, f) =
+      ( index (f, concat (concat (":", string (t)), ":")) <> 0 )
+    end_macro
+      [ (not "exit") * ]
+      < ( { EX ?tid:Nat ... ?fairlyScheduled:String where is_in (tid,
+    fairlyScheduled) } or { TERMINATE ... } ) *
+        . ( "exit" or { EX ... ?f:String where f = "::" } )
+      > true
+
+"test_109_hsa_obe_strong_deadlock.bcg" = verify "svl004_formula_inline.mcl" in "test_109_hsa_obe_strong.bcg"
+
+svl clean info: [temporary] svl000_output.bcg
+
+svl clean info: [temporary] evaluator4
+
+svl clean info: [temporary] evaluator4.o
+
+% bcg_open   "test_109_hsa_obe_strong.bcg"  evaluator4 -source "test_109.svl:41" -dfs -diag "svl000_output.bcg"  "svl004_formula_inline.mcl"
+
+svl clean info: [temporary] svl000_stdout
+bcg_open: using ``/home/ts20/cadp/bin.x64/evaluator4.a''
+bcg_open: running ``evaluator4 -source test_109.svl:41 -dfs -diag svl000_output.bcg svl004_formula_inline.mcl'' for ``./test_109_hsa_obe_strong.bcg''
+
+FALSE
+(consult diagnostic in file ``svl000_output.bcg'')
+command exit with status 0
+
+% bcg_io   "svl000_output.bcg"   "test_109_hsa_obe_strong_deadlock.bcg"
+command exit with status 0
+
+FAIL
+
+svl clean info: [persistent] test_109_hsa_priority.bcg
+
+"test_109_hsa_priority.bcg" = generation of "test_109_hsa_priority.lnt"
+
+svl clean info: [temporary] generator
+
+svl clean info: [temporary] generator.o
+
+svl clean info: [temporary] test_109_hsa_priority.o
+
+svl clean info: [temporary] test_109_hsa_priority.err
+
+% lnt.open   "test_109_hsa_priority.lnt"  generator  "test_109_hsa_priority.bcg"
+
+lnt.open: translating ``common.lnt'' to ``/tmp/ls24_lnt.open_nA90iR/COMMON.lib'' ...
+/tmp/ls24_lnt.open_nA90iR/common.lnt:401: warning: variable NUMCU is declared but not used
+
+lnt.open: translating ``test_109_hsa_priority.lnt'' to ``/tmp/ls24_lnt.open_nA90iR/test_109_hsa_priority.lotos'' ...
+
+lnt.open: calling lotos.open for ``test_109_hsa_priority.lotos'' ...
+lotos.open: using ``(direct) caesar''
+lotos.open: calling ``caesar.adt -debug -silent test_109_hsa_priority''
+cadp_indent: cannot find ``indent''
+             file ``test_109_hsa_priority.h'' will not be formatted
+lotos.open: calling ``lnt_check'' for ``test_109_hsa_priority.h''
+lotos.open: calling ``caesar -silent test_109_hsa_priority''
+#109 warning during restriction:
+     detection of unreachable processes
+In specification TEST_109_HSA_PRIORITY [3]
+
+   - process SCHEDULER_NONE [COMMON:325] is never reached
+
+   - process LOOP__1 [COMMON:334] is never reached
+
+   - process SCHEDULER_WEAK_FAIR [COMMON:351] is never reached
+
+   - process LOOP__1 [COMMON:363] is never reached
+
+   - process WHILE_CONT__1 [COMMON:378] is never reached
+
+   - process LOOP__2 [COMMON:383] is never reached
+
+   - process SCHEDULER_OBE [COMMON:403] is never reached
+
+   - process LOOP__1 [COMMON:415] is never reached
+
+   - process SCHEDULER_HSA [COMMON:441] is never reached
+
+   - process LOOP__1 [COMMON:456] is never reached
+
+   - process COND__2 [COMMON:475] is never reached
+
+   - process LOOP__2 [COMMON:480] is never reached
+
+   - process WHILE_CONT__2 [COMMON:492] is never reached
+
+   - process SCHEDULER_HSA_OBE [COMMON:580] is never reached
+
+   - process LOOP__1 [COMMON:595] is never reached
+
+   - process COND__2 [COMMON:620] is never reached
+
+   - process LOOP__2 [COMMON:629] is never reached
+
+   - process SCHEDULER_LOBE [COMMON:649] is never reached
+
+   - process LOOP__1 [COMMON:661] is never reached
+
+   - process LOOP__2 [COMMON:689] is never reached
+
+   - process COND__3 [COMMON:707] is never reached
+
+   - process WHILE_CONT__2 [COMMON:713] is never reached
+command exit with status 0
+
+info about test_109_hsa_priority.bcg:
+    (* 21 states, 32 transitions, 2.9 Kbytes *)
+
+property FreeFromWeakDeadlockLasso (test_109_hsa_priority)
+ | There are no deadlock lassos in Weak test_109_hsa_priority
+
+svl clean info: [temporary] svl000_display.txt
+
+svl clean info: [temporary] svl003_formula_inline
+
+svl clean info: [persistent] test_109_hsa_priority_deadlock.bcg
+
+svl clean info: [temporary] svl003_formula_inline.mcl
+
+svl clean info: [temporary] svl003_formula_inline.xm
+
+"svl003_formula_inline.mcl" =
+    <true*> (( <  'EX !1 .* !{1}' . true* > @ ) or ( <  'EX !0 .* !{0}' . true* > @ ) or ( <  'EX !0 .* !{0, 1}' . true* . 'EX !1 .* !{0, 1}' . true* > @ ))
+
+"test_109_hsa_priority_deadlock.bcg" = verify "svl003_formula_inline.mcl" in "test_109_hsa_priority.bcg"
+
+svl clean info: [temporary] svl000_output.bcg
+
+svl clean info: [temporary] evaluator4
+
+svl clean info: [temporary] evaluator4.o
+
+% bcg_open   "test_109_hsa_priority.bcg"  evaluator4 -source "test_109.svl:32" -dfs -diag "svl000_output.bcg"  "svl003_formula_inline.mcl"
+
+svl clean info: [temporary] svl000_stdout
+bcg_open: using ``/home/ts20/cadp/bin.x64/evaluator4.a''
+bcg_open: running ``evaluator4 -source test_109.svl:32 -dfs -diag svl000_output.bcg svl003_formula_inline.mcl'' for ``./test_109_hsa_priority.bcg''
+
+TRUE
+(consult diagnostic in file ``svl000_output.bcg'')
+command exit with status 0
+
+% bcg_io   "svl000_output.bcg"   "test_109_hsa_priority_deadlock.bcg"
+command exit with status 0
+
+FAIL
+
+svl clean info: [persistent] test_109_hsa_priority_strong.bcg
+
+"test_109_hsa_priority_strong.bcg" = generation of "test_109_hsa_priority_strong.lnt"
+
+svl clean info: [temporary] generator
+
+svl clean info: [temporary] generator.o
+
+svl clean info: [temporary] test_109_hsa_priority_strong.o
+
+svl clean info: [temporary] test_109_hsa_priority_strong.err
+
+% lnt.open   "test_109_hsa_priority_strong.lnt"  generator  "test_109_hsa_priority_strong.bcg"
+
+lnt.open: translating ``common_strong.lnt'' to ``/tmp/ls24_lnt.open_VkEK9G/COMMON_STRONG.lib'' ...
+/tmp/ls24_lnt.open_VkEK9G/common_strong.lnt:424: warning: value stored in variable NUMCU is not used later
+
+lnt.open: translating ``test_109_hsa_priority_strong.lnt'' to ``/tmp/ls24_lnt.open_VkEK9G/test_109_hsa_priority_strong.lotos'' ...
+
+lnt.open: calling lotos.open for ``test_109_hsa_priority_strong.lotos'' ...
+lotos.open: using ``(direct) caesar''
+lotos.open: calling ``caesar.adt -debug -silent test_109_hsa_priority_strong''
+cadp_indent: cannot find ``indent''
+             file ``test_109_hsa_priority_strong.h'' will not be formatted
+lotos.open: calling ``lnt_check'' for ``test_109_hsa_priority_strong.h''
+lotos.open: calling ``caesar -silent test_109_hsa_priority_strong''
+#109 warning during restriction:
+     detection of unreachable processes
+In specification TEST_109_HSA_PRIORITY_STRONG [3]
+
+   - process SCHEDULER_NONE [COMMON_STRONG:338] is never reached
+
+   - process LOOP__1 [COMMON_STRONG:347] is never reached
+
+   - process SCHEDULER_WEAK_FAIR [COMMON_STRONG:364] is never reached
+
+   - process LOOP__1 [COMMON_STRONG:376] is never reached
+
+   - process WHILE_CONT__1 [COMMON_STRONG:391] is never reached
+
+   - process LOOP__2 [COMMON_STRONG:396] is never reached
+
+   - process SCHEDULER_OBE [COMMON_STRONG:416] is never reached
+
+   - process LOOP__1 [COMMON_STRONG:428] is never reached
+
+   - process SCHEDULER_HSA [COMMON_STRONG:454] is never reached
+
+   - process LOOP__1 [COMMON_STRONG:469] is never reached
+
+   - process COND__2 [COMMON_STRONG:488] is never reached
+
+   - process LOOP__2 [COMMON_STRONG:493] is never reached
+
+   - process WHILE_CONT__2 [COMMON_STRONG:505] is never reached
+
+   - process SCHEDULER_HSA_OBE [COMMON_STRONG:593] is never reached
+
+   - process LOOP__1 [COMMON_STRONG:608] is never reached
+
+   - process COND__2 [COMMON_STRONG:633] is never reached
+
+   - process LOOP__2 [COMMON_STRONG:642] is never reached
+
+   - process SCHEDULER_LOBE [COMMON_STRONG:662] is never reached
+
+   - process LOOP__1 [COMMON_STRONG:677] is never reached
+
+   - process LOOP__2 [COMMON_STRONG:705] is never reached
+
+   - process COND__3 [COMMON_STRONG:723] is never reached
+
+   - process WHILE_CONT__2 [COMMON_STRONG:729] is never reached
+command exit with status 0
+
+info about test_109_hsa_priority_strong.bcg:
+    (* 21 states, 32 transitions, 2.9 Kbytes *)
+
+property FreeFromStrongDeadlockLasso (test_109_hsa_priority_strong)
+ | There are no deadlock lassos in Strong test_109_hsa_priority_strong
+
+svl clean info: [temporary] svl000_display.txt
+
+svl clean info: [temporary] svl004_formula_inline
+
+svl clean info: [persistent] test_109_hsa_priority_strong_deadlock.bcg
+
+svl clean info: [temporary] svl004_formula_inline.mcl
+
+svl clean info: [temporary] svl004_formula_inline.xm
+
+"svl004_formula_inline.mcl" =
+    macro is_in (t, f) =
+      ( index (f, concat (concat (":", string (t)), ":")) <> 0 )
+    end_macro
+      [ (not "exit") * ]
+      < ( { EX ?tid:Nat ... ?fairlyScheduled:String where is_in (tid,
+    fairlyScheduled) } or { TERMINATE ... } ) *
+        . ( "exit" or { EX ... ?f:String where f = "::" } )
+      > true
+
+"test_109_hsa_priority_strong_deadlock.bcg" = verify "svl004_formula_inline.mcl" in "test_109_hsa_priority_strong.bcg"
+
+svl clean info: [temporary] svl000_output.bcg
+
+svl clean info: [temporary] evaluator4
+
+svl clean info: [temporary] evaluator4.o
+
+% bcg_open   "test_109_hsa_priority_strong.bcg"  evaluator4 -source "test_109.svl:41" -dfs -diag "svl000_output.bcg"  "svl004_formula_inline.mcl"
+
+svl clean info: [temporary] svl000_stdout
+bcg_open: using ``/home/ts20/cadp/bin.x64/evaluator4.a''
+bcg_open: running ``evaluator4 -source test_109.svl:41 -dfs -diag svl000_output.bcg svl004_formula_inline.mcl'' for ``./test_109_hsa_priority_strong.bcg''
+
+FALSE
+(consult diagnostic in file ``svl000_output.bcg'')
+command exit with status 0
+
+% bcg_io   "svl000_output.bcg"   "test_109_hsa_priority_strong_deadlock.bcg"
+command exit with status 0
+
+FAIL
+
+svl clean info: [persistent] test_109_lobe.bcg
+
+"test_109_lobe.bcg" = generation of "test_109_lobe.lnt"
+
+svl clean info: [temporary] generator
+
+svl clean info: [temporary] generator.o
+
+svl clean info: [temporary] test_109_lobe.o
+
+svl clean info: [temporary] test_109_lobe.err
+
+% lnt.open   "test_109_lobe.lnt"  generator  "test_109_lobe.bcg"
+
+lnt.open: translating ``common.lnt'' to ``/tmp/ls24_lnt.open_EfFSzW/COMMON.lib'' ...
+/tmp/ls24_lnt.open_EfFSzW/common.lnt:401: warning: variable NUMCU is declared but not used
+
+lnt.open: translating ``test_109_lobe.lnt'' to ``/tmp/ls24_lnt.open_EfFSzW/test_109_lobe.lotos'' ...
+
+lnt.open: calling lotos.open for ``test_109_lobe.lotos'' ...
+lotos.open: using ``(direct) caesar''
+lotos.open: calling ``caesar.adt -debug -silent test_109_lobe''
+cadp_indent: cannot find ``indent''
+             file ``test_109_lobe.h'' will not be formatted
+lotos.open: calling ``lnt_check'' for ``test_109_lobe.h''
+lotos.open: calling ``caesar -silent test_109_lobe''
+#109 warning during restriction:
+     detection of unreachable processes
+In specification TEST_109_LOBE [3]
+
+   - process SCHEDULER_NONE [COMMON:325] is never reached
+
+   - process LOOP__1 [COMMON:334] is never reached
+
+   - process SCHEDULER_WEAK_FAIR [COMMON:351] is never reached
+
+   - process LOOP__1 [COMMON:363] is never reached
+
+   - process WHILE_CONT__1 [COMMON:378] is never reached
+
+   - process LOOP__2 [COMMON:383] is never reached
+
+   - process SCHEDULER_OBE [COMMON:403] is never reached
+
+   - process LOOP__1 [COMMON:415] is never reached
+
+   - process SCHEDULER_HSA [COMMON:441] is never reached
+
+   - process LOOP__1 [COMMON:456] is never reached
+
+   - process COND__2 [COMMON:475] is never reached
+
+   - process LOOP__2 [COMMON:480] is never reached
+
+   - process WHILE_CONT__2 [COMMON:492] is never reached
+
+   - process SCHEDULER_HSA_PRIORITY [COMMON:499] is never reached
+
+   - process LOOP__1 [COMMON:517] is never reached
+
+   - process LOOP__2 [COMMON:545] is never reached
+
+   - process WHILE_CONT__2 [COMMON:557] is never reached
+
+   - process COND__2 [COMMON:570] is never reached
+
+   - process SCHEDULER_HSA_OBE [COMMON:580] is never reached
+
+   - process LOOP__1 [COMMON:595] is never reached
+
+   - process COND__2 [COMMON:620] is never reached
+
+   - process LOOP__2 [COMMON:629] is never reached
+command exit with status 0
+
+info about test_109_lobe.bcg:
+    (* 21 states, 33 transitions, 3.1 Kbytes *)
+
+property FreeFromWeakDeadlockLasso (test_109_lobe)
+ | There are no deadlock lassos in Weak test_109_lobe
+
+svl clean info: [temporary] svl000_display.txt
+
+svl clean info: [temporary] svl003_formula_inline
+
+svl clean info: [persistent] test_109_lobe_deadlock.bcg
+
+svl clean info: [temporary] svl003_formula_inline.mcl
+
+svl clean info: [temporary] svl003_formula_inline.xm
+
+"svl003_formula_inline.mcl" =
+    <true*> (( <  'EX !1 .* !{1}' . true* > @ ) or ( <  'EX !0 .* !{0}' . true* > @ ) or ( <  'EX !0 .* !{0, 1}' . true* . 'EX !1 .* !{0, 1}' . true* > @ ))
+
+"test_109_lobe_deadlock.bcg" = verify "svl003_formula_inline.mcl" in "test_109_lobe.bcg"
+
+svl clean info: [temporary] svl000_output.bcg
+
+svl clean info: [temporary] evaluator4
+
+svl clean info: [temporary] evaluator4.o
+
+% bcg_open   "test_109_lobe.bcg"  evaluator4 -source "test_109.svl:32" -dfs -diag "svl000_output.bcg"  "svl003_formula_inline.mcl"
+
+svl clean info: [temporary] svl000_stdout
+bcg_open: using ``/home/ts20/cadp/bin.x64/evaluator4.a''
+bcg_open: running ``evaluator4 -source test_109.svl:32 -dfs -diag svl000_output.bcg svl003_formula_inline.mcl'' for ``./test_109_lobe.bcg''
+
+TRUE
+(consult diagnostic in file ``svl000_output.bcg'')
+command exit with status 0
+
+% bcg_io   "svl000_output.bcg"   "test_109_lobe_deadlock.bcg"
+command exit with status 0
+
+FAIL
+
+svl clean info: [persistent] test_109_lobe_strong.bcg
+
+"test_109_lobe_strong.bcg" = generation of "test_109_lobe_strong.lnt"
+
+svl clean info: [temporary] generator
+
+svl clean info: [temporary] generator.o
+
+svl clean info: [temporary] test_109_lobe_strong.o
+
+svl clean info: [temporary] test_109_lobe_strong.err
+
+% lnt.open   "test_109_lobe_strong.lnt"  generator  "test_109_lobe_strong.bcg"
+
+lnt.open: translating ``common_strong.lnt'' to ``/tmp/ls24_lnt.open_bj1sDT/COMMON_STRONG.lib'' ...
+/tmp/ls24_lnt.open_bj1sDT/common_strong.lnt:424: warning: value stored in variable NUMCU is not used later
+
+lnt.open: translating ``test_109_lobe_strong.lnt'' to ``/tmp/ls24_lnt.open_bj1sDT/test_109_lobe_strong.lotos'' ...
+
+lnt.open: calling lotos.open for ``test_109_lobe_strong.lotos'' ...
+lotos.open: using ``(direct) caesar''
+lotos.open: calling ``caesar.adt -debug -silent test_109_lobe_strong''
+cadp_indent: cannot find ``indent''
+             file ``test_109_lobe_strong.h'' will not be formatted
+lotos.open: calling ``lnt_check'' for ``test_109_lobe_strong.h''
+lotos.open: calling ``caesar -silent test_109_lobe_strong''
+#109 warning during restriction:
+     detection of unreachable processes
+In specification TEST_109_LOBE_STRONG [3]
+
+   - process SCHEDULER_NONE [COMMON_STRONG:338] is never reached
+
+   - process LOOP__1 [COMMON_STRONG:347] is never reached
+
+   - process SCHEDULER_WEAK_FAIR [COMMON_STRONG:364] is never reached
+
+   - process LOOP__1 [COMMON_STRONG:376] is never reached
+
+   - process WHILE_CONT__1 [COMMON_STRONG:391] is never reached
+
+   - process LOOP__2 [COMMON_STRONG:396] is never reached
+
+   - process SCHEDULER_OBE [COMMON_STRONG:416] is never reached
+
+   - process LOOP__1 [COMMON_STRONG:428] is never reached
+
+   - process SCHEDULER_HSA [COMMON_STRONG:454] is never reached
+
+   - process LOOP__1 [COMMON_STRONG:469] is never reached
+
+   - process COND__2 [COMMON_STRONG:488] is never reached
+
+   - process LOOP__2 [COMMON_STRONG:493] is never reached
+
+   - process WHILE_CONT__2 [COMMON_STRONG:505] is never reached
+
+   - process SCHEDULER_HSA_PRIORITY [COMMON_STRONG:512] is never reached
+
+   - process LOOP__1 [COMMON_STRONG:530] is never reached
+
+   - process LOOP__2 [COMMON_STRONG:558] is never reached
+
+   - process WHILE_CONT__2 [COMMON_STRONG:570] is never reached
+
+   - process COND__2 [COMMON_STRONG:583] is never reached
+
+   - process SCHEDULER_HSA_OBE [COMMON_STRONG:593] is never reached
+
+   - process LOOP__1 [COMMON_STRONG:608] is never reached
+
+   - process COND__2 [COMMON_STRONG:633] is never reached
+
+   - process LOOP__2 [COMMON_STRONG:642] is never reached
+command exit with status 0
+
+info about test_109_lobe_strong.bcg:
+    (* 21 states, 33 transitions, 3.1 Kbytes *)
+
+property FreeFromStrongDeadlockLasso (test_109_lobe_strong)
+ | There are no deadlock lassos in Strong test_109_lobe_strong
+
+svl clean info: [temporary] svl000_display.txt
+
+svl clean info: [temporary] svl004_formula_inline
+
+svl clean info: [persistent] test_109_lobe_strong_deadlock.bcg
+
+svl clean info: [temporary] svl004_formula_inline.mcl
+
+svl clean info: [temporary] svl004_formula_inline.xm
+
+"svl004_formula_inline.mcl" =
+    macro is_in (t, f) =
+      ( index (f, concat (concat (":", string (t)), ":")) <> 0 )
+    end_macro
+      [ (not "exit") * ]
+      < ( { EX ?tid:Nat ... ?fairlyScheduled:String where is_in (tid,
+    fairlyScheduled) } or { TERMINATE ... } ) *
+        . ( "exit" or { EX ... ?f:String where f = "::" } )
+      > true
+
+"test_109_lobe_strong_deadlock.bcg" = verify "svl004_formula_inline.mcl" in "test_109_lobe_strong.bcg"
+
+svl clean info: [temporary] svl000_output.bcg
+
+svl clean info: [temporary] evaluator4
+
+svl clean info: [temporary] evaluator4.o
+
+% bcg_open   "test_109_lobe_strong.bcg"  evaluator4 -source "test_109.svl:41" -dfs -diag "svl000_output.bcg"  "svl004_formula_inline.mcl"
+
+svl clean info: [temporary] svl000_stdout
+bcg_open: using ``/home/ts20/cadp/bin.x64/evaluator4.a''
+bcg_open: running ``evaluator4 -source test_109.svl:41 -dfs -diag svl000_output.bcg svl004_formula_inline.mcl'' for ``./test_109_lobe_strong.bcg''
+
+FALSE
+(consult diagnostic in file ``svl000_output.bcg'')
+command exit with status 0
+
+% bcg_io   "svl000_output.bcg"   "test_109_lobe_strong_deadlock.bcg"
+command exit with status 0
+
+FAIL
+
+svl clean info: [persistent] test_109_weak.bcg
+
+"test_109_weak.bcg" = generation of "test_109_weak.lnt"
+
+svl clean info: [temporary] generator
+
+svl clean info: [temporary] generator.o
+
+svl clean info: [temporary] test_109_weak.o
+
+svl clean info: [temporary] test_109_weak.err
+
+% lnt.open   "test_109_weak.lnt"  generator  "test_109_weak.bcg"
+
+lnt.open: translating ``common.lnt'' to ``/tmp/ls24_lnt.open_2mkdRy/COMMON.lib'' ...
+/tmp/ls24_lnt.open_2mkdRy/common.lnt:401: warning: variable NUMCU is declared but not used
+
+lnt.open: translating ``test_109_weak.lnt'' to ``/tmp/ls24_lnt.open_2mkdRy/test_109_weak.lotos'' ...
+
+lnt.open: calling lotos.open for ``test_109_weak.lotos'' ...
+lotos.open: using ``(direct) caesar''
+lotos.open: calling ``caesar.adt -debug -silent test_109_weak''
+cadp_indent: cannot find ``indent''
+             file ``test_109_weak.h'' will not be formatted
+lotos.open: calling ``lnt_check'' for ``test_109_weak.h''
+lotos.open: calling ``caesar -silent test_109_weak''
+#109 warning during restriction:
+     detection of unreachable processes
+In specification TEST_109_WEAK [3]
+
+   - process SCHEDULER_NONE [COMMON:325] is never reached
+
+   - process LOOP__1 [COMMON:334] is never reached
+
+   - process SCHEDULER_OBE [COMMON:403] is never reached
+
+   - process LOOP__1 [COMMON:415] is never reached
+
+   - process SCHEDULER_HSA [COMMON:441] is never reached
+
+   - process LOOP__1 [COMMON:456] is never reached
+
+   - process COND__2 [COMMON:475] is never reached
+
+   - process LOOP__2 [COMMON:480] is never reached
+
+   - process WHILE_CONT__2 [COMMON:492] is never reached
+
+   - process SCHEDULER_HSA_PRIORITY [COMMON:499] is never reached
+
+   - process LOOP__1 [COMMON:517] is never reached
+
+   - process LOOP__2 [COMMON:545] is never reached
+
+   - process WHILE_CONT__2 [COMMON:557] is never reached
+
+   - process COND__2 [COMMON:570] is never reached
+
+   - process SCHEDULER_HSA_OBE [COMMON:580] is never reached
+
+   - process LOOP__1 [COMMON:595] is never reached
+
+   - process COND__2 [COMMON:620] is never reached
+
+   - process LOOP__2 [COMMON:629] is never reached
+
+   - process SCHEDULER_LOBE [COMMON:649] is never reached
+
+   - process LOOP__1 [COMMON:661] is never reached
+
+   - process LOOP__2 [COMMON:689] is never reached
+
+   - process COND__3 [COMMON:707] is never reached
+
+   - process WHILE_CONT__2 [COMMON:713] is never reached
+command exit with status 0
+
+info about test_109_weak.bcg:
+    (* 20 states, 31 transitions, 3.0 Kbytes *)
+
+property FreeFromWeakDeadlockLasso (test_109_weak)
+ | There are no deadlock lassos in Weak test_109_weak
+
+svl clean info: [temporary] svl000_display.txt
+
+svl clean info: [temporary] svl003_formula_inline
+
+svl clean info: [persistent] test_109_weak_deadlock.bcg
+
+svl clean info: [temporary] svl003_formula_inline.mcl
+
+svl clean info: [temporary] svl003_formula_inline.xm
+
+"svl003_formula_inline.mcl" =
+    <true*> (( <  'EX !1 .* !{1}' . true* > @ ) or ( <  'EX !0 .* !{0}' . true* > @ ) or ( <  'EX !0 .* !{0, 1}' . true* . 'EX !1 .* !{0, 1}' . true* > @ ))
+
+"test_109_weak_deadlock.bcg" = verify "svl003_formula_inline.mcl" in "test_109_weak.bcg"
+
+svl clean info: [temporary] svl000_output.bcg
+
+svl clean info: [temporary] evaluator4
+
+svl clean info: [temporary] evaluator4.o
+
+% bcg_open   "test_109_weak.bcg"  evaluator4 -source "test_109.svl:32" -dfs -diag "svl000_output.bcg"  "svl003_formula_inline.mcl"
+
+svl clean info: [temporary] svl000_stdout
+bcg_open: using ``/home/ts20/cadp/bin.x64/evaluator4.a''
+bcg_open: running ``evaluator4 -source test_109.svl:32 -dfs -diag svl000_output.bcg svl003_formula_inline.mcl'' for ``./test_109_weak.bcg''
+
+FALSE
+(consult diagnostic in file ``svl000_output.bcg'')
+command exit with status 0
+
+% bcg_io   "svl000_output.bcg"   "test_109_weak_deadlock.bcg"
+command exit with status 0
+
+PASS
+
+svl clean info: [persistent] test_109_strong.bcg
+
+"test_109_strong.bcg" = generation of "test_109_strong.lnt"
+
+svl clean info: [temporary] generator
+
+svl clean info: [temporary] generator.o
+
+svl clean info: [temporary] test_109_strong.o
+
+svl clean info: [temporary] test_109_strong.err
+
+% lnt.open   "test_109_strong.lnt"  generator  "test_109_strong.bcg"
+
+lnt.open: translating ``common_strong.lnt'' to ``/tmp/ls24_lnt.open_P9Ob41/COMMON_STRONG.lib'' ...
+/tmp/ls24_lnt.open_P9Ob41/common_strong.lnt:424: warning: value stored in variable NUMCU is not used later
+
+lnt.open: translating ``test_109_strong.lnt'' to ``/tmp/ls24_lnt.open_P9Ob41/test_109_strong.lotos'' ...
+
+lnt.open: calling lotos.open for ``test_109_strong.lotos'' ...
+lotos.open: using ``(direct) caesar''
+lotos.open: calling ``caesar.adt -debug -silent test_109_strong''
+cadp_indent: cannot find ``indent''
+             file ``test_109_strong.h'' will not be formatted
+lotos.open: calling ``lnt_check'' for ``test_109_strong.h''
+lotos.open: calling ``caesar -silent test_109_strong''
+#109 warning during restriction:
+     detection of unreachable processes
+In specification TEST_109_STRONG [3]
+
+   - process SCHEDULER_NONE [COMMON_STRONG:338] is never reached
+
+   - process LOOP__1 [COMMON_STRONG:347] is never reached
+
+   - process SCHEDULER_OBE [COMMON_STRONG:416] is never reached
+
+   - process LOOP__1 [COMMON_STRONG:428] is never reached
+
+   - process SCHEDULER_HSA [COMMON_STRONG:454] is never reached
+
+   - process LOOP__1 [COMMON_STRONG:469] is never reached
+
+   - process COND__2 [COMMON_STRONG:488] is never reached
+
+   - process LOOP__2 [COMMON_STRONG:493] is never reached
+
+   - process WHILE_CONT__2 [COMMON_STRONG:505] is never reached
+
+   - process SCHEDULER_HSA_PRIORITY [COMMON_STRONG:512] is never reached
+
+   - process LOOP__1 [COMMON_STRONG:530] is never reached
+
+   - process LOOP__2 [COMMON_STRONG:558] is never reached
+
+   - process WHILE_CONT__2 [COMMON_STRONG:570] is never reached
+
+   - process COND__2 [COMMON_STRONG:583] is never reached
+
+   - process SCHEDULER_HSA_OBE [COMMON_STRONG:593] is never reached
+
+   - process LOOP__1 [COMMON_STRONG:608] is never reached
+
+   - process COND__2 [COMMON_STRONG:633] is never reached
+
+   - process LOOP__2 [COMMON_STRONG:642] is never reached
+
+   - process SCHEDULER_LOBE [COMMON_STRONG:662] is never reached
+
+   - process LOOP__1 [COMMON_STRONG:677] is never reached
+
+   - process LOOP__2 [COMMON_STRONG:705] is never reached
+
+   - process COND__3 [COMMON_STRONG:723] is never reached
+
+   - process WHILE_CONT__2 [COMMON_STRONG:729] is never reached
+command exit with status 0
+
+info about test_109_strong.bcg:
+    (* 20 states, 31 transitions, 3.0 Kbytes *)
+
+property FreeFromStrongDeadlockLasso (test_109_strong)
+ | There are no deadlock lassos in Strong test_109_strong
+
+svl clean info: [temporary] svl000_display.txt
+
+svl clean info: [temporary] svl004_formula_inline
+
+svl clean info: [persistent] test_109_strong_deadlock.bcg
+
+svl clean info: [temporary] svl004_formula_inline.mcl
+
+svl clean info: [temporary] svl004_formula_inline.xm
+
+"svl004_formula_inline.mcl" =
+    macro is_in (t, f) =
+      ( index (f, concat (concat (":", string (t)), ":")) <> 0 )
+    end_macro
+      [ (not "exit") * ]
+      < ( { EX ?tid:Nat ... ?fairlyScheduled:String where is_in (tid,
+    fairlyScheduled) } or { TERMINATE ... } ) *
+        . ( "exit" or { EX ... ?f:String where f = "::" } )
+      > true
+
+"test_109_strong_deadlock.bcg" = verify "svl004_formula_inline.mcl" in "test_109_strong.bcg"
+
+svl clean info: [temporary] svl000_output.bcg
+
+svl clean info: [temporary] evaluator4
+
+svl clean info: [temporary] evaluator4.o
+
+% bcg_open   "test_109_strong.bcg"  evaluator4 -source "test_109.svl:41" -dfs -diag "svl000_output.bcg"  "svl004_formula_inline.mcl"
+
+svl clean info: [temporary] svl000_stdout
+bcg_open: using ``/home/ts20/cadp/bin.x64/evaluator4.a''
+bcg_open: running ``evaluator4 -source test_109.svl:41 -dfs -diag svl000_output.bcg svl004_formula_inline.mcl'' for ``./test_109_strong.bcg''
+
+TRUE
+(consult diagnostic in file ``svl000_output.bcg'')
+command exit with status 0
+
+% bcg_io   "svl000_output.bcg"   "test_109_strong_deadlock.bcg"
+command exit with status 0
+
+PASS
+

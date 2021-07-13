@@ -1,0 +1,28 @@
+module test_45_hsa_obe(common) is
+
+process MAIN [EX: ExChan, TERMINATE: NatChan] is
+  par EX, TERMINATE in
+    SHARED_MEMORY [EX, TERMINATE] (2)
+  ||
+    SCHEDULER_HSA_OBE [EX, TERMINATE] (2)
+  ||
+    par
+
+       THREAD [EX, TERMINATE] (0, {
+                            ATOMIC_EXCH_BRANCH(MemLoc(1), 1, true, 0, 2, true),
+                            ATOMIC_EXCH_BRANCH(MemLoc(1), 1, true, 1, 2, true),
+                            ATOMIC_EXCH_BRANCH(MemLoc(1), 0, true, 1, 3, true)
+      })
+
+    ||
+
+       THREAD [EX, TERMINATE] (1, {
+                            ATOMIC_EXCH_BRANCH(MemLoc(1), 0, true, 0, 1, true)
+      })
+
+
+    end par
+  end par
+end process
+
+end module
