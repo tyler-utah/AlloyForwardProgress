@@ -286,9 +286,21 @@ To do this, we synthesize Amber tests and run them from the same script. It firs
 
 We have set up a configuration to run each test for 1 iteration on Swift Shader through Amber. If you run the `to_run.sh` it should take around 30 minutes to finish running.
 
-### CUDA and Metal Code
+TODO Tyler: describe how to view the results
 
-_TODO: Tyler: will not be able to execute, but we can provide the xcode projects_
+### CUDA
+
+We have not tested running CUDA code through docker and thus we make no claims about its support. However, we have included the CUDA code gen (similar to the C++ code gen) and driver code. If access to a CUDA enabled device is available, the code from `empirical_testing/test_cuda` can be compiled in run.
+
+There are three directories in `test_cuda`, one for each of our CUDA experiments. `test_plain` produces the tests used in Section 6.3. `test_coop` will generate code to test the CUDA cooperative groups (described in Section 6.4). `test_warp` will generate the code to test the warp scheduler also described in Section 6.4. 
+
+Although the reviewers may not be able to run the code, in each directory, there is a `code_gen` directory that generates the CUDA code from our synthesized tests. For `test_plain` and `test_coop`, this includes tests with the _chunked_ and _round robin_ heuristics. We encourage the reviewers to run the `code_gen` for each (following the `to_run.sh` scripts). and examining the output of each script.
+
+### Metal
+
+Similar to CUDA, we do not believe building and deploying IOS applications is possible through this docker container. Nonetheless, we include a `code_gen` to generate metal kernels and swift initialization. We encourage reviewers to run the code in `code_gen` following the `run_me.sh` script. We have included xcode project files that can be copied to an OSX system to build and deploy an OSX testing harness, or an IOS application that can run on an Iphone or Ipad. 
+
+We warn the reviewers that running the IOS application can cause alarming visual artifacts to appear on the device. Hopefully it goes without saying that we do not assume liability for any damage done to your devices when running our test harness (although we have run it many times over without permanant issue on an Iphone 11 and Ipad Air 3). That said, it is interesting and fun to run these tests on IOS devices and hope that some reviewer will be adventurous enough to try it! 
 
 ## Data
 
