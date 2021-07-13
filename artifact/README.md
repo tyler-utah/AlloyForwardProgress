@@ -284,7 +284,7 @@ While we understand that it may be infeasible for the reviewers to have access t
 
 To do this, we synthesize Amber tests and run them from the same script. It first requires prepping some testing and result directories, and then running the tests. these steps are outlined in `to_run.sh`. 
 
-We have set up a configuration to run each test for 1 iteration on Swift Shader through Amber. If you run the `to_run.sh` it should take around 30 minutes to finish running.
+We have set up a configuration to run each test for 1 iteration on Swift Shader through Amber. If you run the `to_run.sh` it should take around 1.5 hours to finish running.
 
 TODO Tyler: describe how to view the results
 
