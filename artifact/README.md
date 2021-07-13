@@ -264,13 +264,23 @@ This will create `output.pdf` with the visual of figure 8.
 
 ## Emprical Testing
 
+The empirical testing code is all found in the `/data/empirical_testing` directory on the docker image.
+
 ### C++ Code
 
-_TODO: Tyler: this should work_
+The simplest empirical testing to do is to test multi-threaded C++ code as described in the beginning of Section 6.3. There should be no instances of non-termination, and thus these tests should run fairly quickly. 
+
+We first generate the C++ code from our synthesized tests (found in `/data/empirical_testing/ALL_tests_flat`, which simply contains all of our synthesized tests in a flattened directory structure). To generate the the C++ code, go to the directory `test_cpp/code_gen`. There are two files to generate: the initialization, and the kernel. Both python scripts are called from the `to_run.sh` script. Please run this script. There will now be a `kernel_init.h`  file(containing kernel names and function headers)  and a `kernels.cpp`file (containing the kernel implementations). 
+
+To run the C++ code, go to the `cpp_app` directory. Run `make` to build the application. You will then run both an under, and over, subscribed variant of the code (as described in Section 6.3). The commands to run this code are located in `to_run.sh`. These applications should take approximately 1 hour to run. You should see at the bottom of each output (see `to_run.sh` for the output files) the line `total tests killed: 0`, meaning that no tests timed out on C++. 
 
 ### Vulkan Code
 
-_TODO: Tyler: install amber and switftshader_
+While we understand that it may be infeasible for the reviewers to have access to the GPUs that we tested, we have installed a software GPU emulator software in the docker, called [Swift Shader](https://github.com/google/swiftshader). We test Vulkan through the [Amber](https://github.com/google/amber) testing framework. 
+
+To do this, we synthesize Amber tests and run them from the same script. It first requires prepping some testing and result directories, and then running the tests. these steps are outlined in `to_run.sh`. 
+
+We have set up a configuration to run each test for 1 iteration on Swift Shader through Amber. If you run the `to_run.sh` it should take around 30 minutes to finish running.
 
 ### CUDA and Metal Code
 
