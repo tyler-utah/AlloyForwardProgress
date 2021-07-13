@@ -133,16 +133,16 @@
 	    t.innerHTML = "Test Number " + i + " - " + th + " Threads " + ins + " Instructions"
 			    
             var image = document.getElementById("image");
-            image.src = th + '_threads_' + ins + '_instructions/alloy_output_processed/' + i + '/' + i + '.png';
+            image.src = th + '_threads_' + ins + '_instructions/' + i + '/' + i + '.png';
 
             var xml = document.getElementById("xml");
-            xml.src = th + '_threads_' + ins + '_instructions/alloy_output_processed/' + i + '/' + i + '.amber';
+            xml.src = th + '_threads_' + ins + '_instructions/' + i + '/' + i + '.amber';
 
             var txt = document.getElementById("text");
-            txt.src = th + '_threads_' + ins + '_instructions/alloy_output_processed/' + i + '/' + i + '_simple.txt';
+            txt.src = th + '_threads_' + ins + '_instructions/' + i + '/' + i + '_simple.txt';
 
             txt = document.getElementById("labels");
-            txt.src = th + '_threads_' + ins + '_instructions/alloy_output_processed/' + i + '/label_' + i + '.txt';
+            txt.src = th + '_threads_' + ins + '_instructions/' + i + '/label_' + i + '.txt';
         }
 
     </script>
