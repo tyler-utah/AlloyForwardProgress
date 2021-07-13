@@ -58,10 +58,10 @@ ENV VK_ICD_FILENAMES=/data/amber/amber/out/Debug/Linux/vk_swiftshader_icd.json
 
 # Get C++ tester code copied over
 RUN \
-   mkdir -p /data/paper_experiments && \
+   mkdir -p /data/empirical_testing && \
    mkdir -p /data/test_synthesis
 
-COPY ./to_copy/empirical_testing /data/paper_experiments/
+COPY ./to_copy/empirical_testing /data/empirical_testing/
 
 COPY ./to_copy/test_synthesis /data/test_synthesis
 
