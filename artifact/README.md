@@ -4,15 +4,11 @@
 
 This is the OOPSLA '21 artifact for the paper "Specifying and Testing GPU Workgroup Progress Models". We assume that the user has read the paper, and this documentation will refer to the paper (and use notation from the paper) throughout. 
 
-We admit that this artifact might be different than traditional artifacts submitted to OOPLSA. Our results are not reproducible on traditional linux servers. If you have read the paper, you will notice that we test a diversity of devices, from Iphones, to Ipads, to Android tablets. We have done a best-effort to show that our results are reproducible and have included all software to reproduce our results. 
+If you have read the paper, you will notice that we test a diversity of devices, from iPhones, to iPads, to Android tablets. It is thus not feasible for us to provide the ability to reproduce the results of the paper exactly, which would require access to a suitable array of devices. We provide the means to reproduce all aspects of the work that do not require specific devices, and we include instructions for running tests on GPU devices if they are available. Also, we have included the ability to run our experiments on a software-emulated GPU called [Swift Shader](https://github.com/google/swiftshader). Furthermore, we include all data from running our experiments across a diversity of devices.
 
-of the formal tools we use, [CADP](https://en.wikipedia.org/wiki/Construction_and_Analysis_of_Distributed_Processes), requires a license to run. Academic licenses are free and easily acquired with a simple email form; however, we could not legally bundle the source (or an executable) of this tool. We hope the evaluators will follow our simple rules for obtaining the tool to run this section of experiments.
+One of the formal tools we use, [CADP](https://en.wikipedia.org/wiki/Construction_and_Analysis_of_Distributed_Processes), requires a non-standard license to run. An academic licenses for CADP can be acquired easily and free of charge by filling out a simple email form; however, we could not legally bundle the source (or an executable) of this tool. We hope the evaluators will follow our simple rules for obtaining the tool to run this section of experiments.
 
-While we appreciate that the evaluators may not have access to the GPUs we used in our experiments, we have included the ability to run our experiments on a software-emulated GPU called [Swift Shader](https://github.com/google/swiftshader). We have included all data from running our experiments across a diversity of devices.
-
-Our synthesis results require over 1 month of execution time on a big server. We have included scripts to run a subset of the synthesis runs. 
-
-We hope the AE committee will consider the unique components of our work and appreciate the wide applicability of our experiments (even if they are not easily reproduced in a clean traditional academic environment).
+Because our synthesis results required over 1 month of execution time on a high-end server, we have included scripts to run a representative subset of synthesis experiments.
 
 ## Getting started
 
