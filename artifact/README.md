@@ -286,7 +286,12 @@ To do this, we synthesize Amber tests and run them from the same script. It firs
 
 We have set up a configuration to run each test for 1 iteration on Swift Shader through Amber. If you run the `to_run.sh` it should take around 1.5 hours to finish running.
 
-TODO Tyler: describe how to view the results
+Once this finishes running, there will a populated `results` directory. It will contain 5 subdirectories: `outputX` where X is a number between 0 and 5 (inclusive). These correspond to the 5 testing configuration (number of threads and instructions) given in Table 2, and given in the order of the table. That is, `output0` corresponds to `2_thread_2_instruction`. 
+
+In each `output` directory, there are many files, including the `.amber` test specification for each test and heuristic. The file we will describe is the most intuitive and readable: `simple_final_results-DATE.txt `; where DATE is the date of when you are running the test.
+
+If you open this file (make sure your terminal has a decent character width), you should see a nice, textually formatted table of the testing results. `P` means that the test terminated; `F` means that the test failed, or deadlocked and was forceably terminated by the system. Each row corresponds to a test ID, and each column corresponds to a heuristic (plain, round-robin, or chunked). The final column states whether any of the heristics caused a failure. You can examine the `simple_final_results-DATE.txt` for each of the test configurations (i.e. in the different `output` directories).
+
 
 ### CUDA
 
