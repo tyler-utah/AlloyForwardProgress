@@ -2,13 +2,22 @@
 
 ## Abstract
 
-TODO
+This is the OOPSLA '21 artifact for the paper "Specifying and Testing GPU Workgroup Progress Models". We assume that the user has read the paper, and this documentation will refer to the paper (and use notation from the paper) throughout. 
+
+We admit that this artifact might be different than traditional artifacts submitted to OOPLSA. Our results are not reproducible on traditional linux servers. If you have read the paper, you will notice that we test a diversity of devices, from Iphones, to Ipads, to Android tablets. We have done a best-effort to show that our results are reproducible and have included all software to reproduce our results. 
+
+of the formal tools we use, [CADP](https://en.wikipedia.org/wiki/Construction_and_Analysis_of_Distributed_Processes), requires a license to run. Academic licenses are free and easily acquired with a simple email form; however, we could not legally bundle the source (or an executable) of this tool. We hope the evaluators will follow our simple rules for obtaining the tool to run this section of experiments.
+
+While we appreciate that the evaluators may not have access to the GPUs we used in our experiments, we have included the ability to run our experiments on a software-emulated GPU called [Swift Shader](https://github.com/google/swiftshader). We have included all data from running our experiments across a diversity of devices.
+
+Our synthesis results require over 1 month of execution time on a big server. We have included scripts to run a subset of the synthesis runs. 
+
+We hope the AE committee will consider the unique components of our work and appreciate the wide applicability of our experiments (even if they are not easily reproduced in a clean traditional academic environment).
 
 ## Getting started
 
 These instructions have been tested on a 64-bit Linux machine running an OS
-similar to Ubuntu 18.04 with Docker installed and with Bash as the shell. Other
-configurations are likely to work since we mostly use Docker.
+similar to Ubuntu 18.04 with Docker installed and with Bash as the shell. Most of our software is included in the docker image. All data and most software required for the artifact is also included in this repository in the `to_copy` directory.
 
 ## Build the docker image
 
