@@ -70,7 +70,12 @@ RUN \
    cd /data/test_synthesis && \
    cd alloy5 && \
    ./gradlew && \
-   ./gradlew build  
+   ./gradlew build
+
+RUN \
+    apt-get -y install gnuplot
+
+COPY ./to_copy/synthesis_analysis /data/synthesis_analysis
 
 # Login shell
 CMD ["/bin/bash", "--login"]
