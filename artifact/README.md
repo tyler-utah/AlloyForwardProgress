@@ -238,7 +238,7 @@ Section 5.4 describes a Qualitative analysis of the tests. Most of this section 
 
 You should be able to match the configuration and ID given in table 3, with the corresponding test in the Test Explorer.
 
-The test explorer is included in this repo in the `web_test_explorer` directory.
+The test explorer is included in this repo in the `web_test_explorer` directory. This web app allows one to visualize for each test: (1) the instructions for each thread, (2) the resulting LTS, (3) the forward progress results for each scheduler, and (4) the Amber test generated for it (with no saturation techniques). To run it just open the HTML file in the directory with your browser of choice.
 
 ### Running Tests on Formal Models
 
