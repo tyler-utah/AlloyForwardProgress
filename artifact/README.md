@@ -19,7 +19,15 @@ We hope the AE committee will consider the unique components of our work and app
 These instructions have been tested on a 64-bit Linux machine running an OS
 similar to Ubuntu 18.04 with Docker installed and with Bash as the shell. Most of our software is included in the docker image. All data and most software required for the artifact is also included in this repository in the `to_copy` directory.
 
+## Accessing the docker image
+
+This repo contains the necessary data and scripts to build a docker container; however, this can be a lengthy process. For convenience, we have provided a pre-built docker image at: TODO
+
+To launch the docker image, please run: TODO
+
 ## Build the docker image
+
+(this step is unnecessary if you have obtained the prebuilt docker image from the previous step)
 
 Change into the directory:
 
@@ -44,14 +52,9 @@ You should now have a Bash shell inside the container.
 
 ## Test Generation
 
-_TODO: Tyler and Lucas figure out how to get test generation running_
+We begin by discussing the test synthesis process described in Section 5 "Automatic Synthesis of Progress Litmus Tests". This component requires a slightly modified version of the [Alloy](https://alloytools.org/) relational model checker, which we have included in this repo, copied into the docker and built.
 
-_TODO: instructions for running 2 thread 2 instruction variants_
 
-_TODO: State that running larger experiments require tons of time and tons of RAM_
-
-_TODO: point to Lucas Test explorer, both the Princeton hosted page and the git repo, as well as generated raw tests
-> Hugues: we can probably include the html pages directly in the artifact image, for local browsing?
 
 ## CADP: model-checking test termination
 
@@ -60,6 +63,8 @@ the CADP verification toolbox to automatically check whether a given litmus test
 is guaranteed to terminate under various progress models. Here we describe how
 to install CADP, and how to run our scripts that use CADP to do the
 verification.
+
+To run these experiments, change into the `/data/test_synthesis/alloy5` directory. Recall from the paper, that there are 5 different test configurations, which vary the number of threads and instructions in the synthesis run. 
 
 ### CADP install
 
