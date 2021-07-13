@@ -17,9 +17,17 @@ similar to Ubuntu 18.04 with Docker installed and with Bash as the shell. Most o
 
 ## Accessing the docker image
 
-This repo contains the necessary data and scripts to build a docker container; however, this can be a lengthy process. For convenience, we have provided a pre-built docker image at: TODO
+The artifact contains the necessary data and scripts to build a docker container; however, this can be a lengthy process. For convenience, the `gpufwd-image.tar` file is a pre-built docker image.
 
-To launch the docker image, please run: TODO
+To launch the docker image, please run:
+
+```
+sudo docker load --input gpufwd-image.tar
+sudo docker stop gpufwd-container  # Will fail if no such container is running; that's OK
+sudo docker rm gpufwd-container    # Will fail if there is no such container; that's OK
+sudo docker create -it --name gpufwd-container gpufwd-image
+sudo docker start -ia gpufwd-container
+```
 
 ## Build the docker image
 
@@ -37,8 +45,8 @@ build the Docker container, and start the Docker container:
 ```sh
 sudo docker build -t gpufwd-image .
 
-sudo docker stop gpufwd-container  # May fail.
-sudo docker rm gpufwd-container    # May fail.
+sudo docker stop gpufwd-container  # Will fail if no such container is running; that's OK
+sudo docker rm gpufwd-container    # Will fail if there is no such container; that's OK
 sudo docker create -it --name gpufwd-container gpufwd-image
 
 sudo docker start -ia gpufwd-container
