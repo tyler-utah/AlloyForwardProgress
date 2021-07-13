@@ -230,13 +230,37 @@ In each test group, you can use a web browser to locally open the
 
 ### Qualitative Analysis of Synthesized Tests
 
-Section 5.3 describes a Qualitative analysis of the tests. Most of this section requires manual inspection of all the tests. To ease this, we have created a _Test Explorer_ web interface to easier explore the tests. We have hosted a copy of this page [here](https://www.cs.princeton.edu/~ls24/testExplorer.html). To use this page, click on one of the tests on the right-hand-side. Note that the tests are organized by their conformance configuration (as described in Section 5). 
+Section 5.4 describes a Qualitative analysis of the tests. Most of this section requires manual inspection of all the tests. To ease this, we have created a _Test Explorer_ web interface to easier explore the tests. We have hosted a copy of this page [here](https://www.cs.princeton.edu/~ls24/testExplorer.html). To use this page, click on one of the tests on the right-hand-side. Note that the tests are organized by their conformance configuration (as described in Section 5). 
 
 You should be able to match the configuration and ID given in table 3, with the corresponding test in the Test Explorer.
 
 The test explorer is included in this repo in the `web_test_explorer` directory.
 
+### Running Tests on Formal Models
 
+Section 5.5 describes "Running Tests on Formal Models"
+
+The code to do this is largely contained to python scripts to parse and analyze the synthesized Alloy tests and the results from running them on the CADP formal progress models. This code is contained in the `/data/synthesis_analysis` in the docker image.
+
+Inside this directory, there is the results of running the Alloy tests through the formal models in the `formal_results` directory. Inside this, there is a directory for each of the 5 configurations from the test synthesis runs (e.g. `2_thread_2_instruction`). Inside each of these configuration directories is a directory called `schedulers` and then `.csv` files detailing each test ID and whether it passes or fails (i.e. potentially terminates) under each scheduler. We include this data whether or not you have run the full Alloy test synthesis run (not recommended) or the CADP tool.
+
+We have provided scripts to parse and analyze these results in `/data/synthesis_analysis/result_analysis`. The first results to output are the results of Figure 8. To do this, first run the script to see the different percentages of strong and weak tests. This can be done by running:
+
+`python3 strong_vs_weak.py`
+
+The output of this shows the strong/weak percentages broken down per testing configuration. The left most bar of figure 8 is the total percentages shown at the end of the output.
+
+Next, we want to get the data of Table 4. To do this, run:
+
+`python3 mk_table_4.py`
+
+This will display a nicely formatted visual table with the information of table 4 of the paper. The percentages shown in the table correspond to the right bars of figure 8.
+
+The data file for figure out is in `data.dat`, and the gnuplot script to generate the graph is in `plot.gnu`. You can generate the graph by executing:
+
+`gnuplot plot.gnu`
+
+This will create `output.pdf` with the visual of figure 8.
 
 ## Emprical Testing
 
