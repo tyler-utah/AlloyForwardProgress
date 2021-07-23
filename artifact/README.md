@@ -13,7 +13,17 @@ Because our synthesis results required over 1 month of execution time on a high-
 ## Getting started
 
 These instructions have been tested on a 64-bit Linux machine running an OS
-similar to Ubuntu 18.04 with Docker installed and with Bash as the shell. Most of our software is included in the docker image. All data and most software required for the artifact is also included in this repository in the `to_copy` directory.
+similar to Ubuntu 18.04 with Docker installed and with Bash as the shell.
+
+These instructions assume that the artifact archive has been
+downloaded and extracted already, and they operate inside the
+resulting `artifact` directory.
+
+This artifact contains a pre-built docker image that contains most of
+our software. The docker image file is
+`gpufwd_image/gpufwd_image.tar`, see below for details on how to use
+it. All the data present in this docker image is also provided
+directly in the `gpufwd_image/to_copy` directory.
 
 ## Accessing the docker image
 
@@ -22,6 +32,7 @@ The artifact contains the necessary data and scripts to build a docker container
 To launch the docker image, please run:
 
 ```
+cd gpufwd_image
 sudo docker load --input gpufwd-image.tar
 sudo docker stop gpufwd-container  # Will fail if no such container is running; that's OK
 sudo docker rm gpufwd-container    # Will fail if there is no such container; that's OK
